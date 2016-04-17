@@ -1,0 +1,12 @@
+{
+  "name": "Throidal",
+  "productName": "Throidal",
+  "description": "Manage your GitHub Stars with One App",
+  "version": "0.1.0",
+  "author": "xiaoluoboding <xiaoluoboding@gmail.com>",
+  "main": "background.js",
+  "dependencies": {
+    "github-api": "^0.11.2",
+    "jquery": "2.2.2"
+  }
+}
