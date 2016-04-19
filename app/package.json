@@ -6,7 +6,10 @@
   "author": "xiaoluoboding <xiaoluoboding@gmail.com>",
   "main": "background.js",
   "dependencies": {
+    "electron-json-storage": "^2.0.0",
     "github-api": "^0.11.2",
-    "jquery": "2.2.2"
+    "jquery": "2.2.2",
+    "request": "^2.65.0",
+    "vue-resource": "^0.7.0"
   }
 }

@@ -18,7 +18,7 @@
         // with hot-reload because the reloaded component
         // preserves its current state and we are modifying
         // its initial state.
-        msg: '欢迎登陆Throidal号星舰！'
+        msg: 'Welcome board the Throidal Starship！'
       }
     }
   }

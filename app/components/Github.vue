@@ -1,24 +1,14 @@
 <script>
   // import Github from 'github-api'
   import { remote } from 'electron'
+  import storage from 'electron-json-storage'
+  import request from 'request'
   let BrowserWindow = remote.BrowserWindow
-
-  // let github = new Github({
-  //   apiUrl: 'https://api/github.com'
-  // })
-  //
-  // console.log(github)
-
-  // let gist = github.getGist('8a90d65c4a2cc51272f0')
-  //
-  // gist.read(function (err, gist) {
-  //   console.log(gist)
-  // })
 
   // Build the OAuth consent page URL
   let authWindow = new BrowserWindow({
-    width: 1024,
-    height: 768,
+    width: 800,
+    height: 600,
     show: true,
     'web-preferences': {
       'node-integration': false
@@ -26,29 +16,50 @@
   })
 
   let options = {
-    client_id: '',
-    client_secret: '',
+    client_id: 'd4a28554213774aa83cc',
+    client_secret: 'a737f660e30ca4559069ec484658c45cb2a247a4',
     scope: ['user:email']
   }
 
-  let githubUrl = 'https://github.com/login/oauth/authorize?'
-  let authUrl = githubUrl + 'client_id=' + options.client_id + '&scope=' + options.scope
+  export default {
+    data () {
+      return {
+        msg: 'GitHub API',
+        code: '',
+        token: ''
+      }
+    },
 
-  authWindow.loadURL(authUrl)
+    ready: function () {
+      let githubUrl = 'https://github.com/login/oauth/authorize?'
+      let authUrl = githubUrl + 'client_id=' + options.client_id + '&scope=' + options.scope
 
-  authWindow.webContents.on('will-navigate', function (event, url) {
-    handleCallback(url)
-  })
+      console.log(authUrl)
 
-  authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) {
-    handleCallback(newUrl)
-  })
+      authWindow.loadURL(authUrl)
 
-  function handleCallback (url) {
+      authWindow.webContents.on('will-navigate', function (event, url) {
+        getCode(url)
+      })
+
+      authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) {
+        getCode(newUrl)
+      })
+        // If "Done" button is pressed, hide "Loading"
+      authWindow.on('close', function () {
+        authWindow.destroy()
+      })
+    },
+
+    method: {
+
+    }
+  }
+
+  function getCode (url) {
     var raw_code = /code=([^&]*)/.exec(url) || null
     var code = (raw_code && raw_code.length > 1) ? raw_code[1] : null
     var error = /\?error=(.+)$/.exec(url)
-
     if (code || error) {
       // Close the browser if code found or error
       authWindow.destroy()
@@ -56,30 +67,49 @@
 
     // If there is a code, proceed to get token from github
     if (code) {
-      console.log(code)
+      console.log('code:' + code)
+      getToken(options, code)
+      storage.set('login-user', {
+        code: code
+      }, function (error) {
+        if (error) throw error
+      })
     } else if (error) {
       alert('Oops! Something went wrong and we couldn\'t' +
-      'log you in using Github. Please try again.')
+        'log you in using Github. Please try again.')
     }
   }
 
-  // If "Done" button is pressed, hide "Loading"
-  authWindow.on('close', function () {
-    authWindow.destroy()
-  })
+  function getToken (option, code) {
+    var postData = {
+      client_id: option.client_id,
+      client_secret: option.client_secret,
+      code: code
+    }
 
-  export default {
-    data () {
-      return {
-        msg: 'GitHub API'
-      }
-    },
+    var options = {
+      url: 'https://github.com/login/oauth/access_token',
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'Throidal'
+      },
+      form: postData
+    }
 
-    method: {
-      auth: function () {
-        authWindow.loadURL(authUrl)
+    function callback (error, response, body) {
+      if (!error && response.statusCode === 200) {
+        var info = JSON.parse(body)
+        console.log('token:' + info.access_token)
+        storage.set('login-user', {
+          code: code,
+          token: info.access_token
+        }, function (error) {
+          if (error) throw error
+        })
       }
     }
+
+    request(options, callback)
   }
 </script>
 
