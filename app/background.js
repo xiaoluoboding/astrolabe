@@ -3,10 +3,11 @@
 // It doesn't have any windows which you can see on screen, but we can open
 // window from here.
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path'
 
-let mainWindow
+let mainWindow = null
+let authWindow = null
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
@@ -25,6 +26,41 @@ app.on('ready', () => {
   if (process.env.NODE_ENV !== 'production') {
     mainWindow.openDevTools()
   }
+
+  ipcMain.on('open-auth-window', function (event, arg) {
+    if (authWindow) {
+      return
+    }
+
+    // Build the OAuth consent page URL
+    authWindow = new BrowserWindow({
+      width: 1024,
+      height: 768,
+      show: true,
+      'web-preferences': {
+        'node-integration': false
+      }
+    })
+
+    authWindow.loadURL(arg)
+
+    authWindow.webContents.on('will-navigate', function (event, url) {
+      mainWindow.webContents.send('getCode', url)
+    })
+
+    authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) {
+      mainWindow.webContents.send('getCode', newUrl)
+    })
+
+    // If "Done" button is pressed, hide "Loading"
+    authWindow.on('close', function () {
+      authWindow.destroy()
+    })
+  })
+
+  ipcMain.on('destroy-auth-window', function (event, arg) {
+    authWindow.destroy()
+  })
 
   mainWindow.on('closed', () => {
     mainWindow = null

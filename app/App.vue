@@ -1,11 +1,3 @@
-<template>
-  <div id="app">
-    <img class="logo" src="./assets/logo.png">
-    <hello></hello>
-    <github></github>
-  </div>
-</template>
-
 <script>
   import Hello from './components/Hello'
   import Github from './components/Github'
@@ -17,6 +9,14 @@
     }
   }
 </script>
+
+<template>
+  <div id="app">
+    <!-- <img class="logo" src="./assets/logo.png"> -->
+    <hello></hello>
+    <github></github>
+  </div>
+</template>
 
 <style>
   html {
