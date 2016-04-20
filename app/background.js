@@ -28,9 +28,9 @@ app.on('ready', () => {
   }
 
   ipcMain.on('open-auth-window', function (event, arg) {
-    if (authWindow) {
-      return
-    }
+    // if (authWindow) {
+    //   return
+    // }
 
     // Build the OAuth consent page URL
     authWindow = new BrowserWindow({

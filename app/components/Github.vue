@@ -12,7 +12,7 @@
         options: {
           client_id: 'd4a28554213774aa83cc',
           client_secret: 'a737f660e30ca4559069ec484658c45cb2a247a4',
-          scope: ['user:email']
+          scope: ['user:email', 'public_repo']
         },
         code: '',
         token: ''
@@ -28,6 +28,7 @@
 
     methods: {
       githubAuth () {
+        console.log('into github auth func')
         let githubUrl = 'https://github.com/login/oauth/authorize?'
         let authUrl = githubUrl + 'client_id=' + this.options.client_id + '&scope=' + this.options.scope
 

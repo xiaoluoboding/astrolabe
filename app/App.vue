@@ -1,9 +1,17 @@
 <script>
+  import Login from './components/Login'
   import Hello from './components/Hello'
   import Github from './components/Github'
 
   export default {
+    data () {
+      return {
+        isLogin: false
+      }
+    },
+
     components: {
+      Login,
       Hello,
       Github
     }
@@ -12,9 +20,14 @@
 
 <template>
   <div id="app">
-    <!-- <img class="logo" src="./assets/logo.png"> -->
-    <hello></hello>
-    <github></github>
+    <div class="login-style" v-if="!isLogin">
+      <login :is-login.sync="isLogin"></login>
+    </div>
+    <div class="dashboard" v-if="isLogin">
+      <hello></hello>
+      <github></github>
+    </div>
+
   </div>
 </template>
 
