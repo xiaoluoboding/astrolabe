@@ -91,6 +91,24 @@
         }
 
         request(options, callback)
+      },
+      getUser () {
+        var options = {
+          url: 'https://api.github.com/user',
+          headers: {
+            'Accept': 'application/json',
+            'User-Agent': 'Throidal'
+          }
+        }
+
+        function callback (error, response, body) {
+          if (!error && response.statusCode === 200) {
+            var info = JSON.parse(body)
+            console.log('token:' + info)
+          }
+        }
+
+        request(options, callback)
       }
     },
 

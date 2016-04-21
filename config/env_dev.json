@@ -1,0 +1,12 @@
+{
+  "name": "dev",
+  "description": "Add here any environment specific stuff you like.",
+  "throidal": {
+    "url": "mongodb://localhost:27017/throidal",
+    "options": {
+      "server": {
+        "poolSize": 10
+      }
+    }
+  }
+}
