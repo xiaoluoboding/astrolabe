@@ -50,6 +50,7 @@ app.use(hotMiddleware)
 
 // serve pure static assets
 app.use('/static', express.static('./static'))
+app.use('/mdl', express.static('./app/node_modules/material-design-lite'))
 
 module.exports = app.listen(8888, function (err) {
   if (err) {

@@ -3,7 +3,7 @@
   import Github from 'github-api'
   import request from 'request'
   var env = require('../../config/env_dev.json')
-  var connect = require('../utils/mongodb-server/db').connect(env.throidal.url, env.throidal.options)
+  var connect = require('../utils/db').connect(env.throidal.url, env.throidal.options)
 
   export default {
     data () {
@@ -69,7 +69,12 @@
 </script>
 <template>
   <div class="login-screen">
-      {{ $data | json }}
+      <!-- {{ $data | json }} -->
+      <div class="login-form">
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--white">
+          GitHub 登录
+        </button>
+      </div>
   </div>
 </template>
 <style media="screen">
