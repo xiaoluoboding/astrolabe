@@ -3,7 +3,6 @@
   import { ipcRenderer } from 'electron'
   import storage from 'electron-json-storage'
   import request from 'request'
-  import MdlButton from './MdlButton'
 
   export default {
     data () {
@@ -110,10 +109,6 @@
 
         request(options, callback)
       }
-    },
-
-    components: {
-      MdlButton
     }
   }
 </script>
@@ -122,8 +117,10 @@
   <div class="github">
     <h2>{{ msg }}</h2>
   </div>
-  <!-- <pre>
+  <pre>
     {{ $data | json }}
-  </pre> -->
-  <mdl-button @click="githubAuth()">Github登录</mdl-button>
+  </pre>
+  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--white" @click="githubAuth()">
+    GitHub 登录
+  </button>
 </template>

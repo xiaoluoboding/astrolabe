@@ -1,41 +1,41 @@
 <script>
+  import GithubAuth from './GithubAuth'
+  import MdlLoading from './MdlLoading'
   import storage from 'electron-json-storage'
-  import Github from 'github-api'
   import request from 'request'
-  var env = require('../../config/env_dev.json')
-  var connect = require('../utils/db').connect(env.throidal.url, env.throidal.options)
-
+  import env from '../../config/env_dev.json'
+  import db from '../utils/db'
+  var $ = require('jquery')
+  let connect = db.connect(env.throidal.url, env.throidal.options)
+  $(document).ready(function() {
+    console.log('hey')
+  })
   export default {
     data () {
       return {
-        token: ''
+        token: '',
+        loading: false
       }
     },
+
+    props: [
+      'isLogin'
+    ],
 
     ready: function () {
       var self = this
       storage.get('login-user', function (error, data) {
-        self.token = data.token
-        self.getUser(data.token)
-      })
-
-      var github = new Github({
-        token: this.token,
-        auth: 'oauth'
-      })
-
-      var user = github.getUser()
-
-      // console.log(user)
-
-      // user
-      user.show('malanore', function (err, user) {
-        console.log(user.login)
+        if (data.token) {
+          self.loading = false
+          self.token = data.token
+          self.getUser(data.token)
+        }
       })
     },
 
     methods: {
       getUser (token) {
+        var self = this
         var options = {
           url: 'https://api.github.com/user',
           headers: {
@@ -51,30 +51,35 @@
             connect(function(db) {
               // Get the documents collection
               var col = db.collection('t_user')
-              col.find({login: info.login}).toArray(function(err, docs) {
+              col.find({login: info.login}).toArray(function(err, result) {
                 col.deleteOne({login: info.login}, function(err, result) {
                   console.log('Removed User')
                 })
-              })
-              col.insert(info, {w: 1}, function(err, result) {
-                console.log('Inserted User')
+                col.insert(info, {w: 1}, function(err, result) {
+                  console.log('Inserted User')
+                  self.isLogin = true
+                })
               })
             })
           }
         }
         request(options, callback)
       }
+    },
+
+    components: {
+      GithubAuth,
+      MdlLoading
     }
   }
 </script>
 <template>
   <div class="login-screen">
-      <!-- {{ $data | json }} -->
-      <div class="login-form">
-        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--white">
-          GitHub 登录
-        </button>
-      </div>
+    {{ $data | json }}
+    <div class="login-form">
+      <github-auth></github-auth>
+    </div>
+    <mdl-loading v-if="!loading"><mdl-loading>
   </div>
 </template>
 <style media="screen">
@@ -88,5 +93,9 @@
     background-repeat: no-repeat;
     background-size: cover;
     color: #fff;
+  }
+  .login-form {
+  	align-items: center;
+    justify-content: center;
   }
 </style>

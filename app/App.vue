@@ -1,53 +1,44 @@
 <script>
   import Login from './components/Login'
-  import Hello from './components/Hello'
-  import Github from './components/Github'
+  import Main from './components/Main'
 
   export default {
     data () {
       return {
-        isLogin: false
+        isLogin: false,
+        token: ''
       }
     },
 
+    props: [
+      'loading'
+    ],
+
     components: {
       Login,
-      Hello,
-      Github
+      Main
     }
   }
 </script>
 
 <template>
   <div id="app">
-    <div class="login-style" v-if="!isLogin">
-      <login :is-login.sync="isLogin"></login>
+    <div class="login" v-if="!isLogin">
+      <login :is-login.sync="isLogin" :token.sync="token" :loading.sync="loading"></login>
     </div>
-    <div class="dashboard" v-if="isLogin">
-      <hello></hello>
-      <github></github>
+    <div class="main" v-if="isLogin">
+      <main :token.sync="token" :loading.sync="loading"></main>
     </div>
-
   </div>
 </template>
 
 <style>
-  html {
-    height: 100%;
-  }
   body {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-family: lato, sans-serif;
   }
-  #app {
+  .login {
     margin-top: -100px;
     max-width: 600px;
-    font-family: lato, sans-serif;
     text-align: center;
-  }
-  .logo {
-    width: 100px;
-    height: 100px
   }
 </style>

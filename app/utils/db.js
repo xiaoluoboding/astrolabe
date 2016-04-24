@@ -22,7 +22,7 @@ function connect (url, options) {
         }
         _db = cache[url] = db
         for (let i in fns) {
-          console.log(i)
+          console.log('Open DB Link[' + i + ']Times')
           fns.shift().call(null, _db)
         }
       })
