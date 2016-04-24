@@ -1,4 +1,5 @@
 <script>
+  import NavBar from './NavBar'
   import SideBar from './SideBar'
   import { remote } from 'electron'
   import os from 'os'
@@ -6,6 +7,8 @@
   import env from '../../config/env_dev.json'
   import db from '../utils/db'
   let connect = db.connect(env.throidal.url, env.throidal.options)
+
+  var $ = require('jquery')
 
   export default {
     data () {
@@ -52,51 +55,24 @@
           })
         })
       })
+      $('.dropdown-button').dropdown({
+        inDuration: 300,
+        outDuration: 225,
+        constrain_width: false, // Does not change width of dropdown to that of the activator
+        hover: true, // Activate on hover
+        gutter: 0, // Spacing from edge
+        belowOrigin: false, // Displays dropdown below the button
+        alignment: 'left' // Displays dropdown with edge aligned to the left of button
+      });
     },
     components: {
+      NavBar,
       SideBar
     }
   }
 </script>
 
 <template>
-  <!-- The drawer is always open in large screens. The header is always shown,
-  even in small screens. -->
-  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <header class="mdl-layout__header">
-      <div class="mdl-layout__header-row">
-        <div class="mdl-layout-spacer"></div>
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable
-                    mdl-textfield--floating-label mdl-textfield--align-right">
-          <label class="mdl-button mdl-js-button mdl-button--icon"
-                 for="fixed-header-drawer-exp">
-            <i class="material-icons">search</i>
-          </label>
-          <div class="mdl-textfield__expandable-holder">
-            <input class="mdl-textfield__input" type="text" name="sample"
-                   id="fixed-header-drawer-exp">
-          </div>
-        </div>
-      </div>
-    </header>
-    <div class="mdl-layout__drawer">
-      <span class="mdl-layout-title">Title</span>
-      <nav class="mdl-navigation">
-        <a class="mdl-navigation__link" href="">Link</a>
-        <a class="mdl-navigation__link" href="">Link</a>
-        <a class="mdl-navigation__link" href="">Link</a>
-        <a class="mdl-navigation__link" href="">Link</a>
-      </nav>
-    </div>
-    <main class="mdl-layout__content">
-      <div class="page-content"><!-- Your content goes here --></div>
-    </main>
-  </div>
+  <nav-bar></nav-bar>
   <side-bar></side-bar>
 </template>
-
-<style>
-  .nav-wrapper {
-    margin-left: 300px;
-  }
-</style>
