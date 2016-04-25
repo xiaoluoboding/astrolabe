@@ -146,9 +146,7 @@
       <div class="top-bar">
         <span>Throidal</span>
         <!-- Sidebar toggle button -->
-        <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-          <i class="material-icons">menu</i>
-        </button>
+        <a class="waves-effect waves-grey lighten-5 btn-flat btn-floating sidebar-toggle"><i class="material-icons">menu</i></a>
       </div>
     </div>
 
@@ -228,53 +226,6 @@
     <!-- Sidebar text -->
     <!--  <div class="sidebar-text">Text</div> -->
   </aside>
-
-  <div class="wrapper">
-    <!-- Sidebar Constructor -->
-    <div class="constructor">
-      <h2 class="headline">Sidebar Constructor</h2>
-      <p>
-        <label for="sidebar-position">Sidebar postion</label>
-        <select id="sidebar-position" name="sidebar-position">
-          <option value="">Default</option>
-          <option value="sidebar-fixed-left">Float on left</option>
-          <option value="sidebar-fixed-right">Float on right</option>
-          <option value="sidebar-stacked">Stacked on left</option>
-        </select>
-      </p>
-      <p>
-        <label for="sidebar-theme">Sidebar theme</label>
-        <select id="sidebar-theme" name="sidebar-theme">
-          <option value="sidebar-default">Default</option>
-          <option value="sidebar-inverse">Inverse</option>
-          <option value="sidebar-colored">Colored</option>
-          <option value="sidebar-colored-inverse">Colored-Inverse</option>
-        </select>
-      </p>
-      <p>
-        <label for="sidebar-header">Sidebar header cover</label>
-        <select id="sidebar-header" name="sidebar-header">
-          <option value="header-cover">Image cover</option>
-          <option value="">Color cover</option>
-        </select>
-      </p>
-      <p>
-        <!-- Accent-colored raised button with ripple -->
-        <a class="waves-effect waves-light btn sidebar-toggle">Toggle sidebar</a>
-      </p>
-      <!-- <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-        <a class="btn-floating btn-large red">
-          <i class="large material-icons">mode_edit</i>
-        </a>
-        <ul>
-          <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
-          <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
-          <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
-          <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
-        </ul>
-      </div> -->
-    </div>
-  </div>
 </template>
 <style>
   [class^="md-"],
@@ -335,19 +286,6 @@
     height: 100%;
   }
 
-  body {
-    font-family: 'RobotoDraft', 'Roboto', 'Helvetica Neue, Helvetica, Arial', sans-serif;
-    font-style: normal;
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 1.4;
-    color: #212121;
-    background-color: #f5f5f5;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-  }
-
   .sidebar-overlay {
     visibility: hidden;
     position: fixed;
@@ -378,7 +316,6 @@
 
   .top-bar {
     height: 64px;
-    background: rgba(0, 0, 0, 0.1);
   }
 
   .top-bar span {
@@ -460,6 +397,7 @@
     -webkit-transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
     -o-transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
     transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
   }
 
   .sidebar:before,
@@ -1252,7 +1190,6 @@
     }
     .top-bar {
       height: 56px;
-      background: rgba(0, 0, 0, 0.1);
     }
     .top-bar span {
       font-size: 29px;

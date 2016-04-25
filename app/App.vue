@@ -26,9 +26,7 @@
     <div class="login" v-if="!isLogin">
       <login :is-login.sync="isLogin" :token.sync="token" :loading.sync="loading"></login>
     </div>
-    <div class="main" v-if="isLogin">
-      <main :token.sync="token" :loading.sync="loading"></main>
-    </div>
+    <main :token.sync="token" :loading.sync="loading" v-if="isLogin"></main>
   </div>
 </template>
 

@@ -1,8 +1,8 @@
 <script>
   import NavBar from './NavBar'
   import SideBar from './SideBar'
+  import Dashboard from './Dashboard'
   import { remote } from 'electron'
-  import os from 'os'
   import Github from 'github-api'
   import env from '../../config/env_dev.json'
   import db from '../utils/db'
@@ -13,12 +13,12 @@
   export default {
     data () {
       return {
-        platform: os.platform(),
         appName: remote.app.getName(),
         msg: 'Welcome board the Throidal Starship！',
         login: '',
-        avatar_url: '',
-        html_url: ''
+        avatarUrl: '',
+        htmlUrl: '',
+        repos: ''
       }
     },
 
@@ -34,8 +34,8 @@
         var userCol = db.collection('t_user')
         userCol.find({}).toArray(function(err, result) {
           self.login = result[0].login
-          self.avatar_url = result[0].avatar_url
-          self.html_url = result[0].html_url
+          self.avatarUrl = result[0].avatar_url
+          self.htmlUrl = result[0].html_url
           var github = new Github({
             token: self.token,
             auth: 'oauth'
@@ -49,6 +49,7 @@
               //
               // })
             }
+            self.repos = repos
             // starsCol.insertMany(repos, {w: 1}, function(err, result) {
             //   console.log('Inserted Stars')
             // })
@@ -67,12 +68,18 @@
     },
     components: {
       NavBar,
-      SideBar
+      SideBar,
+      Dashboard
     }
   }
 </script>
 
 <template>
-  <nav-bar></nav-bar>
-  <side-bar></side-bar>
+  <header>
+    <nav-bar :login='login' :avatar-url='avatarUrl' :html-url='htmlUrl'></nav-bar>
+  </header>
+  <main>
+    <side-bar></side-bar>
+    <dashboard :repos='repos'></dashboard>
+  </main>
 </template>

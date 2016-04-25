@@ -13,6 +13,7 @@
     "materialize-css": "^0.97.6",
     "mongodb": "^2.1.16",
     "request": "^2.65.0",
+    "vue-octicon": "^0.2.1",
     "vue-resource": "^0.7.0"
   }
 }

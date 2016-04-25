@@ -1,6 +1,12 @@
 <script>
   export default {
-    name: 'NavBar'
+    name: 'NavBar',
+
+    props: [
+      'login',
+      'avatarUrl',
+      'htmlUrl'
+    ]
   }
 </script>
 
@@ -12,29 +18,30 @@
     <li class="divider"></li>
     <li><a href="#!">three</a></li>
   </ul>
-  <nav>
-    <div class="nav-wrapper">
-      <a href="#!" class="brand-logo waves-effect waves-teal">Logo</a>
-      <ul class="right hide-on-med-and-down">
-        <!-- Dropdown Trigger -->
-        <li>
-          <a class="dropdown-button waves-effect waves-teal" href="#!" data-activates="dropdown1">
-            <div class="nav-userinfo">
-              <img src="../assets/images/bg.jpg">
-              <span>Malanore</span>
-              <i class="material-icons right">arrow_drop_down</i>
-            </div>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+  <div class="navbar-fixed">
+    <nav>
+      <div class="nav-wrapper">
+        <a href="#!" class="brand-logo waves-effect waves-teal">Logo</a>
+        <ul class="right hide-on-med-and-down">
+          <!-- Dropdown Trigger -->
+          <li>
+            <a class="dropdown-button waves-effect waves-teal" href="#!" data-activates="dropdown1">
+              <div class="nav-userinfo">
+                <img :src="avatarUrl" alt="{{ login }}">
+                <span>{{ login }}</span>
+                <i class="material-icons right">arrow_drop_down</i>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
 </template>
-
 
 <style>
   .nav-wrapper {
-    margin-left: 300px;
+    margin-left: 240px;
   }
 
   .nav-wrapper .dropdown-button {
