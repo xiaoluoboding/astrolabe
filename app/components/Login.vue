@@ -7,9 +7,7 @@
   import db from '../utils/db'
   var $ = require('jquery')
   let connect = db.connect(env.throidal.url, env.throidal.options)
-  $(document).ready(function() {
-    console.log('hey')
-  })
+
   export default {
     data () {
       return {
@@ -84,7 +82,7 @@
 </template>
 <style media="screen">
   .login-screen {
-    position: absolute;
+    position: fixed;
     top: 0px;
     right: 0px;
     bottom: 0px;

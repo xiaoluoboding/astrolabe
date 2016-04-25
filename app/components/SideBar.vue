@@ -152,19 +152,6 @@
 
     <!-- Sidebar navigation -->
     <ul class="nav sidebar-nav">
-      <li class="dropdown">
-        <ul id="settings-dropdown" class="dropdown-menu">
-          <li>
-            <a href="#" tabindex="-1"><i class="material-icons">perm_contact_calendar</i>Profile</a>
-          </li>
-          <li>
-            <a href="#" tabindex="-1"><i class="material-icons">settings</i>Settings</a>
-          </li>
-          <li>
-            <a href="#" tabindex="-1"><i class="material-icons">exit_to_app</i>Exit</a>
-          </li>
-        </ul>
-      </li>
       <li>
         <a href="#" class="waves-effect waves-teal">
           <i class="material-icons">star</i>
@@ -377,7 +364,7 @@
   }
 
   .sidebar-stacked.open + .wrapper .constructor {
-    margin-left: 216px;
+    margin-left: 240px;
   }
 
   @media (max-width: 768px) {
@@ -1129,13 +1116,13 @@
 
   .sidebar {
     width: 0;
-    -webkit-transform: translate3d(-216px, 0, 0);
-    transform: translate3d(-216px, 0, 0);
+    -webkit-transform: translate3d(-240px, 0, 0);
+    transform: translate3d(-240px, 0, 0);
   }
 
   .sidebar.open {
-    min-width: 216px;
-    width: 216px;
+    min-width: 240px;
+    width: 240px;
     -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
   }
@@ -1163,8 +1150,8 @@
     right: 0;
     box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.35);
     -webkit-box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.35);
-    -webkit-transform: translate3d(216px, 0, 0);
-    transform: translate3d(216px, 0, 0);
+    -webkit-transform: translate3d(240px, 0, 0);
+    transform: translate3d(240px, 0, 0);
   }
 
   .sidebar-fixed-right.open {

@@ -1,4 +1,6 @@
 <script>
+  var $ = require('jquery')
+
   export default {
     name: 'NavBar',
 
@@ -6,17 +8,35 @@
       'login',
       'avatarUrl',
       'htmlUrl'
-    ]
+    ],
+
+    ready: function() {
+      $('.dropdown-button').dropdown({
+        inDuration: 300,
+        outDuration: 225,
+        constrain_width: true, // Does not change width of dropdown to that of the activator
+        // hover: true, // Activate on hover
+        gutter: 0, // Spacing from edge
+        belowOrigin: true, // Displays dropdown below the button
+        alignment: 'right' // Displays dropdown with edge aligned to the left of button
+      });
+    }
   }
 </script>
 
 <template>
   <!-- Dropdown Structure -->
   <ul id="dropdown1" class="dropdown-content">
-    <li><a href="#!">one</a></li>
-    <li><a href="#!">two</a></li>
+    <li>
+      <a href="#" tabindex="-1"><i class="material-icons tiny">perm_contact_calendar</i>Profile</a>
+    </li>
+    <li>
+      <a href="#" tabindex="-1"><i class="material-icons tiny">settings</i>Settings</a>
+    </li>
     <li class="divider"></li>
-    <li><a href="#!">three</a></li>
+    <li>
+      <a href="#" tabindex="-1"><i class="material-icons tiny">exit_to_app</i>Exit</a>
+    </li>
   </ul>
   <div class="navbar-fixed">
     <nav>
@@ -41,7 +61,7 @@
 
 <style>
   .nav-wrapper {
-    margin-left: 240px;
+    margin-left: 264px;
   }
 
   .nav-wrapper .dropdown-button {
@@ -76,5 +96,11 @@
 
   .nav-userinfo span {
     margin: 0 -5px 0 10px;
+  }
+
+  .dropdown-content li > a > i {
+    float: left;
+    margin-right: 16px;
+    font-size: 1.6rem;
   }
 </style>
