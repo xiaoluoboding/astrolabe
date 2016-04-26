@@ -8,8 +8,6 @@
   import db from '../utils/db'
   let connect = db.connect(env.throidal.url, env.throidal.options)
 
-  var $ = require('jquery')
-
   export default {
     data () {
       return {
@@ -18,6 +16,7 @@
         login: '',
         avatarUrl: '',
         htmlUrl: '',
+        github: '',
         repos: ''
       }
     },
@@ -29,6 +28,11 @@
 
     ready: function() {
       var self = this
+      var github = new Github({
+        token: self.token,
+        auth: 'oauth'
+      })
+      this.github = github
       connect(function(db) {
         // Get the documents collection
         var userCol = db.collection('t_user')
@@ -36,10 +40,6 @@
           self.login = result[0].login
           self.avatarUrl = result[0].avatar_url
           self.htmlUrl = result[0].html_url
-          var github = new Github({
-            token: self.token,
-            auth: 'oauth'
-          })
           var user = github.getUser()
           user.userStarred(result[0].login, function(err, repos) {
             // var starsCol = db.collection('t_stars')
@@ -71,6 +71,6 @@
   </header>
   <main>
     <side-bar></side-bar>
-    <dashboard :repos='repos'></dashboard>
+    <dashboard :github='github' :repos='repos'></dashboard>
   </main>
 </template>

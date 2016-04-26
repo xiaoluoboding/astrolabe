@@ -9,6 +9,7 @@
     "electron-json-storage": "^2.0.0",
     "github-api": "^0.11.2",
     "jquery": "^2.2.3",
+    "marked": "^0.3.5",
     "material-design-icons": "^2.2.3",
     "materialize-css": "^0.97.6",
     "mongodb": "^2.1.16",

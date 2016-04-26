@@ -1,31 +1,54 @@
 <script>
-  // var Octicon = require('../node_modules/vue-octicon/src/components/Octicon.vue');
   import Octicon from '../node_modules/vue-octicon/src/components/Octicon'
-  import shell from 'shell'
   import Search from './Search'
+  import Readme from './Readme'
+  import shell from 'shell'
+  import marked from 'marked'
+
+  marked.setOptions({
+    renderer: new marked.Renderer(),
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: true,
+    smartLists: true,
+    smartypants: false
+  })
 
   export default {
     name: 'Dashboard',
 
     data () {
       return {
-        searchQuery: ''
+        searchQuery: '',
+        repoReadme: ''
       }
     },
 
     props: [
+      'github',
       'repos'
     ],
 
     methods: {
       openInBrowser(url) {
         shell.openExternal(url);
+      },
+      showReadme(userName, repoName) {
+        var self = this
+        var github = this.github
+        var repo = github.getRepo(userName, repoName)
+        repo.read('master', 'README.md', function(err, data) {
+          self.repoReadme = marked(data)
+        });
       }
     },
 
     components: {
       Octicon,
-      Search
+      Search,
+      Readme
     }
   }
 </script>
@@ -34,7 +57,9 @@
     <aside id="repos-desc" class="repos-desc">
       <search :search-query.sync="searchQuery"></search>
       <ul class="collection">
-        <li class="collection-item" v-for="repo in repos | filterBy searchQuery in 'full_name' 'description'">
+        <li class="collection-item"
+            @click="showReadme(repo.full_name.split('\/').shift(),repo.full_name.split('\/').pop())"
+            v-for="repo in repos | filterBy searchQuery in 'full_name' 'description'">
           <span class="title">{{ repo.full_name }}</span>
           <p>{{ repo.description }}</p>
           <div class="repo-count">
@@ -50,8 +75,7 @@
       </ul>
     </aside>
     <main id="repos-readme" class="repos-readme">
-      <div class="wrapper">
-        <!-- Sidebar Constructor -->
+      <!-- <div class="wrapper">
         <div class="constructor">
           <h2 class="headline">Sidebar Constructor</h2>
           <p>
@@ -80,22 +104,11 @@
             </select>
           </p>
           <p>
-            <!-- Accent-colored raised button with ripple -->
             <a class="waves-effect waves-light btn sidebar-toggle">Toggle sidebar</a>
           </p>
-          <!-- <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-            <a class="btn-floating btn-large red">
-              <i class="large material-icons">mode_edit</i>
-            </a>
-            <ul>
-              <li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
-              <li><a class="btn-floating yellow darken-1"><i class="material-icons">format_quote</i></a></li>
-              <li><a class="btn-floating green"><i class="material-icons">publish</i></a></li>
-              <li><a class="btn-floating blue"><i class="material-icons">attach_file</i></a></li>
-            </ul>
-          </div> -->
         </div>
-      </div>
+      </div> -->
+      <readme :repo-readme='repoReadme'></readme>
     </main>
   </main>
 </template>

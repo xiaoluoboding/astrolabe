@@ -1,11 +1,10 @@
 <script>
   import GithubAuth from './GithubAuth'
-  import MdlLoading from './MdlLoading'
+  import MdlLoading from './materialize/MdlLoading'
   import storage from 'electron-json-storage'
   import request from 'request'
   import env from '../../config/env_dev.json'
   import db from '../utils/db'
-  var $ = require('jquery')
   let connect = db.connect(env.throidal.url, env.throidal.options)
 
   export default {
