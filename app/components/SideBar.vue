@@ -88,6 +88,13 @@
         });
       });
 
+      // Nestable
+      //
+      // -------------------
+      $(document).ready(function() {
+        $('.dd').nestable();
+      });
+
       /**
        * Created by Kupletsky Sergey on 08.09.14.
        *
@@ -185,27 +192,56 @@
           </li>
         </ul>
       </li>
-      <li>
-        <a href="#" class="waves-effect waves-teal">
-          <i class="material-icons">local_offer</i>
-          <span>JavaScript</span>
-          <span class="sidebar-badge">223</span>
-        </a>
-      </li>
-      <li>
-        <a href="#" class="waves-effect waves-teal">
-          <i class="material-icons">local_offer</i>
-          <span>Css</span>
-          <span class="sidebar-badge">98</span>
-        </a>
-      </li>
-      <li>
-        <a href="#" class="waves-effect waves-teal">
-          <i class="material-icons">local_offer</i>
-          <span>Html</span>
-          <span class="sidebar-badge">3</span>
-        </a>
-      </li>
+      <li class="divider"></li>
+      <div class="dd" id="nestable">
+  			<ol class="dd-list">
+  				<li class="dd-item" data-id="1">
+  					<div class="dd-handle">
+  						<i class="material-icons">local_offer</i>
+              <span class="red">Item 1</span>
+              <span class="sidebar-badge">216</span>
+  					</div>
+  				</li>
+  				<li class="dd-item" data-id="2">
+  					<div class="dd-handle">
+  						<i class="material-icons">local_offer</i>
+              <span class="orange">Item 2</span>
+              <span class="sidebar-badge">32</span>
+  					</div>
+  				</li>
+  				<li class="dd-item" data-id="3">
+  					<div class="dd-handle">
+  						<i class="material-icons">local_offer</i>
+              <span class="yellow">Item 3</span>
+              <span class="sidebar-badge">64</span>
+  					</div>
+  				</li>
+  				<li class="dd-item" data-id="4">
+  					<div class="dd-handle">
+  						<i class="material-icons">local_offer</i>
+              <span class="green">Item 4</span>
+  					</div>
+  				</li>
+  				<li class="dd-item" data-id="4">
+  					<div class="dd-handle">
+              <i class="material-icons">local_offer</i>
+  						<span class="cyan">Item 5</span>
+  					</div>
+  				</li>
+  				<li class="dd-item" data-id="4">
+  					<div class="dd-handle">
+  						<i class="material-icons">local_offer</i>
+              <span class="blue">Item 6</span>
+  					</div>
+  				</li>
+  				<li class="dd-item" data-id="4">
+  					<div class="dd-handle">
+  						<i class="material-icons">local_offer</i>
+              <span class="purple">Item 7</span>
+  					</div>
+  				</li>
+  			</ol>
+  		</div>
     </ul>
     <!-- Sidebar divider -->
     <!-- <div class="sidebar-divider"></div> -->
