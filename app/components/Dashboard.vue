@@ -2,6 +2,7 @@
   import Octicon from '../node_modules/vue-octicon/src/components/Octicon'
   import Search from './Search'
   import Readme from './Readme'
+  import MdlLoading from './materialize/MdlLoading'
   import shell from 'shell'
   import marked from 'marked'
 
@@ -22,7 +23,8 @@
     data () {
       return {
         searchQuery: '',
-        repoReadme: ''
+        repoReadme: '',
+        loadingReadme: ''
       }
     },
 
@@ -36,6 +38,7 @@
         shell.openExternal(url);
       },
       showReadme(userName, repoName) {
+        this.loadingReadme = false
         var self = this
         var github = this.github
         var repo = github.getRepo(userName, repoName)
@@ -45,10 +48,19 @@
       }
     },
 
+    watch: {
+      'repoReadme': function (val, oldVal) {
+        if (val) {
+          this.loadingReadme = true
+        }
+      }
+    },
+
     components: {
       Octicon,
       Search,
-      Readme
+      Readme,
+      MdlLoading
     }
   }
 </script>
@@ -108,7 +120,13 @@
           </p>
         </div>
       </div> -->
-      <readme :repo-readme='repoReadme'></readme>
+      <div class='empty-placeholder' v-if='!repoReadme'>
+        No Repo Selected
+      </div>
+      <div v-else>
+        <mdl-loading v-if='!loadingReadme'></mdl-loading>
+        <readme v-if='loadingReadme' :repo-readme='repoReadme'></readme>
+      </div>
     </main>
   </main>
 </template>

@@ -89,6 +89,7 @@
     height: 48px;
     margin: 8px;
     float: left;
+    border: 3px solid rgba(0, 0, 0, 0.14);
     border-radius: 50%;
     -webkit-transition: all 0.2s ease-in-out;
     transition: all 0.2s ease-in-out;

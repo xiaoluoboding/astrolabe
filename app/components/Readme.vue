@@ -13,6 +13,22 @@
   </div>
 </template>
 <style>
+  .repos-readme .empty-placeholder {
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    color: #658399;
+    font-weight: bold;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    text-align: center;
+    width: 100%;
+  }
+
   .repos-readme .readme {
     margin: 16px;
   }
