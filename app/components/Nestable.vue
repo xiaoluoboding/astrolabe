@@ -510,4 +510,9 @@
   .dd-placeholder {
     border: 1px dashed #999;
   }
+
+  .dd-list.dd-dragel {
+    position: fixed;
+    margin: 36px 0 0 -40px
+  }
 </style>

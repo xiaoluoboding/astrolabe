@@ -1,9 +1,14 @@
 <script>
+  import Search from './Search'
   var $ = require('jquery')
   var jQuery = $
 
   export default {
     name: 'SideBar',
+
+    props: [
+      'searchQuery'
+    ],
 
     ready: function () {
       /**
@@ -137,6 +142,10 @@
           return this;
         }
       })(jQuery.fn.removeClass);
+    },
+
+    components: {
+      Search
     }
   }
 
@@ -151,9 +160,9 @@
     <div class="sidebar-header">
       <!-- Top bar -->
       <div class="top-bar">
-        <span>Throidal</span>
         <!-- Sidebar toggle button -->
         <a class="waves-effect waves-grey lighten-5 btn-flat btn-floating sidebar-toggle"><i class="material-icons">menu</i></a>
+        <search :search-query.sync="searchQuery"></search>
       </div>
     </div>
 
@@ -180,13 +189,19 @@
         <ul class="dropdown-menu">
           <li>
             <a href="#" tabindex="-1" class="waves-effect waves-teal">
-              Social
+              JavaScript
               <span class="sidebar-badge">12</span>
             </a>
           </li>
           <li>
             <a href="#" tabindex="-1" class="waves-effect waves-teal">
-              Promo
+              Css
+              <span class="sidebar-badge">0</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" tabindex="-1" class="waves-effect waves-teal">
+              Html
               <span class="sidebar-badge">0</span>
             </a>
           </li>
@@ -472,7 +487,7 @@
 
   .sidebar .sidebar-toggle {
     position: relative;
-    float: right;
+    float: left;
     margin: 12px;
     padding: 0;
     background-image: none;

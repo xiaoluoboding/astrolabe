@@ -8,9 +8,9 @@
   }
 </script>
 <template>
-  <form action="" class="Search">
-    <input class="Search-box" type="search" id="Search-box" autocomplete="off" v-model="searchQuery">
-    <label class="Search-label" for="Search-box"><i class="material-icons medium">search</i></label>
+  <form action="" class="search">
+    <input class="search-box" type="search" id="search-box" autocomplete="off" v-model="searchQuery">
+    <label class="search-label" for="search-box"><i class="material-icons medium">search</i></label>
   </form>
 </template>
 <style media="screen">
@@ -25,7 +25,8 @@
 
   input[type="search"] {
     box-sizing: border-box;
-    box-shadow: 0 3px 12px -1px rgba(0, 0, 0, .3);
+    /*box-shadow: 0 3px 12px -1px rgba(0, 0, 0, .3);*/
+    box-shadow: none;
     border-bottom: none;
     margin: 0;
     padding: 8px 10px;
@@ -46,40 +47,51 @@
 *
 */
 
-  .Search {
+  .search {
     position: relative;
-    display: flex;
+    /*display: flex;*/
+    /*margin-top: 8px;*/
+    /*color: #555;*/
+    position: fixed;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: table-cell;
     font-weight: 500;
-    margin-top: 8px;
-    color: #555;
+    color: #fff;
+    float: right;
+    margin: 9px;
+    right: 0;
+    width: 176px;
   }
 
-  .Search-box {
+  .search-box {
     flex: 1 0 auto;
     margin: 0 12px;
     border: 0;
-    box-shadow: 0 3px 12px -1px rgba(0, 0, 0, .3);
     transition: all .15s ease-in-out;
   }
 
-  .Search-box:focus {
+  .search-box:focus {
     flex: 1 0 90%;
     margin: 0;
     outline: 0;
   }
 
-  .Search-label {
+  .search-label {
     position: absolute;
     top: 8px;
     right: 8px;
     transition: all .15s ease-in-out;
+    color: #f5f5f5;
+    opacity: 0.7;
   }
 
-  .Search-label i {
+  .search-label i {
     font-size: 28px;
   }
 
-  .Search-box:focus + .Search-label {
+  .search-box:focus + .search-label {
     transform: translateX(12px);
   }
 </style>
