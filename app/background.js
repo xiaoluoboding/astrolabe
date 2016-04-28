@@ -11,8 +11,8 @@ let authWindow = null
 
 app.on('ready', () => {
   mainWindow = new BrowserWindow({
-    width: 1024,
-    height: 768
+    width: 1280,
+    height: 800
   })
 
   // Load the HTML file directly from the webpack dev server if

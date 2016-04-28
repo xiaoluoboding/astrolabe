@@ -6,13 +6,12 @@
     data () {
       return {
         isLogin: false,
-        token: ''
+        token: '',
+        user: '',
+        repos: '',
+        github: ''
       }
     },
-
-    props: [
-      'loading'
-    ],
 
     components: {
       Login,
@@ -23,10 +22,17 @@
 
 <template>
   <div id="app">
-    <div class="login" v-if="!isLogin">
-      <login :is-login.sync="isLogin" :token.sync="token" :loading.sync="loading"></login>
+    <div class="login animated fadeIn" v-if="!isLogin">
+      <login
+        :is-login.sync="isLogin"
+        :user.sync="user"
+        :repos.sync="repos"
+        :github.sync="github">
+      </login>
     </div>
-    <main :token.sync="token" :loading.sync="loading" v-if="isLogin"></main>
+    <div class="animated fadeIn" v-else>
+      <main :user.sync="user" :repos.sync="repos" :github.sync="github"></main>
+    </div>
   </div>
 </template>
 

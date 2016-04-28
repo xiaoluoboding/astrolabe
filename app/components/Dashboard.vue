@@ -22,13 +22,13 @@
 
     data () {
       return {
-        searchQuery: '',
         repoReadme: '',
         loadingReadme: ''
       }
     },
 
     props: [
+      'searchQuery',
       'github',
       'repos'
     ],
@@ -67,7 +67,8 @@
 <template>
   <main id="content" class="content">
     <aside id="repos-desc" class="repos-desc">
-      <search :search-query.sync="searchQuery"></search>
+      <!-- <search :search-query.sync="searchQuery"></search> -->
+      <dot-loader v-if=''></dot-loader>
       <ul class="collection">
         <li class="collection-item"
             @click="showReadme(repo.full_name.split('\/').shift(),repo.full_name.split('\/').pop())"
@@ -147,7 +148,7 @@
   .repos-readme {
     position: absolute;
     background: #fff;
-    color: #2C3E50;
+    color: #546e7a;
     top: 64px;
     left: 560px;
     right: 0;
@@ -163,6 +164,10 @@
 
   .collection .collection-item {
     padding: 10px;
+  }
+
+  .collection .collection-item:hover {
+    background: #fafafa;
   }
 
   .collection .collection-item .title{

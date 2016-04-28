@@ -5,9 +5,7 @@
     name: 'NavBar',
 
     props: [
-      'login',
-      'avatarUrl',
-      'htmlUrl'
+      'user'
     ],
 
     ready: function() {
@@ -28,27 +26,27 @@
   <!-- Dropdown Structure -->
   <ul id="dropdown1" class="dropdown-content">
     <li>
-      <a href="#" tabindex="-1"><i class="material-icons tiny">perm_contact_calendar</i>Profile</a>
+      <a href="#" tabindex="-1" class="waves-effect waves-teal"><i class="material-icons tiny">perm_contact_calendar</i>Profile</a>
     </li>
     <li>
-      <a href="#" tabindex="-1"><i class="material-icons tiny">settings</i>Settings</a>
+      <a href="#" tabindex="-1" class="waves-effect waves-teal"><i class="material-icons tiny">settings</i>Settings</a>
     </li>
     <li class="divider"></li>
     <li>
-      <a href="#" tabindex="-1"><i class="material-icons tiny">exit_to_app</i>Exit</a>
+      <a href="#" tabindex="-1" class="waves-effect waves-teal"><i class="material-icons tiny">exit_to_app</i>Exit</a>
     </li>
   </ul>
   <div class="navbar-fixed">
     <nav>
       <div class="nav-wrapper">
-        <a href="#!" class="brand-logo waves-effect waves-teal">Logo</a>
+        <a href="#!" class="brand-logo waves-effect waves-teal">Throidal</a>
         <ul class="right hide-on-med-and-down">
           <!-- Dropdown Trigger -->
           <li>
             <a class="dropdown-button waves-effect waves-teal" href="#!" data-activates="dropdown1">
               <div class="nav-userinfo">
-                <img :src="avatarUrl" alt="{{ login }}">
-                <span>{{ login }}</span>
+                <img :src="user.avatar_url" alt="{{ user.login }}">
+                <span>{{ user.login }}</span>
                 <i class="material-icons right">arrow_drop_down</i>
               </div>
             </a>
@@ -60,6 +58,10 @@
 </template>
 
 <style>
+  nav {
+    background-color: #e91e63;
+  }
+
   .nav-wrapper {
     margin-left: 264px;
   }

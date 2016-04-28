@@ -2,61 +2,20 @@
   import NavBar from './NavBar'
   import SideBar from './SideBar'
   import Dashboard from './Dashboard'
-  import { remote } from 'electron'
-  import Github from 'github-api'
-  import env from '../../config/env_dev.json'
-  import db from '../utils/db'
-  let connect = db.connect(env.throidal.url, env.throidal.options)
 
   export default {
     data () {
       return {
-        appName: remote.app.getName(),
-        msg: 'Welcome board the Throidal Starship！',
-        login: '',
-        avatarUrl: '',
-        htmlUrl: '',
-        github: '',
-        repos: ''
+        searchQuery: ''
       }
     },
 
     props: [
-      'token',
-      'loading'
+      'user',
+      'repos',
+      'github'
     ],
 
-    ready: function() {
-      var self = this
-      var github = new Github({
-        token: self.token,
-        auth: 'oauth'
-      })
-      this.github = github
-      connect(function(db) {
-        // Get the documents collection
-        var userCol = db.collection('t_user')
-        userCol.find({}).toArray(function(err, result) {
-          self.login = result[0].login
-          self.avatarUrl = result[0].avatar_url
-          self.htmlUrl = result[0].html_url
-          var user = github.getUser()
-          user.userStarred(result[0].login, function(err, repos) {
-            // var starsCol = db.collection('t_stars')
-            // for (var i in repos) {
-            //   console.log(repos[i].full_name)
-            //   // starsCol.find({full_name: repos[i].full_name}).toArray(function(err, result) {
-            //   //
-            //   // })
-            // }
-            self.repos = repos
-            // starsCol.insertMany(repos, {w: 1}, function(err, result) {
-            //   console.log('Inserted Stars')
-            // })
-          })
-        })
-      })
-    },
     components: {
       NavBar,
       SideBar,
@@ -67,10 +26,10 @@
 
 <template>
   <header>
-    <nav-bar :login='login' :avatar-url='avatarUrl' :html-url='htmlUrl'></nav-bar>
+    <nav-bar :user='user' ></nav-bar>
   </header>
   <main>
-    <side-bar></side-bar>
-    <dashboard :github='github' :repos='repos'></dashboard>
+    <side-bar :search-query.sync="searchQuery"></side-bar>
+    <dashboard :github='github' :repos='repos' :search-query.sync="searchQuery"></dashboard>
   </main>
 </template>

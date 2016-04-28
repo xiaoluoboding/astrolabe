@@ -1,8 +1,11 @@
 <script>
   import GithubAuth from './GithubAuth'
   import MdlLoading from './materialize/MdlLoading'
+  import DotLoader from 'vue-spinner/src/DotLoader.vue'
+  import BounceLoader from 'vue-spinner/src/BounceLoader.vue'
   import storage from 'electron-json-storage'
   import request from 'request'
+  import Github from 'github-api'
   import env from '../../config/env_dev.json'
   import db from '../utils/db'
   let connect = db.connect(env.throidal.url, env.throidal.options)
@@ -11,28 +14,35 @@
     data () {
       return {
         token: '',
-        loading: false
+        connecting: '',
+        loading: ''
       }
     },
 
     props: [
-      'isLogin'
+      'isLogin',
+      'user',
+      'repos',
+      'github'
     ],
 
     ready: function () {
-      var self = this
-      storage.get('login-user', function (error, data) {
-        if (data.token) {
-          self.loading = false
-          self.token = data.token
-          self.getUser(data.token)
-        }
-      })
+      this.getLocalToken()
     },
 
     methods: {
+      getLocalToken () {
+        var self = this
+        storage.get('login-user', function (error, data) {
+          if (data.token) {
+            self.token = data.token
+            self.getUser(data.token)
+          }
+        })
+      },
       getUser (token) {
         var self = this
+        self.connecting = true
         var options = {
           url: 'https://api.github.com/user',
           headers: {
@@ -44,39 +54,80 @@
 
         function callback (error, response, body) {
           if (!error && response.statusCode === 200) {
-            var info = JSON.parse(body)
+            var user = JSON.parse(body)
+            self.user = user
             connect(function(db) {
               // Get the documents collection
               var col = db.collection('t_user')
-              col.find({login: info.login}).toArray(function(err, result) {
-                col.deleteOne({login: info.login}, function(err, result) {
+              col.find({login: user.login}).toArray(function(err, result) {
+                col.deleteOne({login: user.login}, function(err, result) {
                   console.log('Removed User')
                 })
-                col.insert(info, {w: 1}, function(err, result) {
+                col.insert(user, {w: 1}, function(err, result) {
                   console.log('Inserted User')
-                  self.isLogin = true
+                  self.getRepos(user)
                 })
               })
             })
           }
         }
         request(options, callback)
+      },
+      getRepos (user) {
+        var self = this
+        self.connecting = false
+        self.loading = true
+        // Get the documents collection
+        var github = new Github({
+          token: self.token,
+          auth: 'oauth'
+        })
+        this.github = github
+        connect(function(db) {
+          var userCol = db.collection('t_user')
+          userCol.find({}).toArray(function(err, result) {
+            var githubUser = github.getUser()
+            githubUser.userStarred(user.login, function(err, repos) {
+              // var starsCol = db.collection('t_stars')
+              // for (var i in repos) {
+              //   console.log(repos[i].full_name)
+              //   // starsCol.find({full_name: repos[i].full_name}).toArray(function(err, result) {
+              //   //
+              //   // })
+              // }
+              self.repos = repos
+              self.loading = false
+              self.isLogin = true
+              // starsCol.insertMany(repos, {w: 1}, function(err, result) {
+              //   console.log('Inserted Stars')
+              // })
+            })
+          })
+        })
       }
     },
 
     components: {
       GithubAuth,
-      MdlLoading
+      MdlLoading,
+      DotLoader,
+      BounceLoader
     }
   }
 </script>
 <template>
   <div class="login-screen">
-    {{ $data | json }}
     <div class="login-form">
       <github-auth></github-auth>
     </div>
-    <mdl-loading v-if="!loading"><mdl-loading>
+    <div class="loading" v-if="connecting">
+      <bounce-loader></bounce-loader>
+      <span>Connecting ...</span>
+    </div>
+    <div class="loading" v-if="loading">
+      <dot-loader color='crimson'></dot-loader>
+      <span>Loading ...</span>
+    </div>
   </div>
 </template>
 <style media="screen">
@@ -91,8 +142,47 @@
     background-size: cover;
     color: #fff;
   }
+
   .login-form {
   	align-items: center;
     justify-content: center;
+  }
+
+  .loading {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: white;
+  }
+
+  .loading .v-spinner {
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    margin: -30px 0 0 -30px;
+  }
+
+  .loading span {
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    color: #658399;
+    pointer-events: none;
+    position: absolute;
+    top: 55%;
+    left: 0;
+    text-align: center;
+    width: 100%;
   }
 </style>

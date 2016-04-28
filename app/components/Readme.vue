@@ -34,7 +34,7 @@
   }
 
   .repos-readme .readme img {
-    max-width: 750px;
+    max-width: 670px;
     vertical-align: middle;
   }
 
