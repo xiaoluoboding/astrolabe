@@ -8,10 +8,10 @@
   import Github from 'github-api'
   import env from '../../config/env_dev.json'
   import db from '../utils/db'
-  let connect = db.connect(env.throidal.url, env.throidal.options)
+  let connect = db.connect(env.db.url, env.db.options)
 
   export default {
-    data () {
+    data() {
       return {
         token: '',
         connecting: '',
@@ -26,21 +26,21 @@
       'github'
     ],
 
-    ready: function () {
+    ready: function() {
       this.getLocalToken()
     },
 
     methods: {
-      getLocalToken () {
+      getLocalToken() {
         var self = this
-        storage.get('login-user', function (error, data) {
+        storage.get('login-user', function(error, data) {
           if (data.token) {
             self.token = data.token
             self.getUser(data.token)
           }
         })
       },
-      getUser (token) {
+      getUser(token) {
         var self = this
         self.connecting = true
         var options = {
@@ -52,18 +52,24 @@
           }
         }
 
-        function callback (error, response, body) {
+        function callback(error, response, body) {
           if (!error && response.statusCode === 200) {
             var user = JSON.parse(body)
             self.user = user
             connect(function(db) {
               // Get the documents collection
               var col = db.collection('t_user')
-              col.find({login: user.login}).toArray(function(err, result) {
-                col.deleteOne({login: user.login}, function(err, result) {
+              col.find({
+                login: user.login
+              }).toArray(function(err, result) {
+                col.deleteOne({
+                  login: user.login
+                }, function(err, result) {
                   console.log('Removed User')
                 })
-                col.insert(user, {w: 1}, function(err, result) {
+                col.insert(user, {
+                  w: 1
+                }, function(err, result) {
                   console.log('Inserted User')
                   self.getRepos(user)
                 })
@@ -73,36 +79,54 @@
         }
         request(options, callback)
       },
-      getRepos (user) {
+      getRepos(user) {
         var self = this
         self.connecting = false
         self.loading = true
-        // Get the documents collection
+          // Get the documents collection
         var github = new Github({
           token: self.token,
           auth: 'oauth'
         })
         this.github = github
         connect(function(db) {
-          var userCol = db.collection('t_user')
-          userCol.find({}).toArray(function(err, result) {
-            var githubUser = github.getUser()
-            githubUser.userStarred(user.login, function(err, repos) {
-              // var starsCol = db.collection('t_stars')
-              // for (var i in repos) {
-              //   console.log(repos[i].full_name)
-              //   // starsCol.find({full_name: repos[i].full_name}).toArray(function(err, result) {
-              //   //
-              //   // })
-              // }
-              self.repos = repos
-              self.loading = false
-              self.isLogin = true
-              // starsCol.insertMany(repos, {w: 1}, function(err, result) {
-              //   console.log('Inserted Stars')
-              // })
-            })
+          var reposCol = db.collection('t_repos')
+          reposCol.find({}).toArray(function(err, result) {
+            self.repos = result
+            self.loading = false
+            self.isLogin = true
           })
+          // var userCol = db.collection('t_user')
+          // userCol.find({}).toArray(function(err, result) {
+          //   var githubUser = github.getUser()
+          //   githubUser.userStarred(user.login, function(err, repos) {
+          //     // var reposCol = db.collection('t_repos')
+          //     // for (var i in repos) {
+          //     //   console.log(repos[i].full_name)
+          //     //   // starsCol.find({full_name: repos[i].full_name}).toArray(function(err, result) {
+          //     //   //
+          //     //   // })
+          //     // }
+          //     for (var i in repos) {
+          //       self.repos.push({
+          //         id: repos[i].id,
+          //         full_name: repos[i].full_name,
+          //         description: repos[i].description,
+          //         stargazers_count: repos[i].stargazers_count,
+          //         forks_count: repos[i].forks_count,
+          //         html_url: repos[i].html_url,
+          //         language: repos[i].language,
+          //         selected: false
+          //       })
+          //     }
+          //     self.loading = false
+          //     self.isLogin = true
+          //     // console.log(self.repos);
+          //     // reposCol.insertMany(self.repos, {w: 1}, function(err, result) {
+          //     //   console.log('Inserted repos')
+          //     // })
+          //   })
+          // })
         })
       }
     },
@@ -144,7 +168,7 @@
   }
 
   .login-form {
-  	align-items: center;
+    align-items: center;
     justify-content: center;
   }
 

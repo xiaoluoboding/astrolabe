@@ -8,7 +8,7 @@
         isLogin: false,
         token: '',
         user: '',
-        repos: '',
+        repos: [],
         github: ''
       }
     },

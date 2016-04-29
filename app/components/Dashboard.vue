@@ -23,6 +23,7 @@
     data () {
       return {
         repoReadme: '',
+        indexSnapshot: -1,
         loadingReadme: ''
       }
     },
@@ -37,14 +38,19 @@
       openInBrowser(url) {
         shell.openExternal(url);
       },
-      showReadme(userName, repoName) {
-        this.loadingReadme = false
+      showReadme(index, repo) {
         var self = this
-        var github = this.github
-        var repo = github.getRepo(userName, repoName)
-        repo.read('master', 'README.md', function(err, data) {
-          self.repoReadme = marked(data)
-        });
+        this.indexSnapshot = index
+        if (!repo.selected) {
+          this.loadingReadme = false
+          repo.selected = !repo.selected
+          this.repos.$set(index, repo)
+          var github = this.github
+          var githubRepo = github.getRepo(repo.full_name.split('\/').shift(), repo.full_name.split('\/').pop())
+          githubRepo.read('master', 'README.md', function(err, data) {
+            self.repoReadme = marked(data)
+          });
+        }
       }
     },
 
@@ -52,6 +58,12 @@
       'repoReadme': function (val, oldVal) {
         if (val) {
           this.loadingReadme = true
+        }
+      },
+      'indexSnapshot': function (val, oldVal) {
+        if (oldVal != -1) {
+          this.repos[oldVal].selected = !this.repos[oldVal].selected
+          this.repos.$set(oldVal, this.repos[oldVal])
         }
       }
     },
@@ -68,11 +80,11 @@
   <main id="content" class="content">
     <aside id="repos-desc" class="repos-desc">
       <!-- <search :search-query.sync="searchQuery"></search> -->
-      <dot-loader v-if=''></dot-loader>
       <ul class="collection">
-        <li class="collection-item"
-            @click="showReadme(repo.full_name.split('\/').shift(),repo.full_name.split('\/').pop())"
-            v-for="repo in repos | filterBy searchQuery in 'full_name' 'description'">
+        <li href="#" class="collection-item"
+            :class="{ active: repo.selected }"
+            @click="showReadme($index, repo)"
+            v-for="repo in repos | filterBy searchQuery in 'full_name' 'description'" track-by="$index">
           <span class="title">{{ repo.full_name }}</span>
           <p>{{ repo.description }}</p>
           <div class="repo-count">
@@ -88,6 +100,7 @@
       </ul>
     </aside>
     <main id="repos-readme" class="repos-readme">
+      <!-- {{ $data.indexSnapshot | json }} -->
       <!-- <div class="wrapper">
         <div class="constructor">
           <h2 class="headline">Sidebar Constructor</h2>
@@ -166,14 +179,14 @@
     padding: 10px;
   }
 
-  .collection .collection-item:hover {
-    background: #fafafa;
-  }
-
   .collection .collection-item .title{
     font-size: 16px;
     font-weight: bold;
     color: #546e7a;
+  }
+
+  .collection .collection-item.active .title{
+    color: #fff;
   }
 
   .collection .collection-item .repo-count{
@@ -181,6 +194,10 @@
     margin-top: 2px;
     font-weight: bold;
     color: #546e7a;
+  }
+
+  .collection .collection-item.active .repo-count{
+    color: #fff;
   }
 
   .collection .collection-item .secondary-content {

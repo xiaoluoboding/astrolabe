@@ -32,7 +32,15 @@
     padding: 8px 10px;
   }
 
-/**
+  .search input[type=search]:focus:not([readonly]) {
+    border-bottom: 1px solid #f5f5f5;
+    box-shadow: 0 1px 0 0 #f5f5f5;
+  }
+
+  .search input[type=search]:focus:not([readonly]) + label {
+    color: #fff;
+  }
+  /**
 * The search field needs to be a little smaller than its container but when
 * focused it needs to grow to the whole width of its container.
 *
