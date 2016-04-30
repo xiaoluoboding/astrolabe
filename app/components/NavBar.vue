@@ -1,14 +1,16 @@
 <script>
-  var $ = require('jquery')
+  import $ from 'jquery'
 
   export default {
     name: 'NavBar',
 
-    props: [
-      'user'
-    ],
+    vuex: {
+      getters: {
+        user: ({ github }) => github.user
+      }
+    },
 
-    ready: function() {
+    ready () {
       $('.dropdown-button').dropdown({
         inDuration: 300,
         outDuration: 225,
@@ -24,7 +26,7 @@
 
 <template>
   <!-- Dropdown Structure -->
-  <ul id="dropdown1" class="dropdown-content">
+  <ul id="dropdownMenu" class="dropdown-content">
     <li>
       <a href="#" tabindex="-1" class="waves-effect waves-teal"><i class="material-icons tiny">perm_contact_calendar</i>Profile</a>
     </li>
@@ -40,10 +42,11 @@
     <nav>
       <div class="nav-wrapper">
         <a href="#!" class="brand-logo waves-effect waves-teal">Throidal</a>
+        <a class="waves-effect waves-light btn sidebar-toggle">Toggle sidebar</a>
         <ul class="right hide-on-med-and-down">
           <!-- Dropdown Trigger -->
           <li>
-            <a class="dropdown-button waves-effect waves-teal" href="#!" data-activates="dropdown1">
+            <a class="dropdown-button waves-effect waves-teal" href="#!" data-activates="dropdownMenu">
               <div class="nav-userinfo">
                 <img :src="user.avatar_url" alt="{{ user.login }}">
                 <span>{{ user.login }}</span>

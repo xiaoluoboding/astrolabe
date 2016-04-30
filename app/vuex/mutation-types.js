@@ -1,0 +1,15 @@
+// login mutation types
+export const TOGGLE_CONNECTING = 'TOGGLE_CONNECTING'
+export const TOGGLE_LOADING = 'TOGGLE_LOADING'
+export const TOGGLE_LOGIN = 'TOGGLE_LOGIN'
+
+// github mutation types
+export const SET_TOKEN = 'SET_TOKEN'
+export const SET_GITHUB = 'SET_GITHUB'
+export const SET_USER = 'SET_USER'
+export const SET_REPOS = 'SET_REPOS'
+
+// dashboard mutation types
+export const TOGGLE_LOADING_README = 'TOGGLE_LOADING_README'
+export const SET_ACTIVE_REPO = 'SET_ACTIVE_REPO'
+export const ORDER_REPO = 'ORDER_REPO'

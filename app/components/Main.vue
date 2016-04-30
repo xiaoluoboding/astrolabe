@@ -10,12 +10,6 @@
       }
     },
 
-    props: [
-      'user',
-      'repos',
-      'github'
-    ],
-
     components: {
       NavBar,
       SideBar,
@@ -26,10 +20,10 @@
 
 <template>
   <header>
-    <nav-bar :user='user' ></nav-bar>
+    <nav-bar></nav-bar>
   </header>
   <main>
     <side-bar :search-query.sync="searchQuery"></side-bar>
-    <dashboard :github='github' :repos='repos' :search-query.sync="searchQuery"></dashboard>
+    <dashboard :search-query.sync="searchQuery"></dashboard>
   </main>
 </template>

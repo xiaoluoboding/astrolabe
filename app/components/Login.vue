@@ -1,4 +1,13 @@
 <script>
+  import {
+    toggleConnecting,
+    toggleLoading,
+    toggleLogin,
+    setToken,
+    setGithub,
+    setUser,
+    setRepos
+  } from '../vuex/actions'
   import GithubAuth from './GithubAuth'
   import MdlLoading from './materialize/MdlLoading'
   import DotLoader from 'vue-spinner/src/DotLoader.vue'
@@ -11,22 +20,26 @@
   let connect = db.connect(env.db.url, env.db.options)
 
   export default {
-    data() {
-      return {
-        token: '',
-        connecting: '',
-        loading: ''
+    vuex: {
+      getters: {
+        connecting: ({ login }) => login.connecting,
+        loading: ({ login }) => login.loading,
+        isLogin: ({ login }) => login.isLogin,
+        github: ({ github }) => github.github,
+        repos: ({ github }) => github.repos
+      },
+      actions: {
+        toggleConnecting,
+        toggleLoading,
+        toggleLogin,
+        setToken,
+        setGithub,
+        setUser,
+        setRepos
       }
     },
 
-    props: [
-      'isLogin',
-      'user',
-      'repos',
-      'github'
-    ],
-
-    ready: function() {
+    ready () {
       this.getLocalToken()
     },
 
@@ -35,14 +48,20 @@
         var self = this
         storage.get('login-user', function(error, data) {
           if (data.token) {
-            self.token = data.token
+            // self.token = data.token
+            self.setToken(data.token)
+            var github = new Github({
+              token: data.token,
+              auth: 'oauth'
+            })
+            self.setGithub(github)
             self.getUser(data.token)
           }
         })
       },
       getUser(token) {
         var self = this
-        self.connecting = true
+        this.toggleConnecting()
         var options = {
           url: 'https://api.github.com/user',
           headers: {
@@ -55,7 +74,8 @@
         function callback(error, response, body) {
           if (!error && response.statusCode === 200) {
             var user = JSON.parse(body)
-            self.user = user
+            // self.user = user
+            self.setUser(user)
             connect(function(db) {
               // Get the documents collection
               var col = db.collection('t_user')
@@ -81,24 +101,19 @@
       },
       getRepos(user) {
         var self = this
-        self.connecting = false
-        self.loading = true
+        this.toggleLoading()
           // Get the documents collection
-        var github = new Github({
-          token: self.token,
-          auth: 'oauth'
-        })
-        this.github = github
+
         connect(function(db) {
           var reposCol = db.collection('t_repos')
           reposCol.find({}).toArray(function(err, result) {
-            self.repos = result
-            self.loading = false
-            self.isLogin = true
+            self.setRepos(result)
+            self.toggleLogin()
           })
+
           // var userCol = db.collection('t_user')
           // userCol.find({}).toArray(function(err, result) {
-          //   var githubUser = github.getUser()
+          //   var githubUser = self.github.getUser()
           //   githubUser.userStarred(user.login, function(err, repos) {
           //     // var reposCol = db.collection('t_repos')
           //     // for (var i in repos) {
@@ -107,24 +122,11 @@
           //     //   //
           //     //   // })
           //     // }
-          //     for (var i in repos) {
-          //       self.repos.push({
-          //         id: repos[i].id,
-          //         full_name: repos[i].full_name,
-          //         description: repos[i].description,
-          //         stargazers_count: repos[i].stargazers_count,
-          //         forks_count: repos[i].forks_count,
-          //         html_url: repos[i].html_url,
-          //         language: repos[i].language,
-          //         selected: false
-          //       })
-          //     }
-          //     self.loading = false
-          //     self.isLogin = true
-          //     // console.log(self.repos);
-          //     // reposCol.insertMany(self.repos, {w: 1}, function(err, result) {
-          //     //   console.log('Inserted repos')
-          //     // })
+          //     self.setRepos(repos)
+          //     self.toggleLogin()
+          //     reposCol.insertMany(self.repos, {w: 1}, function(err, result) {
+          //       console.log('Inserted repos')
+          //     })
           //   })
           // })
         })
