@@ -10,7 +10,28 @@
       'searchQuery'
     ],
 
-    ready: function () {
+    vuex: {
+      getters: {
+        repos: ({ github }) => github.repos
+      }
+    },
+
+    computed: {
+      total () {
+        return this.repos.length
+      },
+      untaggedTotal () {
+        let count = 0
+        for (var i in this.repos) {
+          if (this.repos[i].language == null) {
+            count += 1
+          }
+        }
+        return count
+      }
+    },
+
+    ready () {
       /**
        * Created by Kupletsky Sergey on 17.10.14.
        *
@@ -172,12 +193,14 @@
         <a href="#" class="waves-effect waves-teal">
           <i class="material-icons">star</i>
           <span>All Stars</span>
+          <span class="sidebar-badge">{{ total }}</span>
         </a>
       </li>
       <li>
         <a href="#" class="waves-effect waves-teal">
           <i class="material-icons">bookmark_border</i>
           <span>Untagged Stars</span>
+          <span class="sidebar-badge">{{ untaggedTotal }}</span>
         </a>
       </li>
       <li class="divider"></li>
@@ -416,12 +439,6 @@
 
   .sidebar-stacked.open + .wrapper .constructor {
     margin-left: 240px;
-  }
-
-  @media (max-width: 768px) {
-    .sidebar-stacked.open + .wrapper .constructor {
-      margin-left: 192px;
-    }
   }
   /* -- Sidebar style ------------------------------- */
 
@@ -1215,12 +1232,15 @@
   }
 
   @media (max-width: 768px) {
+    .sidebar-stacked.open + .wrapper .constructor {
+      margin-left: 192px;
+    }
     .sidebar.open {
       min-width: 192px;
       width: 192px;
     }
     .sidebar .sidebar-header {
-      height: 135px;
+      height: 56px;
     }
     .sidebar .sidebar-user-info img {
       width: 44px;

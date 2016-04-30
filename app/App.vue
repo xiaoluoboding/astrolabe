@@ -3,13 +3,15 @@
   import Main from './components/Main'
 
   export default {
-    data () {
-      return {
-        isLogin: false,
-        token: '',
-        user: '',
-        repos: [],
-        github: ''
+    // data () {
+    //   return {
+    //     isLogin: true
+    //   }
+    // },
+
+    vuex: {
+      getters: {
+        isLogin: ({ login }) => login.isLogin
       }
     },
 
@@ -23,15 +25,10 @@
 <template>
   <div id="app">
     <div class="login animated fadeIn" v-if="!isLogin">
-      <login
-        :is-login.sync="isLogin"
-        :user.sync="user"
-        :repos.sync="repos"
-        :github.sync="github">
-      </login>
+      <login></login>
     </div>
     <div class="animated fadeIn" v-else>
-      <main :user.sync="user" :repos.sync="repos" :github.sync="github"></main>
+      <main></main>
     </div>
   </div>
 </template>
