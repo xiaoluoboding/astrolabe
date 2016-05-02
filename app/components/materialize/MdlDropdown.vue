@@ -149,8 +149,8 @@
           activates.stop(true, true).css('opacity', 0)
             .slideDown({
               queue: false,
-              duration: options.inDuration,
               // easing: 'easeOutCubic',
+              duration: options.inDuration,
               complete: function() {
                 $(this).css('height', '');
               }
@@ -159,8 +159,8 @@
               opacity: 1
             }, {
               queue: false,
+              // easing: 'easeOutSine',
               duration: options.inDuration
-              // easing: 'easeOutSine'
             });
         }
 

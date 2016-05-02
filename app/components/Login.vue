@@ -74,25 +74,21 @@
         function callback(error, response, body) {
           if (!error && response.statusCode === 200) {
             var user = JSON.parse(body)
-            // self.user = user
             self.setUser(user)
             connect(function(db) {
               // Get the documents collection
               var col = db.collection('t_user')
-              col.find({
-                login: user.login
-              }).toArray(function(err, result) {
-                col.deleteOne({
-                  login: user.login
-                }, function(err, result) {
-                  console.log('Removed User')
-                })
-                col.insert(user, {
-                  w: 1
-                }, function(err, result) {
-                  console.log('Inserted User')
-                  self.getRepos(user)
-                })
+              user._id = user.id
+              col.findOneAndUpdate({_id: user.id}, {$set: user}).then(function(result) {
+                // find null then insert new user instead
+                if (!result.lastErrorObject.n) {
+                  col.insert(user, function(err, result) {
+                    console.log('Inserted User')
+                  })
+                } else {
+                  console.log('Updated User')
+                }
+                self.getRepos(user)
               })
             })
           }
@@ -151,7 +147,7 @@
       <span>Connecting ...</span>
     </div>
     <div class="loading" v-if="loading">
-      <dot-loader color='crimson'></dot-loader>
+      <dot-loader color='#e91e63'></dot-loader>
       <span>Loading ...</span>
     </div>
   </div>
@@ -181,6 +177,7 @@
     bottom: 0;
     left: 0;
     background: white;
+    z-index: 1020;
   }
 
   .loading .v-spinner {
