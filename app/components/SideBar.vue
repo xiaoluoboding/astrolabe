@@ -1,4 +1,5 @@
 <script>
+  import { toggleSidebar } from '../vuex/actions'
   import Search from './Search'
   var $ = require('jquery')
   var jQuery = $
@@ -6,13 +7,22 @@
   export default {
     name: 'SideBar',
 
+    data() {
+      return {
+      }
+    },
+
     props: [
       'searchQuery'
     ],
 
     vuex: {
       getters: {
-        repos: ({ github }) => github.repos
+        repos: ({ github }) => github.repos,
+        isAll: ({ sidebar }) => sidebar.isAll
+      },
+      actions: {
+        toggleSidebar
       }
     },
 
@@ -32,24 +42,19 @@
     },
 
     ready () {
-      /**
-       * Created by Kupletsky Sergey on 17.10.14.
-       *
-       * Material Sidebar (Profile menu)
-       * Tested on Win8.1 with browsers: Chrome 37, Firefox 32, Opera 25, IE 11, Safari 5.1.7
-       * You can use this sidebar in Bootstrap (v3) projects. HTML-markup like Navbar bootstrap component will make your work easier.
-       * Dropdown menu and sidebar toggle button works with JQuery and Bootstrap.min.js
-       */
-
       // Sidebar toggle
-      //
-      // -------------------
       $(document).ready(function() {
         var overlay = $('.sidebar-overlay');
+
+        jQuery.Velocity ? console.log("Velocity is already loaded") : console.log('Velocity is not working')
 
         $('.sidebar-toggle').on('click', function() {
           var sidebar = $('#sidebar');
           sidebar.toggleClass('open');
+          $('.nav-wrapper').toggleClass('open');
+          $('.search').toggle(320);
+          $('.nav.sidebar-nav span').toggle(320);
+          // $('.add-tag').tooltip('toggle')
           if ((sidebar.hasClass('sidebar-fixed-left') || sidebar.hasClass('sidebar-fixed-right')) && sidebar.hasClass('open')) {
             overlay.addClass('active');
           } else {
@@ -62,18 +67,12 @@
           $('#sidebar').removeClass('open');
         });
       });
-      // Sidebar constructor
-      //
-      // -------------------
+      // Sidebar content
       $(document).ready(function() {
         var sidebar = $('#sidebar');
         var sidebarHeader = $('#sidebar .sidebar-header');
         var sidebarImg = sidebarHeader.css('background-image');
-        var toggleButtons = $('.sidebar-toggle');
 
-        // Hide toggle buttons on default position
-        // toggleButtons.css('display', 'none');
-        // $('body').css('display', 'table');
         $('select').css('display', 'inherit');
 
         // Sidebar position
@@ -82,15 +81,6 @@
           sidebar.removeClass('sidebar-fixed-left sidebar-fixed-right sidebar-stacked').addClass(value).addClass('open');
           if (value === 'sidebar-fixed-left' || value === 'sidebar-fixed-right') {
             $('.sidebar-overlay').addClass('active');
-          }
-          // Show toggle buttons
-          if (value !== '') {
-            toggleButtons.css('display', 'initial');
-            $('body').css('display', 'initial');
-          } else {
-            // Hide toggle buttons
-            toggleButtons.css('display', 'none');
-            $('body').css('display', 'table');
           }
         });
 
@@ -114,9 +104,7 @@
         });
       });
 
-      // Nestable
-      //
-      // -------------------
+      // Nestable Setup
       $(document).ready(function() {
         $('.dd').nestable();
       });
@@ -182,21 +170,20 @@
       <!-- Top bar -->
       <div class="top-bar">
         <!-- Sidebar toggle button -->
-        <a class="waves-effect waves-grey lighten-5 btn-flat btn-floating sidebar-toggle"><i class="material-icons">menu</i></a>
+        <a class="waves-effect waves-light btn-flat btn-floating sidebar-toggle"><i class="material-icons">menu</i></a>
         <search :search-query.sync="searchQuery"></search>
       </div>
     </div>
-
     <!-- Sidebar navigation -->
     <ul class="nav sidebar-nav">
-      <li>
+      <li :class="{active : isAll}" @click="toggleSidebar()">
         <a href="#" class="waves-effect waves-teal">
           <i class="material-icons">star</i>
           <span>All Stars</span>
           <span class="sidebar-badge">{{ total }}</span>
         </a>
       </li>
-      <li>
+      <li :class="{active : !isAll}" @click="toggleSidebar()">
         <a href="#" class="waves-effect waves-teal">
           <i class="material-icons">bookmark_border</i>
           <span>Untagged Stars</span>
@@ -235,118 +222,83 @@
   			<ol class="dd-list">
   				<li class="dd-item" data-id="1">
   					<div class="dd-handle">
-  						<i class="material-icons">local_offer</i>
-              <span class="red">Item 1</span>
-              <span class="sidebar-badge">216</span>
+              <a href="#" class="waves-effect waves-red">
+    						<i class="material-icons">local_offer</i>
+                <span class="red">Item 1</span>
+                <span class="sidebar-badge">216</span>
+              </a>
   					</div>
   				</li>
   				<li class="dd-item" data-id="2">
   					<div class="dd-handle">
-  						<i class="material-icons">local_offer</i>
-              <span class="orange">Item 2</span>
-              <span class="sidebar-badge">32</span>
+              <a href="#" class="waves-effect waves-orange">
+    						<i class="material-icons">local_offer</i>
+                <span class="orange">Item 2</span>
+                <span class="sidebar-badge">32</span>
+              </a>
   					</div>
   				</li>
   				<li class="dd-item" data-id="3">
   					<div class="dd-handle">
-  						<i class="material-icons">local_offer</i>
-              <span class="yellow">Item 3</span>
-              <span class="sidebar-badge">64</span>
+              <a href="#" class="waves-effect waves-yellow">
+    						<i class="material-icons">local_offer</i>
+                <span class="yellow">Item 3</span>
+                <span class="sidebar-badge">64</span>
+              </a>
   					</div>
   				</li>
   				<li class="dd-item" data-id="4">
+    					<div class="dd-handle">
+                <a href="#" class="waves-effect waves-green">
+      						<i class="material-icons">local_offer</i>
+                  <span class="green">Item 4</span>
+                </a>
+    					</div>
+  				</li>
+  				<li class="dd-item" data-id="5">
   					<div class="dd-handle">
-  						<i class="material-icons">local_offer</i>
-              <span class="green">Item 4</span>
+              <a href="#" class="waves-effect waves-teal">
+                <i class="material-icons">local_offer</i>
+    						<span class="cyan">Item 5</span>
+              </a>
   					</div>
   				</li>
-  				<li class="dd-item" data-id="4">
+  				<li class="dd-item" data-id="6">
   					<div class="dd-handle">
-              <i class="material-icons">local_offer</i>
-  						<span class="cyan">Item 5</span>
+              <a href="#" class="waves-effect waves-blue">
+    						<i class="material-icons">local_offer</i>
+                <span class="blue">Item 6</span>
+              </a>
   					</div>
   				</li>
-  				<li class="dd-item" data-id="4">
+  				<li class="dd-item" data-id="7">
   					<div class="dd-handle">
-  						<i class="material-icons">local_offer</i>
-              <span class="blue">Item 6</span>
+              <a href="#" class="waves-effect waves-purple">
+    						<i class="material-icons">local_offer</i>
+                <span class="purple">Item 7</span>
+              </a>
   					</div>
   				</li>
-  				<li class="dd-item" data-id="4">
-  					<div class="dd-handle">
-  						<i class="material-icons">local_offer</i>
-              <span class="purple">Item 7</span>
-  					</div>
-  				</li>
-  			</ol>
+  			</ul>
   		</div>
-    </ul>
+    </ol>
     <!-- Sidebar divider -->
     <!-- <div class="sidebar-divider"></div> -->
 
-    <!-- Sidebar text -->
-    <!--  <div class="sidebar-text">Text</div> -->
+    <!-- Sidebar action -->
+    <div class="sidebar-action">
+      <a
+        href="#!"
+        class="add-tag waves-effect waves-circle waves-light btn-floating"
+        data-toggle="tooltip"
+        data-placement="left"
+        title="Add A Tag">
+        <i class="material-icons">add</i>
+      </a>
+    </div>
   </aside>
 </template>
 <style>
-  [class^="md-"],
-  [class*=" md-"] {
-    display: inline-block;
-    font: normal normal normal 14px/1 'Material Design Iconic Font';
-    font-size: inherit;
-    speak: none;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  .md {
-    line-height: inherit;
-    vertical-align: bottom;
-  }
-
-  .md-inbox:before {
-    content: "\f10c";
-  }
-
-  .md-star:before {
-    content: "\f2e5";
-  }
-
-  .md-send:before {
-    content: "\f119";
-  }
-
-  .md-drafts:before {
-    content: "\f107";
-  }
-
-  .md-arrow-back:before {
-    content: "\f297";
-  }
-
-  .md-arrow-forward:before {
-    content: "\f298";
-  }
-  /* -- You can use this sidebar in Bootstrap (v3) projects. HTML-markup like Navbar bootstrap component will make your work easier. -- */
-  /* -- Box model ------------------------------- */
-
-  *,
-  *:after,
-  *:before {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-  }
-  /* -- Demo style ------------------------------- */
-
-  html,
-  body {
-    position: relative;
-    min-height: 100%;
-    height: 100%;
-  }
-
   .sidebar-overlay {
     visibility: hidden;
     position: fixed;
@@ -420,24 +372,21 @@
   .dropdown-menu {
     display: none;
   }
-  /* -- Constructor style ------------------------------- */
+  /* -- Content style ------------------------------- */
 
-  .constructor {
+  .content {
     position: relative;
     margin: 0;
-    padding: 0 50px;
     -webkit-transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
     -o-transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
     transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
   }
 
-  .sidebar,
-  .wrapper {
-    display: table-cell;
-    vertical-align: top;
+  .sidebar-stacked + .wrapper .content {
+    margin-left: 64px;
   }
 
-  .sidebar-stacked.open + .wrapper .constructor {
+  .sidebar-stacked.open + .wrapper .content {
     margin-left: 240px;
   }
   /* -- Sidebar style ------------------------------- */
@@ -586,6 +535,8 @@
     position: absolute;
     right: 16px;
     top: 12px;
+    font-size: 12px;
+    padding: 0px 6px;
   }
 
   .sidebar .sidebar-brand:hover,
@@ -598,8 +549,8 @@
     min-width: 24px;
     height: 24px;
     line-height: 24px;
-    padding: 0 3px;
-    font-size: 10px;
+    padding: 0 6px;
+    font-size: 12px;
     text-align: center;
     white-space: nowrap;
     vertical-align: baseline;
@@ -619,13 +570,14 @@
     overflow: hidden;
   }
 
-  .sidebar .sidebar-text {
+  .sidebar .sidebar-action {
+    position: inherit;
     display: block;
-    height: 48px;
-    line-height: 48px;
+    bottom: 0;
+    height: 64px;
+    width: 240px;
+    line-height: 64px;
     padding: 0;
-    padding-left: 16px;
-    padding-right: 56px;
     text-decoration: none;
     clear: both;
     font-weight: 500;
@@ -638,23 +590,37 @@
     transition: all 0.2s ease-in-out;
   }
 
-  .sidebar .sidebar-text:hover,
-  .sidebar .sidebar-text:focus {
+  .sidebar .sidebar-action a {
+    margin: 14px;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  .sidebar.open .sidebar-action a {
+    margin: 14px;
+    -webkit-transform: translate3d(176px, 0, 0);
+    transform: translate3d(176px, 0, 0);
+  }
+
+  .sidebar .sidebar-action:hover,
+  .sidebar .sidebar-action:focus {
     -webkit-box-shadow: none;
     box-shadow: none;
     outline: none;
   }
 
-  .sidebar .sidebar-text .caret {
+  .sidebar .sidebar-action .caret {
     position: absolute;
     right: 24px;
     top: 24px;
   }
 
-  .sidebar .sidebar-text .sidebar-badge {
+  .sidebar .sidebar-action .sidebar-badge {
     position: absolute;
     right: 16px;
     top: 12px;
+    font-size: 12px;
+    padding: 0px 6px;
   }
 
   .sidebar .sidebar-icon {
@@ -689,8 +655,6 @@
     height: 48px;
     line-height: 48px;
     padding: 0;
-    padding-left: 16px;
-    padding-right: 56px;
     text-decoration: none;
     clear: both;
     font-weight: 500;
@@ -720,6 +684,7 @@
     position: absolute;
     right: 16px;
     top: 12px;
+
   }
 
   .sidebar .sidebar-nav li a:hover {
@@ -771,7 +736,7 @@
     background-color: #bdbdbd;
   }
 
-  .sidebar-default .sidebar-text {
+  .sidebar-default .sidebar-action {
     color: #212121;
   }
 
@@ -882,7 +847,7 @@
     background-color: #bdbdbd;
   }
 
-  .sidebar-inverse .sidebar-text {
+  .sidebar-inverse .sidebar-action {
     color: #f5f5f5;
   }
 
@@ -993,7 +958,7 @@
     background-color: #bdbdbd;
   }
 
-  .sidebar-colored .sidebar-text {
+  .sidebar-colored .sidebar-action {
     color: #212121;
   }
 
@@ -1004,12 +969,8 @@
 
   .sidebar-colored .sidebar-nav li > a i {
     color: #757575;
-    padding: 12px 0;
+    margin: 12px 20px;
     float: left;
-  }
-
-  .sidebar-colored .sidebar-nav li > a span {
-    margin-left: 12px;
   }
 
   .sidebar-colored .sidebar-nav li:hover > a,
@@ -1105,7 +1066,7 @@
     background-color: #bdbdbd;
   }
 
-  .sidebar-colored-inverse .sidebar-text {
+  .sidebar-colored-inverse .sidebar-action {
     color: #e0e0e0;
   }
 
@@ -1206,6 +1167,9 @@
 
   .sidebar-stacked {
     left: 0;
+    min-width: 64px;
+    width: 64px;
+    transform: translate3d(0, 0, 0);
   }
 
   .sidebar-fixed-left {
@@ -1232,7 +1196,7 @@
   }
 
   @media (max-width: 768px) {
-    .sidebar-stacked.open + .wrapper .constructor {
+    .sidebar-stacked.open + .wrapper .content {
       margin-left: 192px;
     }
     .sidebar.open {

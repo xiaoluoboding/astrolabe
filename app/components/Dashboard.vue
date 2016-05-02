@@ -8,8 +8,10 @@
   import Search from './Search'
   import Readme from './Readme'
   import MdlLoading from './materialize/MdlLoading'
+  import MdlFab from './materialize/MdlFab'
   import shell from 'shell'
   import marked from 'marked'
+  import $ from 'jquery'
 
   marked.setOptions({
     renderer: new marked.Renderer(),
@@ -27,6 +29,7 @@
 
     data () {
       return {
+        strollStyle: true,
         repoReadme: ''
       }
     },
@@ -42,7 +45,8 @@
         loadingReadme: ({ dashboard }) => dashboard.loadingReadme,
         activeRepo: ({ dashboard }) => dashboard.activeRepo,
         repoKey: ({ dashboard }) => dashboard.repoKey,
-        order: ({ dashboard }) => dashboard.order
+        order: ({ dashboard }) => dashboard.order,
+        strollStyle: ({ dashboard }) => dashboard.strollStyle
       },
       actions: {
         toggleLoadingReadme,
@@ -51,9 +55,16 @@
       }
     },
 
-    ready () {
-      // Bind via element reference
-      // stroll.bind(document.getElementById('cards'));
+    ready() {
+      $(document).ready(function() {
+        $('body').css('overflow', 'hidden')
+        $('[data-toggle="tooltip"]').tooltip()
+        $('.repos-desc').css('height', $(window).height() - 124)
+      })
+
+      $(window).resize(function() {
+        $('.repos-desc').css('height', $(this).height() - 124)
+      })
     },
 
     methods: {
@@ -88,30 +99,30 @@
       Octicon,
       Search,
       Readme,
-      MdlLoading
+      MdlLoading,
+      MdlFab
     }
   }
 </script>
 <template>
-  <main id="content" class="content">
-    <div class="btn-group btn-repos">
-      <a class="waves-effect waves-light btn" @click="orderByRepoKey('owner_name')"><octicon name="octoface"></octicon>Owner</a>
-      <a class="waves-effect waves-light btn" @click="orderByRepoKey('repo_name')"><octicon name="repo"></octicon>Repo</a>
-      <a class="waves-effect waves-light btn" @click="orderByRepoKey('stargazers_count')"><octicon name="star"></octicon>Star</a>
-    </div>
-    <aside id="repos-desc" class="repos-desc">
-      <!-- <search :search-query.sync="searchQuery"></search> -->
-      <div id="cards" class="cards">
+  <main class="wrapper">
+    <div class="content">
+      <div class="btn-group btn-repos">
+        <a class="waves-effect waves-light btn" @click="orderByRepoKey('owner_name')"><octicon name="octoface"></octicon>Owner</a>
+        <a class="waves-effect waves-light btn" @click="orderByRepoKey('repo_name')"><octicon name="repo"></octicon>Repo</a>
+        <a class="waves-effect waves-light btn" @click="orderByRepoKey('stargazers_count')"><octicon name="star"></octicon>Star</a>
+      </div>
+      <aside id="repos-desc" class="repos-desc" :class="{ cards: strollStyle }">
+        <!-- <search :search-query.sync="searchQuery"></search> -->
         <div
-          class="card"
-          :class="{ 'blue-grey': activeRepo.id === repo.id }"
-          :class="{ 'darken-1': activeRepo.id === repo.id }"
+          class="card waves-effect waves-light"
+          :class="{ 'blue-grey': activeRepo.id === repo.id, 'darken-1': activeRepo.id === repo.id }"
           @click="showReadme(repo)"
           v-for="repo in repos | filterBy searchQuery in 'owner_name' 'repo_name' 'description' | orderBy repoKey order">
           <div class="card-content" :class="{ 'white-text': activeRepo.id === repo.id }">
             <span class="card-title">{{ repo.owner_name }} / {{ repo.repo_name }}</span>
             <p>{{ repo.description }}</p>
-            <div class="tags">
+            <div class="card-tag" v-if="repo.language">
               <div class="chip">
                {{ repo.language }}
               </div>
@@ -129,53 +140,32 @@
             </div>
           </div>
         </div>
-      </div>
-      <!-- <ul class="collection">
-        <li href="#" class="collection-item"
-            :class="{ active: activeRepo.id === repo.id }"
-            @click="showReadme(repo)"
-            v-for="repo in repos | filterBy searchQuery in 'owner_name' 'repo_name' 'description' | orderBy repoKey order" track-by="$index">
-          <span class="title">{{ repo.owner_name }} / {{ repo.repo_name }}</span>
-          <p>{{ repo.description }}</p>
-          <div class="tags">
-            <div class="chip">
-             {{ repo.language }}
-            </div>
-          </div>
-          <div class="repo-count">
-            <div class="star">
-              <octicon name="star"></octicon><span> {{ repo.stargazers_count }}</span>
-            </div>
-            <div class="fork">
-              <octicon name="repo-forked"></octicon><span> {{ repo.forks_count }}</span>
-            </div>
-          </div>
-          <a href="#" class="secondary-content" @click="openInBrowser(repo.html_url)">View on GitHub</a>
-        </li>
-      </ul> -->
-    </aside>
-    <main id="repos-readme" class="repos-readme">
-      <!-- {{ $data | json }} -->
-      <div class='empty-placeholder' v-if='!repoReadme'>
-        No Repo Selected
-      </div>
-      <div v-else>
-        <div class="animated fadeIn" v-if='loadingReadme'>
-          <mdl-loading></mdl-loading>
+      </aside>
+      <mdl-fab></mdl-fab>
+      <main id="repos-readme" class="repos-readme">
+        <!-- {{ $data | json }} -->
+        <div class='empty-placeholder' v-if='!repoReadme'>
+          No Repo Selected
         </div>
-        <div class="animated fadeIn" v-else>
-          <readme :repo-readme='repoReadme'></readme>
+        <div v-else>
+          <div class="animated fadeIn" v-if='loadingReadme'>
+            <mdl-loading></mdl-loading>
+          </div>
+          <div class="animated fadeIn" v-else>
+            <readme :repo-readme='repoReadme'></readme>
+          </div>
         </div>
-      </div>
-    </main>
-  </main>
+      </main>
+    </div>
+  </div>
 </template>
 <style>
   .btn-group.btn-repos {
-    position: absolute;
+    position: relative;
+    /*position: absolute;
     left: 240px;
     top: 64px;
-    bottom: 0;
+    bottom: 0;*/
     padding: 12px 8px;
     width: 320px;
     background: #fafafa;
@@ -184,76 +174,37 @@
   }
 
   .repos-desc {
-    position: absolute;
+    position: relative;
+    /*position: absolute;
     left: 240px;
     top: 128px;
-    bottom: 0;
+    bottom: 0;*/
     padding: 0 8px;
     width: 320px;
     background: white;
-    overflow-y: auto;
+    overflow-y: scroll;
     overflow-x: hidden;
     border-right: 1px solid rgba(55,53,112,0.08);
+  }
+
+  .repos-desc .waves-effect {
+    display: block;
   }
 
   .repos-readme {
     position: absolute;
     background: #fff;
     color: #546e7a;
-    top: 64px;
-    left: 560px;
+    /*top: 64px;
+    left: 560px;*/
+    top: 0;
+    left: 320px;
     right: 0;
     bottom: 0;
     min-width: 448px;
     overflow-y: scroll;
     overflow-x: hidden;
   }
-
-  /* collection */
-
-  .collection {
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.12),0 2px 8px 0 rgba(0,0,0,0.12);
-  }
-
-  .collection .collection-item {
-    padding: 10px;
-  }
-
-  .collection .collection-item .title{
-    font-size: 16px;
-    font-weight: bold;
-    color: #546e7a;
-  }
-
-  .collection .collection-item.active .title{
-    color: #fff;
-  }
-
-  .collection .collection-item .repo-count{
-    display: inline-flex;
-    margin-top: 2px;
-    font-weight: bold;
-    color: #546e7a;
-  }
-
-  .collection .collection-item.active .repo-count{
-    color: #fff;
-  }
-
-  .collection .collection-item .secondary-content {
-    font-size: 13px;
-    font-weight: bold;
-  }
-
-  .collection .collection-item .repo-count .star{
-    margin-right: 4px;
-  }
-
-  .collection .collection-item .repo-count span{
-    float: right;
-    margin: -2px 2px;
-  }
-
   /* btn-group */
 
   .btn-group {
@@ -282,10 +233,6 @@
 
   /* cards */
 
-  .cards {
-    margin: 0.5rem 0 1rem 0;
-  }
-
   .card {
     margin: 0.5rem 0 0.5rem 0;
   }
@@ -311,6 +258,21 @@
 
   .card .card-content p {
     margin: 0 0 8px 0;
+  }
+
+  .card .card-content .card-tag .chip {
+    margin-bottom: 8px;
+    height: 24px;
+    line-height: 20px;
+    color: rgba(0, 0, 0, 0.8);
+    padding: 2px 8px;
+    background-color: #e0e0e0;
+  }
+
+  .card .card-content.white-text .card-tag .chip {
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.9);
+    background-color: #FFAB40;
   }
 
   .card .card-action {

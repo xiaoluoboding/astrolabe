@@ -5,6 +5,7 @@ import Vuex from 'vuex'
 import login from './modules/login'
 import github from './modules/github'
 import dashboard from './modules/dashboard'
+import sidebar from './modules/sidebar'
 
 Vue.use(Vuex)
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
   modules: {
     login,
     github,
-    dashboard
+    dashboard,
+    sidebar
   }
 })

@@ -40,13 +40,12 @@
   </ul>
   <div class="navbar-fixed">
     <nav>
-      <div class="nav-wrapper">
-        <a href="#!" class="brand-logo waves-effect waves-teal">Throidal</a>
-        <a class="waves-effect waves-light btn sidebar-toggle">Toggle sidebar</a>
+      <div class="nav-wrapper open">
+        <span href="#!" class="brand-logo waves-effect waves-light">Throidal</span>
         <ul class="right hide-on-med-and-down">
           <!-- Dropdown Trigger -->
           <li>
-            <a class="dropdown-button waves-effect waves-teal" href="#!" data-activates="dropdownMenu">
+            <a class="dropdown-button waves-effect waves-light" href="#!" data-activates="dropdownMenu">
               <div class="nav-userinfo">
                 <img :src="user.avatar_url" alt="{{ user.login }}">
                 <span>{{ user.login }}</span>
@@ -65,14 +64,22 @@
     background-color: #e91e63;
   }
 
-  .nav-wrapper {
-    margin-left: 264px;
+  nav .brand-logo {
+    font-size: 1.8rem;
+  }
+
+  .nav-wrapper.open .brand-logo {
+    transform: translate3d(264px, 0, 0);
+  }
+
+  .nav-wrapper .brand-logo {
+    transform: translate3d(88px, 0, 0);
   }
 
   .nav-wrapper .dropdown-button {
     position: absolute;
     bottom: 0;
-    right: 0;
+    right: 20px;
     display: block;
     height: 64px;
     line-height: 64px;

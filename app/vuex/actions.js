@@ -19,6 +19,9 @@ export const toggleLoadingReadme = makeAction('TOGGLE_LOADING_README')
 export const setActiveRepo = makeAction('SET_ACTIVE_REPO')
 export const orderRepo = makeAction('ORDER_REPO')
 
+// sidebar actions
+export const toggleSidebar = makeAction('TOGGLE_SIDEBAR')
+
 function makeAction (type) {
   return ({ dispatch }, ...args) => dispatch(type, ...args)
 }

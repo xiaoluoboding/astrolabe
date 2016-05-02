@@ -3,6 +3,7 @@
   import { ipcRenderer } from 'electron'
   import storage from 'electron-json-storage'
   import request from 'request'
+  import Octicon from '../node_modules/vue-octicon/src/components/Octicon'
 
   export default {
     data () {
@@ -109,6 +110,10 @@
 
         request(options, callback)
       }
+    },
+
+    components: {
+      Octicon
     }
   }
 </script>
@@ -120,7 +125,8 @@
   <pre>
     {{ $data | json }}
   </pre>
-  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--white" @click="githubAuth()">
-    GitHub 登录
-  </button>
+  <a class="waves-effect waves-light btn sidebar-toggle" @click="githubAuth()">
+    <octicon name="mark-github"></octicon>
+    <span>Log in with GitHub</span>
+  </a>
 </template>

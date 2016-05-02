@@ -464,41 +464,37 @@
 </script>
 <style>
   .dd .dd-list {
-    margin: 16px 16px 16px -24px;
+    margin-left: -40px;
   }
 
-  .dd-handle {
-    position: relative;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    display: block;
-    height: 36px;
-    line-height: 36px;
-    padding: 0;
-    padding-right: 56px;
-    text-decoration: none;
-    clear: both;
-    font-weight: 500;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    -webkit-transition: all 0.2s ease-in-out;
-    transition: all 0.2s ease-in-out;
+  .dd .dd-list .dd-item {
+    padding: 2px 0;
+  }
+
+  .dd .dd-list li a {
+    height: 36px !important;
+    line-height: 36px !important;
+  }
+
+  .dd .dd-list li a:hover {
+    color: #212121;
+    background-color: #e0e0e0;
+  }
+
+  .dd .dd-list li a .sidebar-badge {
+    top: 6px !important;
   }
 
   .dd-handle i {
     color: #757575;
     float: left;
-    padding: 6px 0;
+    margin: 6px 20px;
   }
 
   .dd-handle span {
     color: #fafafa;
-    margin-left: 12px;
-    padding: 6px 8px;
+    display: inline-block;
+    padding: 0 20px;
   }
 
   .dd-handle .sidebar-badge {
@@ -509,10 +505,18 @@
 
   .dd-placeholder {
     border: 1px dashed #999;
+    margin: 2px;
   }
 
   .dd-list.dd-dragel {
     position: fixed;
-    margin: 36px 0 0 -40px
+    line-height: 36px;
+    height: 36px;
+    margin: 36px 0 0 -40px;
+    list-style: none;
+  }
+
+  .dd-list.dd-dragel .sidebar-badge {
+    display: none;
   }
 </style>

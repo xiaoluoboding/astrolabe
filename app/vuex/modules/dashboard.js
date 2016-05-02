@@ -1,4 +1,4 @@
-// vuex/modules/login.js
+// vuex/modules/dashboard.js
 import {
   TOGGLE_LOADING_README,
   SET_ACTIVE_REPO,
