@@ -2,7 +2,8 @@
   import {
     toggleLoadingReadme,
     setActiveRepo,
-    orderRepo
+    orderRepo,
+    filterByLanguage
   } from '../vuex/actions'
   import Octicon from '../node_modules/vue-octicon/src/components/Octicon'
   import Search from './Search'
@@ -34,10 +35,6 @@
       }
     },
 
-    props: [
-      'searchQuery'
-    ],
-
     vuex: {
       getters: {
         github: ({ github }) => github.github,
@@ -46,12 +43,15 @@
         activeRepo: ({ dashboard }) => dashboard.activeRepo,
         repoKey: ({ dashboard }) => dashboard.repoKey,
         order: ({ dashboard }) => dashboard.order,
-        strollStyle: ({ dashboard }) => dashboard.strollStyle
+        strollStyle: ({ dashboard }) => dashboard.strollStyle,
+        searchQuery: ({ sidebar }) => sidebar.searchQuery,
+        filterFields: ({ sidebar }) => sidebar.filterFields
       },
       actions: {
         toggleLoadingReadme,
         setActiveRepo,
-        orderRepo
+        orderRepo,
+        filterByLanguage
       }
     },
 
@@ -114,16 +114,17 @@
       </div>
       <aside id="repos-desc" class="repos-desc" :class="{ cards: strollStyle }">
         <!-- <search :search-query.sync="searchQuery"></search> -->
+        <!-- {{ $data | json }} -->
         <div
           class="card waves-effect waves-light"
           :class="{ 'blue-grey': activeRepo.id === repo.id, 'darken-1': activeRepo.id === repo.id }"
           @click="showReadme(repo)"
-          v-for="repo in repos | filterBy searchQuery in 'owner_name' 'repo_name' 'description' | orderBy repoKey order">
+          v-for="repo in repos | filterBy searchQuery in filterFields | orderBy repoKey order">
           <div class="card-content" :class="{ 'white-text': activeRepo.id === repo.id }">
             <span class="card-title">{{ repo.owner_name }} / {{ repo.repo_name }}</span>
             <p>{{ repo.description }}</p>
             <div class="card-tag" v-if="repo.language">
-              <div class="chip">
+              <div class="chip" @click="filterByLanguage(repo.language)">
                {{ repo.language }}
               </div>
             </div>

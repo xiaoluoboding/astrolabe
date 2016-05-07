@@ -1,15 +1,27 @@
 <script>
+  import {
+    setSearchQuery
+  } from '../vuex/actions'
+
   export default {
     name: 'Search',
 
-    props: [
-      'searchQuery'
-    ]
+    vuex: {
+      actions: {
+        setSearchQuery
+      }
+    },
+
+    methods: {
+      updateSearchQuery: function(e) {
+        this.setSearchQuery(e.target.value)
+      }
+    }
   }
 </script>
 <template>
   <form action="" class="search">
-    <input class="search-box" type="search" id="search-box" autocomplete="off" v-model="searchQuery">
+    <input class="search-box" type="search" id="search-box" autocomplete="off" :value="searchQuery" @input="updateSearchQuery">
     <label class="search-label" for="search-box"><i class="material-icons medium">search</i></label>
   </form>
 </template>

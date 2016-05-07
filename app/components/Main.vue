@@ -4,12 +4,6 @@
   import Dashboard from './Dashboard'
 
   export default {
-    data () {
-      return {
-        searchQuery: ''
-      }
-    },
-
     components: {
       NavBar,
       SideBar,
@@ -23,7 +17,7 @@
     <nav-bar></nav-bar>
   </header>
   <main>
-    <side-bar :search-query.sync="searchQuery"></side-bar>
-    <dashboard :search-query.sync="searchQuery"></dashboard>
+    <side-bar></side-bar>
+    <dashboard></dashboard>
   </main>
 </template>

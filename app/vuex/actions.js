@@ -21,6 +21,8 @@ export const orderRepo = makeAction('ORDER_REPO')
 
 // sidebar actions
 export const toggleSidebar = makeAction('TOGGLE_SIDEBAR')
+export const setSearchQuery = makeAction('SET_SEARCH_QUERY')
+export const filterByLanguage = makeAction('FILTER_BY_LANGUAGE')
 
 function makeAction (type) {
   return ({ dispatch }, ...args) => dispatch(type, ...args)

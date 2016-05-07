@@ -1,28 +1,24 @@
 <script>
-  import { toggleSidebar } from '../vuex/actions'
+  import {
+    toggleSidebar,
+    filterByLanguage
+  } from '../vuex/actions'
   import Search from './Search'
-  var $ = require('jquery')
-  var jQuery = $
+  import $ from 'jquery'
+  const jQuery = $
 
   export default {
     name: 'SideBar',
 
-    data() {
-      return {
-      }
-    },
-
-    props: [
-      'searchQuery'
-    ],
-
     vuex: {
       getters: {
         repos: ({ github }) => github.repos,
-        isAll: ({ sidebar }) => sidebar.isAll
+        isAll: ({ sidebar }) => sidebar.isAll,
+        searchQuery: ({ sidebar }) => sidebar.searchQuery
       },
       actions: {
-        toggleSidebar
+        toggleSidebar,
+        filterByLanguage
       }
     },
 
@@ -171,7 +167,7 @@
       <div class="top-bar">
         <!-- Sidebar toggle button -->
         <a class="waves-effect waves-light btn-flat btn-floating sidebar-toggle"><i class="material-icons">menu</i></a>
-        <search :search-query.sync="searchQuery"></search>
+        <search></search>
       </div>
     </div>
     <!-- Sidebar navigation -->
