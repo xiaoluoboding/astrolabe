@@ -12,11 +12,8 @@
     "marked": "^0.3.5",
     "material-design-icons": "^2.2.3",
     "materialize-css": "^0.97.6",
-    "mongodb": "^2.1.16",
     "request": "^2.65.0",
     "vue-octicon": "^0.2.1",
-    "vue-resource": "^0.7.0",
-    "vue-spinner": "^1.0.2",
-    "vuex": "^0.6.3"
+    "vue-spinner": "^1.0.2"
   }
 }

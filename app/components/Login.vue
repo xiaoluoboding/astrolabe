@@ -15,9 +15,6 @@
   import storage from 'electron-json-storage'
   import request from 'request'
   import Github from 'github-api'
-  import env from '../../config/env_dev.json'
-  import db from '../utils/db'
-  let connect = db.connect(env.db.url, env.db.options)
 
   export default {
     vuex: {
@@ -75,57 +72,36 @@
           if (!error && response.statusCode === 200) {
             var user = JSON.parse(body)
             self.setUser(user)
-            connect(function(db) {
-              // Get the documents collection
-              var col = db.collection('t_user')
-              user._id = user.id
-              col.findOneAndUpdate({_id: user.id}, {$set: user}).then(function(result) {
-                // find null then insert new user instead
-                if (!result.lastErrorObject.n) {
-                  col.insert(user, function(err, result) {
-                    console.log('Inserted User')
-                  })
-                } else {
-                  console.log('Updated User')
-                }
-                self.getRepos(user)
-              })
-            })
+            self.getRepos(user)
           }
         }
         request(options, callback)
       },
       getRepos(user) {
-        var self = this
         this.toggleLoading()
-          // Get the documents collection
+        this.setRepos()
+        this.toggleLogin()
 
-        connect(function(db) {
-          var reposCol = db.collection('t_repos')
-          reposCol.find({}).toArray(function(err, result) {
-            self.setRepos(result)
-            self.toggleLogin()
-          })
-
-          // var userCol = db.collection('t_user')
-          // userCol.find({}).toArray(function(err, result) {
-          //   var githubUser = self.github.getUser()
-          //   githubUser.userStarred(user.login, function(err, repos) {
-          //     // var reposCol = db.collection('t_repos')
-          //     // for (var i in repos) {
-          //     //   console.log(repos[i].full_name)
-          //     //   // starsCol.find({full_name: repos[i].full_name}).toArray(function(err, result) {
-          //     //   //
-          //     //   // })
-          //     // }
-          //     self.setRepos(repos)
-          //     self.toggleLogin()
-          //     reposCol.insertMany(self.repos, {w: 1}, function(err, result) {
-          //       console.log('Inserted repos')
-          //     })
-          //   })
-          // })
-        })
+        // connect(function(db) {
+        //   // var userCol = db.collection('t_user')
+        //   // userCol.find({}).toArray(function(err, result) {
+        //   //   var githubUser = self.github.getUser()
+        //   //   githubUser.userStarred(user.login, function(err, repos) {
+        //   //     // var reposCol = db.collection('t_repos')
+        //   //     // for (var i in repos) {
+        //   //     //   console.log(repos[i].full_name)
+        //   //     //   // starsCol.find({full_name: repos[i].full_name}).toArray(function(err, result) {
+        //   //     //   //
+        //   //     //   // })
+        //   //     // }
+        //   //     self.setRepos(repos)
+        //   //     self.toggleLogin()
+        //   //     reposCol.insertMany(self.repos, {w: 1}, function(err, result) {
+        //   //       console.log('Inserted repos')
+        //   //     })
+        //   //   })
+        //   // })
+        // })
       }
     },
 
