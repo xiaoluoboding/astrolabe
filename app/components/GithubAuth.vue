@@ -1,6 +1,16 @@
 <script>
-  // import Github from 'github-api'
-  import { ipcRenderer } from 'electron'
+  import Github from 'github-api'
+  import { remote } from 'electron'
+  import {
+    toggleConnecting,
+    toggleLoading,
+    toggleLogin,
+    setToken,
+    setGithub,
+    setUser,
+    initRepos
+  } from '../vuex/actions'
+  const BrowserWindow = remote.BrowserWindow
   import storage from 'electron-json-storage'
   import request from 'request'
   import Octicon from '../node_modules/vue-octicon/src/components/Octicon'
@@ -13,35 +23,69 @@
           client_id: 'd4a28554213774aa83cc',
           client_secret: 'a737f660e30ca4559069ec484658c45cb2a247a4',
           scope: ['user:email', 'public_repo']
-        },
-        code: '',
-        token: ''
+        }
+      }
+    },
+
+    vuex: {
+      getters: {
+        github: ({ github }) => github.github
+      },
+      actions: {
+        toggleConnecting,
+        toggleLoading,
+        toggleLogin,
+        setToken,
+        setGithub,
+        setUser,
+        initRepos
       }
     },
 
     ready: function () {
-      var self = this
-      ipcRenderer.on('getCode', function (event, arg) {
-        self.getCode(arg)
-      })
     },
 
     methods: {
       githubAuth () {
         console.log('into github auth func')
+        let self = this
+        // Build the OAuth consent page URL
         let githubUrl = 'https://github.com/login/oauth/authorize?'
         let authUrl = githubUrl + 'client_id=' + this.options.client_id + '&scope=' + this.options.scope
+        let authWindow = null
 
         // Open auth window
-        ipcRenderer.send('open-auth-window', authUrl)
+        authWindow = new BrowserWindow({
+          width: 1024,
+          height: 768,
+          show: true,
+          'web-preferences': {
+            'node-integration': false
+          }
+        })
+
+        authWindow.loadURL(authUrl)
+
+        authWindow.webContents.on('will-navigate', function (event, url) {
+          self.getCode(url, authWindow)
+        })
+
+        authWindow.webContents.on('did-get-redirect-request', function (event, oldUrl, newUrl) {
+          self.getCode(newUrl, authWindow)
+        })
+
+        // If "Done" button is pressed, hide "Loading"
+        authWindow.on('close', function () {
+          authWindow.destroy()
+        })
       },
-      getCode (url) {
-        var raw_code = /code=([^&]*)/.exec(url) || null
-        var code = (raw_code && raw_code.length > 1) ? raw_code[1] : null
-        var error = /\?error=(.+)$/.exec(url)
+      getCode (url, authWindow) {
+        let raw_code = /code=([^&]*)/.exec(url) || null
+        let code = (raw_code && raw_code.length > 1) ? raw_code[1] : null
+        let error = /\?error=(.+)$/.exec(url)
         if (code || error) {
           // Close the browser if code found or error
-          ipcRenderer.send('destroy-auth-window')
+          authWindow.destroy()
         }
 
         // If there is a code, proceed to get token from github
@@ -60,14 +104,14 @@
         }
       },
       getToken (option, code) {
-        var self = this
-        var postData = {
+        let self = this
+        let postData = {
           client_id: option.client_id,
           client_secret: option.client_secret,
           code: code
         }
 
-        var options = {
+        let options = {
           url: 'https://github.com/login/oauth/access_token',
           headers: {
             'Accept': 'application/json',
@@ -78,9 +122,15 @@
 
         function callback (error, response, body) {
           if (!error && response.statusCode === 200) {
-            var info = JSON.parse(body)
+            let info = JSON.parse(body)
             console.log('token:' + info.access_token)
-            self.token = info.access_token
+            self.setToken(info.access_token)
+            var github = new Github({
+              token: info.access_token,
+              auth: 'oauth'
+            })
+            self.setGithub(github)
+            self.getUser(info.access_token)
             storage.set('login-user', {
               code: code,
               token: info.access_token
@@ -92,23 +142,34 @@
 
         request(options, callback)
       },
-      getUser () {
-        var options = {
+      getUser(token) {
+        let self = this
+        this.toggleConnecting()
+        let options = {
           url: 'https://api.github.com/user',
           headers: {
             'Accept': 'application/json',
-            'User-Agent': 'Throidal'
+            'User-Agent': 'Throidal',
+            'Authorization': 'token ' + token
           }
         }
-
-        function callback (error, response, body) {
+        function callback(error, response, body) {
           if (!error && response.statusCode === 200) {
-            var info = JSON.parse(body)
-            console.log('token:' + info)
+            let user = JSON.parse(body)
+            self.setUser(user)
+            self.getRepos(user)
           }
         }
-
         request(options, callback)
+      },
+      getRepos(user) {
+        let self = this
+        this.toggleLoading()
+        let githubUser = self.github.getUser()
+        githubUser.userStarred(user.login, function(err, repos) {
+          self.initRepos(repos)
+        })
+        this.toggleLogin()
       }
     },
 
@@ -122,9 +183,6 @@
   <div class="github">
     <h2>{{ msg }}</h2>
   </div>
-  <pre>
-    {{ $data | json }}
-  </pre>
   <a class="waves-effect waves-light btn sidebar-toggle" @click="githubAuth()">
     <octicon name="mark-github"></octicon>
     <span>Log in with GitHub</span>
