@@ -6,6 +6,7 @@
     setToken,
     setGithub,
     setUser,
+    initRepos,
     setRepos
   } from '../vuex/actions'
   import GithubAuth from './GithubAuth'
@@ -21,7 +22,6 @@
       getters: {
         connecting: ({ login }) => login.connecting,
         loading: ({ login }) => login.loading,
-        isLogin: ({ login }) => login.isLogin,
         github: ({ github }) => github.github,
         repos: ({ github }) => github.repos
       },
@@ -32,6 +32,7 @@
         setToken,
         setGithub,
         setUser,
+        initRepos,
         setRepos
       }
     },
@@ -42,12 +43,11 @@
 
     methods: {
       getLocalToken() {
-        var self = this
+        let self = this
         storage.get('login-user', function(error, data) {
           if (data.token) {
-            // self.token = data.token
             self.setToken(data.token)
-            var github = new Github({
+            let github = new Github({
               token: data.token,
               auth: 'oauth'
             })
@@ -57,9 +57,9 @@
         })
       },
       getUser(token) {
-        var self = this
+        let self = this
         this.toggleConnecting()
-        var options = {
+        let options = {
           url: 'https://api.github.com/user',
           headers: {
             'Accept': 'application/json',
@@ -67,10 +67,9 @@
             'Authorization': 'token ' + token
           }
         }
-
         function callback(error, response, body) {
           if (!error && response.statusCode === 200) {
-            var user = JSON.parse(body)
+            let user = JSON.parse(body)
             self.setUser(user)
             self.getRepos(user)
           }
@@ -78,30 +77,14 @@
         request(options, callback)
       },
       getRepos(user) {
+        let self = this
         this.toggleLoading()
-        this.setRepos()
+        // this.setRepos()
+        let githubUser = this.github.getUser()
+        githubUser.userStarred(user.login, function(err, repos) {
+          self.initRepos(user, repos)
+        })
         this.toggleLogin()
-
-        // connect(function(db) {
-        //   // var userCol = db.collection('t_user')
-        //   // userCol.find({}).toArray(function(err, result) {
-        //   //   var githubUser = self.github.getUser()
-        //   //   githubUser.userStarred(user.login, function(err, repos) {
-        //   //     // var reposCol = db.collection('t_repos')
-        //   //     // for (var i in repos) {
-        //   //     //   console.log(repos[i].full_name)
-        //   //     //   // starsCol.find({full_name: repos[i].full_name}).toArray(function(err, result) {
-        //   //     //   //
-        //   //     //   // })
-        //   //     // }
-        //   //     self.setRepos(repos)
-        //   //     self.toggleLogin()
-        //   //     reposCol.insertMany(self.repos, {w: 1}, function(err, result) {
-        //   //       console.log('Inserted repos')
-        //   //     })
-        //   //   })
-        //   // })
-        // })
       }
     },
 
@@ -115,12 +98,12 @@
 </script>
 <template>
   <div class="login-screen">
-    <div class="login-form">
-      <github-auth></github-auth>
-    </div>
     <div class="loading" v-if="connecting">
       <bounce-loader></bounce-loader>
       <span>Connecting ...</span>
+    </div>
+    <div class="login-form" v-else>
+      <github-auth></github-auth>
     </div>
     <div class="loading" v-if="loading">
       <dot-loader color='#e91e63'></dot-loader>

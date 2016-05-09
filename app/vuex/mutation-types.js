@@ -7,6 +7,7 @@ export const TOGGLE_LOGIN = 'TOGGLE_LOGIN'
 export const SET_TOKEN = 'SET_TOKEN'
 export const SET_GITHUB = 'SET_GITHUB'
 export const SET_USER = 'SET_USER'
+export const INIT_REPOS = 'INIT_REPOS'
 export const SET_REPOS = 'SET_REPOS'
 
 // dashboard mutation types

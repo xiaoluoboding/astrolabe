@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
 const reposSchema = new Schema({
-  id: Number,
+  _id: Number,
   owner_name: String,
   repo_name: String,
   description: String,

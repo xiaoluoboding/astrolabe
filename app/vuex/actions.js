@@ -12,6 +12,7 @@ export const toggleLogin = makeAction('TOGGLE_LOGIN')
 export const setToken = makeAction('SET_TOKEN')
 export const setGithub = makeAction('SET_GITHUB')
 export const setUser = makeAction('SET_USER')
+export const initRepos = makeAction('INIT_REPOS')
 export const setRepos = makeAction('SET_REPOS')
 
 // dashboard actions
