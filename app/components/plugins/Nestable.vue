@@ -494,7 +494,8 @@
   .dd-handle span {
     color: #fafafa;
     display: inline-block;
-    padding: 0 20px;
+    font-weight: bold;
+    /*padding: 0 20px;*/
   }
 
   .dd-handle .sidebar-badge {

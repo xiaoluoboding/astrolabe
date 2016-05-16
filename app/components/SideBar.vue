@@ -12,9 +12,18 @@
 
     vuex: {
       getters: {
-        repos: ({ github }) => github.repos,
-        isAll: ({ sidebar }) => sidebar.isAll,
-        searchQuery: ({ sidebar }) => sidebar.searchQuery
+        repos: ({
+          github
+        }) => github.repos,
+        isAll: ({
+          sidebar
+        }) => sidebar.isAll,
+        searchQuery: ({
+          sidebar
+        }) => sidebar.searchQuery,
+        langGroup: ({
+          github
+        }) => github.langGroup
       },
       actions: {
         toggleSidebar,
@@ -23,10 +32,10 @@
     },
 
     computed: {
-      total () {
+      total() {
         return this.repos.length
       },
-      untaggedTotal () {
+      untaggedTotal() {
         let count = 0
         for (var i in this.repos) {
           if (this.repos[i].language == null) {
@@ -34,10 +43,27 @@
           }
         }
         return count
+      },
+      langGroups() {
+        var langGroups = []
+        var waveColors = ['waves-red', 'waves-orange', 'waves-yellow', 'waves-green', 'waves-teal', 'waves-blue', 'waves-purple']
+        function randomArray(array, separate) {
+          array.sort(function () {
+            return Math.random() - 0.5
+          })
+          return array[separate]
+        }
+        for (let i in this.langGroup) {
+          if (typeof (this.langGroup[i].lang) === 'string') {
+            this.langGroup[i].color = randomArray(waveColors, 1)
+            langGroups.push(this.langGroup[i])
+          }
+        }
+        return langGroups
       }
     },
 
-    ready () {
+    ready() {
       // Sidebar toggle
       $(document).ready(function() {
         var overlay = $('.sidebar-overlay');
@@ -101,9 +127,9 @@
       });
 
       // Nestable Setup
-      $(document).ready(function() {
-        $('.dd').nestable();
-      });
+      // $(document).ready(function() {
+      //   $('.dd').nestable();
+      // });
 
       /**
        * Created by Kupletsky Sergey on 08.09.14.
@@ -153,7 +179,6 @@
       Search
     }
   }
-
 </script>
 <template>
   <!-- Overlay for fixed sidebar -->
@@ -215,80 +240,25 @@
       </li>
       <li class="divider"></li>
       <div class="dd" id="nestable">
-  			<ol class="dd-list">
-  				<li class="dd-item" data-id="1">
-  					<div class="dd-handle">
-              <a href="#" class="waves-effect waves-red">
-    						<i class="material-icons">local_offer</i>
-                <span class="red">Item 1</span>
-                <span class="sidebar-badge">216</span>
-              </a>
-  					</div>
-  				</li>
-  				<li class="dd-item" data-id="2">
-  					<div class="dd-handle">
-              <a href="#" class="waves-effect waves-orange">
-    						<i class="material-icons">local_offer</i>
-                <span class="orange">Item 2</span>
-                <span class="sidebar-badge">32</span>
-              </a>
-  					</div>
-  				</li>
-  				<li class="dd-item" data-id="3">
-  					<div class="dd-handle">
-              <a href="#" class="waves-effect waves-yellow">
-    						<i class="material-icons">local_offer</i>
-                <span class="yellow">Item 3</span>
-                <span class="sidebar-badge">64</span>
-              </a>
-  					</div>
-  				</li>
-  				<li class="dd-item" data-id="4">
-    					<div class="dd-handle">
-                <a href="#" class="waves-effect waves-green">
-      						<i class="material-icons">local_offer</i>
-                  <span class="green">Item 4</span>
-                </a>
-    					</div>
-  				</li>
-  				<li class="dd-item" data-id="5">
-  					<div class="dd-handle">
-              <a href="#" class="waves-effect waves-teal">
+        <ol class="dd-list">
+          <li class="dd-item" data-id="{{ index }}" v-for="(index, group) in langGroups | orderBy lang">
+            <div class="dd-handle">
+              <a href="#" class="waves-effect" :class="group.color" @click="filterByLanguage(group.lang)">
                 <i class="material-icons">local_offer</i>
-    						<span class="cyan">Item 5</span>
+                <span class="blue-grey-text">{{ group.lang }}</span>
+                <span class="sidebar-badge">{{ group.count }}</span>
               </a>
-  					</div>
-  				</li>
-  				<li class="dd-item" data-id="6">
-  					<div class="dd-handle">
-              <a href="#" class="waves-effect waves-blue">
-    						<i class="material-icons">local_offer</i>
-                <span class="blue">Item 6</span>
-              </a>
-  					</div>
-  				</li>
-  				<li class="dd-item" data-id="7">
-  					<div class="dd-handle">
-              <a href="#" class="waves-effect waves-purple">
-    						<i class="material-icons">local_offer</i>
-                <span class="purple">Item 7</span>
-              </a>
-  					</div>
-  				</li>
-  			</ul>
-  		</div>
-    </ol>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </ul>
     <!-- Sidebar divider -->
     <!-- <div class="sidebar-divider"></div> -->
 
     <!-- Sidebar action -->
     <div class="sidebar-action">
-      <a
-        href="#!"
-        class="add-tag waves-effect waves-circle waves-light btn-floating"
-        data-toggle="tooltip"
-        data-placement="left"
-        title="Add A Tag">
+      <a href="#!" class="add-tag waves-effect waves-circle waves-light btn-floating" data-toggle="tooltip" data-placement="left" title="Add A Tag">
         <i class="material-icons">add</i>
       </a>
     </div>
@@ -397,7 +367,7 @@
     -webkit-transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
     -o-transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
     transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
-    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
   }
 
   .sidebar:before,
@@ -680,7 +650,6 @@
     position: absolute;
     right: 16px;
     top: 12px;
-
   }
 
   .sidebar .sidebar-nav li a:hover {

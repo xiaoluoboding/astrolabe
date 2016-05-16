@@ -19,7 +19,8 @@ const state = {
   token: '',
   github: '',
   user: '',
-  repos: []
+  repos: [],
+  langGroup: []
 }
 
 // mutations
@@ -51,6 +52,7 @@ const mutations = {
 
   [INIT_REPOS] (state, user, repos) {
     // insert t_repos
+    let initRepos = []
     for (let i in repos) {
       let t_repo = {
         '_id': repos[i].id,
@@ -72,12 +74,12 @@ const mutations = {
         }
       }
       Repos.findOneAndUpdate(query, doc, options, callback)
+      initRepos.push(t_repo);
     }
     console.log('findOneAndUpdate [%d] repos', repos.length)
 
     // insert t_user_repos
     let reposArray = []
-    let langGroup = []
     for (let i in repos) {
       reposArray.push(repos[i].id)
     }
@@ -94,6 +96,7 @@ const mutations = {
           console.log(err)
           return
         }
+        state.langGroup = res
         let user_repos = {
           'user_id': user.id,
           'repos': reposArray,
@@ -112,7 +115,9 @@ const mutations = {
         userRepos.findOneAndUpdate(query, doc, options, callback)
       }
     )
-    state.repos = repos
+
+    // set init repos
+    state.repos = initRepos
   },
 
   [SET_REPOS] (state) {

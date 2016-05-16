@@ -6,8 +6,7 @@
     setToken,
     setGithub,
     setUser,
-    initRepos,
-    setRepos
+    initRepos
   } from '../vuex/actions'
   import GithubAuth from './GithubAuth'
   import MdlLoading from './materialize/MdlLoading'
@@ -32,8 +31,7 @@
         setToken,
         setGithub,
         setUser,
-        initRepos,
-        setRepos
+        initRepos
       }
     },
 
@@ -79,7 +77,6 @@
       getRepos(user) {
         let self = this
         this.toggleLoading()
-        // this.setRepos()
         let githubUser = this.github.getUser()
         githubUser.userStarred(user.login, function(err, repos) {
           self.initRepos(user, repos)

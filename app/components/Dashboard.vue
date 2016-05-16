@@ -73,7 +73,7 @@
       },
       showReadme(repo) {
         var self = this
-        if (repo.id != this.activeRepo.id) {
+        if (repo._id != this.activeRepo._id) {
           this.setActiveRepo(repo)
           this.repoReadme = true
           var githubRepo = this.github.getRepo(repo.owner_name, repo.repo_name)
@@ -117,10 +117,10 @@
         <!-- {{ $data | json }} -->
         <div
           class="card waves-effect waves-light"
-          :class="{ 'blue-grey': activeRepo.id === repo.id, 'darken-1': activeRepo.id === repo.id }"
+          :class="{ 'blue-grey': activeRepo._id === repo._id, 'darken-1': activeRepo._id === repo._id }"
           @click="showReadme(repo)"
           v-for="repo in repos | filterBy searchQuery in filterFields | orderBy repoKey order">
-          <div class="card-content" :class="{ 'white-text': activeRepo.id === repo.id }">
+          <div class="card-content" :class="{ 'white-text': activeRepo._id === repo._id }">
             <span class="card-title">{{ repo.owner_name }} / {{ repo.repo_name }}</span>
             <p>{{ repo.description }}</p>
             <div class="card-tag" v-if="repo.language">
