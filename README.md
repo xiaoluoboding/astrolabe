@@ -30,6 +30,8 @@ Manage your github stars with one app.
 - [ ] Add tags
 - [ ] Setting Interface
 - [ ] Icon design
+- [ ] User Card
+- [ ] Repo Card
 
 # License
 
