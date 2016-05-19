@@ -125,7 +125,6 @@
           }
         });
       });
-
       // Nestable Setup
       // $(document).ready(function() {
       //   $('.dd').nestable();
@@ -214,25 +213,29 @@
       <li class="divider"></li>
       <li class="dropdown">
         <a class="ripple-effect dropdown-toggle" href="#" data-toggle="dropdown">
-              All Tags
+          <i class="material-icons">label</i>
+          <span>Tag Group</span>
           <b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
           <li>
             <a href="#" tabindex="-1" class="waves-effect waves-teal">
-              JavaScript
+              <i class="material-icons">label_outline</i>
+              <span>JavaScript</span>
               <span class="sidebar-badge">12</span>
             </a>
           </li>
           <li>
             <a href="#" tabindex="-1" class="waves-effect waves-teal">
-              Css
+              <i class="material-icons">label_outline</i>
+              <span>Css</span>
               <span class="sidebar-badge">0</span>
             </a>
           </li>
           <li>
             <a href="#" tabindex="-1" class="waves-effect waves-teal">
-              Html
+              <i class="material-icons">label_outline</i>
+              <span>Html</span>
               <span class="sidebar-badge">0</span>
             </a>
           </li>
@@ -257,11 +260,11 @@
     <!-- <div class="sidebar-divider"></div> -->
 
     <!-- Sidebar action -->
-    <div class="sidebar-action">
+    <!-- <div class="sidebar-action">
       <a href="#!" class="add-tag waves-effect waves-circle waves-light btn-floating" data-toggle="tooltip" data-placement="left" title="Add A Tag">
         <i class="material-icons">add</i>
       </a>
-    </div>
+    </div> -->
   </aside>
 </template>
 <style>

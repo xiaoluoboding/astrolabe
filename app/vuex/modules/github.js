@@ -53,6 +53,7 @@ const mutations = {
   [INIT_REPOS] (state, user, repos) {
     // insert t_repos
     let initRepos = []
+    let reposArray = []
     for (let i in repos) {
       let t_repo = {
         '_id': repos[i].id,
@@ -75,14 +76,11 @@ const mutations = {
       }
       Repos.findOneAndUpdate(query, doc, options, callback)
       initRepos.push(t_repo);
+      reposArray.push(repos[i].id)
     }
     console.log('findOneAndUpdate [%d] repos', repos.length)
 
     // insert t_user_repos
-    let reposArray = []
-    for (let i in repos) {
-      reposArray.push(repos[i].id)
-    }
     let aggregate = [
       {$match: {_id: {$in: reposArray}}},
       {$group: {_id: '$language', count: {$sum: 1}}},
