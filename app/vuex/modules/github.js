@@ -63,6 +63,11 @@ const mutations = {
         'stargazers_count': repos[i].stargazers_count,
         'forks_count': repos[i].forks_count,
         'html_url': repos[i].html_url,
+        'clone_url': repos[i].clone_url,
+        'git_url': repos[i].git_url,
+        'downloads_url': repos[i].downloads_url,
+        'created_at': repos[i].created_at,
+        'updated_at': repos[i].updated_at,
         'language': repos[i].language
       }
       let query = {_id: repos[i].id}

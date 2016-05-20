@@ -10,6 +10,11 @@ const reposSchema = new Schema({
   stargazers_count: Number,
   forks_count: Number,
   html_url: String,
+  clone_url: String,
+  git_url: String,
+  downloads_url: String,
+  created_at: String,
+  updated_at: String,
   language: String
 })
 
