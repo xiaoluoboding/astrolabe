@@ -7,6 +7,9 @@ import Nestable from './components/plugins/Nestable'
 import MdlWave from './components/materialize/MdlWave'
 import MdlDropdown from './components/materialize/MdlDropdown'
 import Easing from './components/plugins/Easing'
+import VueClipboard from 'vue-clipboard'
+
+Vue.use(VueClipboard)
 
 new Vue({
   el: 'body',

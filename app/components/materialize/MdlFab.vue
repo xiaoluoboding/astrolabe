@@ -1,16 +1,54 @@
 <script>
   export default {
-    name: 'MdlFab'
+    name: 'MdlFab',
+
+    data () {
+      return {
+        copyData: '',
+        copyTooltip: 'Copy clone link to clipboard'
+      }
+    },
+
+    vuex: {
+      getters: {
+        activeRepo: ({
+          dashboard
+        }) => dashboard.activeRepo
+      }
+    },
+
+    ready() {
+      // console.log(activeRepo);
+    },
+
+    methods: {
+      copyAction() {
+        this.copyTooltip = 'Copied!'
+      },
+      initTooltip() {
+        this.copyTooltip = 'Copy clone link to clipboard'
+      }
+    }
   }
 </script>
 
 <template>
   <div class="fab">
-    <a href="#" class="btn-fab btn-floating waves-effect waves-light red" tooltip="Github"><i class="material-icons">insert_chart</i></a>
-    <a href="#" class="btn-fab btn-floating waves-effect waves-light yellow darken-1" tooltip="Google+"><i class="material-icons">format_quote</i></a>
-    <a href="#" class="btn-fab btn-floating waves-effect waves-light green" tooltip="Twitter"><i class="material-icons">publish</i></a>
-    <a href="#" class="btn-fab btn-floating waves-effect waves-light blue" tooltip="Facebook"><i class="material-icons">attach_file</i></a>
-    <a href="#" class="btn-fab btn-large btn-floating waves-effect waves-light red" tooltip="Share">
+    <a href="#" class="btn-fab btn-floating waves-effect waves-light red" tooltip="View On GitHub">
+      <i class="material-icons">open_in_browser</i>
+    </a>
+    <a href="#" class="btn-fab btn-floating waves-effect waves-light yellow darken-1" tooltip="{{ copyTooltip }}"
+       v-if="activeRepo" v-clipboard:copy="activeRepo.clone_url" @click="copyAction()">
+      <i class="material-icons">content_copy</i>
+    </a>
+    <a href="#" class="btn-fab btn-floating waves-effect waves-light green" tooltip="Download">
+      <i class="material-icons">file_download</i>
+    </a>
+    <a href="#" class="btn-fab btn-floating waves-effect waves-light blue" tooltip="Add Tags">
+      <i class="material-icons">add</i>
+    </a>
+    <a href="#" class="btn-fab btn-large btn-floating waves-effect waves-light red" tooltip="Operate"
+       @mouseenter="initTooltip()">
       <i class="large material-icons">mode_edit</i>
     </a>
   </div>
