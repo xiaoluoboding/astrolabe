@@ -1,5 +1,5 @@
-# Throidal
-Manage your github stars with one app.
+# astrolabe
+Manage your GitHub stars with one app.
 
 # State of the Art
 
@@ -12,12 +12,14 @@ Manage your github stars with one app.
 # Usages
 
 - `clone this repo`
-- `cd Throidal`
+- `cd astrolabe`
 - `npm install`
-- `cd Throidal/app`
+- `cd astrolabe/app`
 - `npm install`
-- `cd Throidal`
+- `cd astrolabe`
 - `npm start`
+
+Now you can rise up astrolabe with hot loading.
 
 # Features
 
@@ -27,11 +29,13 @@ Manage your github stars with one app.
 - [x] Github stars List
 - [x] Github stars Sort
 - [x] Parse the README.md file of repo
+- [x] Categorized and navigated by language
 - [ ] Add tags
 - [ ] Setting Interface
 - [ ] Icon design
 - [ ] User Card
 - [ ] Repo Card
+- [x] Copy clone link to clipboard
 
 # License
 
