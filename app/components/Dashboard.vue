@@ -81,9 +81,6 @@
             self.repoReadme = marked(data)
           });
         }
-      },
-      orderByRepoKey(repoKey) {
-        this.orderRepo(repoKey)
       }
     },
 
@@ -108,9 +105,9 @@
   <main class="wrapper">
     <div class="content">
       <div class="btn-group btn-repos">
-        <a class="waves-effect waves-light btn" @click="orderByRepoKey('owner_name')"><octicon name="octoface"></octicon>Owner</a>
-        <a class="waves-effect waves-light btn" @click="orderByRepoKey('repo_name')"><octicon name="repo"></octicon>Repo</a>
-        <a class="waves-effect waves-light btn" @click="orderByRepoKey('stargazers_count')"><octicon name="star"></octicon>Star</a>
+        <a class="waves-effect waves-light btn" @click="orderRepo('owner_name')"><octicon name="octoface"></octicon>Owner</a>
+        <a class="waves-effect waves-light btn" @click="orderRepo('repo_name')"><octicon name="repo"></octicon>Repo</a>
+        <a class="waves-effect waves-light btn" @click="orderRepo('stargazers_count')"><octicon name="star"></octicon>Star</a>
       </div>
       <aside id="repos-desc" class="repos-desc" :class="{ cards: strollStyle }">
         <!-- <search :search-query.sync="searchQuery"></search> -->

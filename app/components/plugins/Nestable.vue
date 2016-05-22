@@ -476,8 +476,9 @@
     line-height: 36px !important;
   }
 
-  .dd .dd-list li a:hover {
-    color: #212121;
+  .dd .dd-list li a:hover,
+  .dd .dd-list li a:focus {
+    color: #f06292 !important;
     background-color: #e0e0e0;
   }
 
@@ -492,7 +493,6 @@
   }
 
   .dd-handle span {
-    color: #fafafa;
     display: inline-block;
     font-weight: bold;
     /*padding: 0 20px;*/

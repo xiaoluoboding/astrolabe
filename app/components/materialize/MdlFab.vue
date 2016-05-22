@@ -1,11 +1,14 @@
 <script>
+  import shell from 'shell'
+
   export default {
     name: 'MdlFab',
 
     data () {
       return {
         copyData: '',
-        copyTooltip: 'Copy clone link to clipboard'
+        copyTooltip: 'Copy clone link to clipboard',
+        showCopy: false
       }
     },
 
@@ -17,16 +20,23 @@
       }
     },
 
-    ready() {
-      // console.log(activeRepo);
-    },
-
     methods: {
       copyAction() {
         this.copyTooltip = 'Copied!'
       },
       initTooltip() {
         this.copyTooltip = 'Copy clone link to clipboard'
+      },
+      openInBrowser(url) {
+        shell.openExternal(url);
+      }
+    },
+
+    watch: {
+      activeRepo(val) {
+        if (typeof(val) !== undefined) {
+          this.showCopy = true
+        }
       }
     }
   }
@@ -34,11 +44,12 @@
 
 <template>
   <div class="fab">
-    <a href="#" class="btn-fab btn-floating waves-effect waves-light red" tooltip="View On GitHub">
+    <a href="#" class="btn-fab btn-floating waves-effect waves-light red" tooltip="View on GitHub"
+       v-show="showCopy" @click="openInBrowser(activeRepo.html_url)">
       <i class="material-icons">open_in_browser</i>
     </a>
     <a href="#" class="btn-fab btn-floating waves-effect waves-light yellow darken-1" tooltip="{{ copyTooltip }}"
-       v-if="activeRepo" v-clipboard:copy="activeRepo.clone_url" @click="copyAction()">
+       v-show="showCopy" v-clipboard:copy="activeRepo.clone_url" @click="copyAction()">
       <i class="material-icons">content_copy</i>
     </a>
     <a href="#" class="btn-fab btn-floating waves-effect waves-light green" tooltip="Download">

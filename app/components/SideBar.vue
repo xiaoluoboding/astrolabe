@@ -1,6 +1,7 @@
 <script>
   import {
     toggleSidebar,
+    setSearchQuery,
     filterByLanguage
   } from '../vuex/actions'
   import Search from './Search'
@@ -27,6 +28,7 @@
       },
       actions: {
         toggleSidebar,
+        setSearchQuery,
         filterByLanguage
       }
     },
@@ -197,14 +199,14 @@
     <!-- Sidebar navigation -->
     <ul class="nav sidebar-nav">
       <li :class="{active : isAll}" @click="toggleSidebar()">
-        <a href="#" class="waves-effect waves-teal">
+        <a href="#" class="waves-effect waves-teal" @click="setSearchQuery('')">
           <i class="material-icons">star</i>
           <span>All Stars</span>
           <span class="sidebar-badge">{{ total }}</span>
         </a>
       </li>
       <li :class="{active : !isAll}" @click="toggleSidebar()">
-        <a href="#" class="waves-effect waves-teal">
+        <a href="#" class="waves-effect waves-teal" @click="filterByLanguage()">
           <i class="material-icons">bookmark_border</i>
           <span>Untagged Stars</span>
           <span class="sidebar-badge">{{ untaggedTotal }}</span>
