@@ -115,7 +115,7 @@
           url: 'https://github.com/login/oauth/access_token',
           headers: {
             'Accept': 'application/json',
-            'User-Agent': 'Throidal'
+            'User-Agent': 'Astrolabe'
           },
           form: postData
         }
@@ -149,7 +149,7 @@
           url: 'https://api.github.com/user',
           headers: {
             'Accept': 'application/json',
-            'User-Agent': 'Throidal',
+            'User-Agent': 'Astrolabe',
             'Authorization': 'token ' + token
           }
         }

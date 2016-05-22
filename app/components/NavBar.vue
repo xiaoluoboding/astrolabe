@@ -41,7 +41,7 @@
   <div class="navbar-fixed">
     <nav>
       <div class="nav-wrapper open">
-        <span href="#!" class="brand-logo waves-effect waves-light">Throidal</span>
+        <span href="#!" class="brand-logo waves-effect waves-light">Astrolabe</span>
         <ul class="right hide-on-med-and-down">
           <!-- Dropdown Trigger -->
           <li>
