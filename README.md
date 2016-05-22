@@ -1,5 +1,5 @@
-# astrolabe
-Manage your GitHub stars with one app.
+# Astrolabe
+Manage your GitHub stars use one desktop app.
 
 # State of the Art
 
