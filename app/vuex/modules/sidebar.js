@@ -19,8 +19,10 @@ const state = {
 
 // mutations
 const mutations = {
-  [TOGGLE_SIDEBAR] (state) {
-    state.isAll = !state.isAll
+  [TOGGLE_SIDEBAR] (state, flag) {
+    if (!flag) {
+      state.isAll = !state.isAll
+    }
   },
   [SET_SEARCH_QUERY] (state, searchQuery) {
     if (state.filterFields.length == 1) {

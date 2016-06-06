@@ -53,19 +53,19 @@
     color: #fff;
   }
   /**
-* The search field needs to be a little smaller than its container but when
-* focused it needs to grow to the whole width of its container.
-*
-* I wanted the icon to be specified in the html instead of a background so
-* I could use fontawesome.
-*
-* I use flexbox so that the search box grows to the whole width of its
-* container (minus the margins when it's not focused).
-*
-* When the search box is focused the icon moves horizontally the width of the
-* margin. To be able to target the label I used the adjacent sibling selector.
-*
-*/
+  * The search field needs to be a little smaller than its container but when
+  * focused it needs to grow to the whole width of its container.
+  *
+  * I wanted the icon to be specified in the html instead of a background so
+  * I could use fontawesome.
+  *
+  * I use flexbox so that the search box grows to the whole width of its
+  * container (minus the margins when it's not focused).
+  *
+  * When the search box is focused the icon moves horizontally the width of the
+  * margin. To be able to target the label I used the adjacent sibling selector.
+  *
+  */
 
   .search {
     position: relative;

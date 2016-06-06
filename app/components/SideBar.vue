@@ -39,8 +39,8 @@
       },
       untaggedTotal() {
         let count = 0
-        for (var i in this.repos) {
-          if (this.repos[i].language == null) {
+        for (let i in this.repos) {
+          if (this.repos[i].language == 'null') {
             count += 1
           }
         }
@@ -198,15 +198,15 @@
     </div>
     <!-- Sidebar navigation -->
     <ul class="nav sidebar-nav">
-      <li :class="{active : isAll}" @click="toggleSidebar()">
+      <li :class="{active : isAll}" @click="toggleSidebar(isAll)">
         <a href="#" class="waves-effect waves-teal" @click="setSearchQuery('')">
           <i class="material-icons">star</i>
           <span>All Stars</span>
           <span class="sidebar-badge">{{ total }}</span>
         </a>
       </li>
-      <li :class="{active : !isAll}" @click="toggleSidebar()">
-        <a href="#" class="waves-effect waves-teal" @click="filterByLanguage()">
+      <li :class="{active : !isAll}" @click="toggleSidebar(!isAll)">
+        <a href="#" class="waves-effect waves-teal" @click="filterByLanguage('null')">
           <i class="material-icons">bookmark_border</i>
           <span>Untagged Stars</span>
           <span class="sidebar-badge">{{ untaggedTotal }}</span>
@@ -247,7 +247,7 @@
       <div class="dd" id="nestable">
         <ol class="dd-list">
           <li class="dd-item" data-id="{{ index }}"
-              v-for="(index, group) in langGroups | orderBy lang" v-if="group.count > 5">
+              v-for="(index, group) in langGroups | orderBy lang" v-if="group.count > 5 && group.lang != 'null'">
             <div class="dd-handle">
               <a href="#" class="waves-effect" :class="group.color" @click="filterByLanguage(group.lang)">
                 <i class="material-icons">local_offer</i>

@@ -68,7 +68,7 @@ const mutations = {
         'downloads_url': repos[i].downloads_url,
         'created_at': repos[i].created_at,
         'updated_at': repos[i].updated_at,
-        'language': repos[i].language
+        'language': repos[i].language == null ? 'null' : repos[i].language
       }
       let query = {_id: repos[i].id}
       let doc = {$set: t_repo}

@@ -121,7 +121,7 @@
             <span class="card-title">{{ repo.owner_name }} / {{ repo.repo_name }}</span>
             <p>{{ repo.description }}</p>
             <div class="card-tag" v-if="repo.language">
-              <div class="chip" @click="filterByLanguage(repo.language)">
+              <div class="chip" @click="filterByLanguage(repo.language)" v-if="repo.language != 'null'">
                {{ repo.language }}
               </div>
             </div>
