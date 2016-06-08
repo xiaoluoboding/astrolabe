@@ -1,4 +1,5 @@
 <script>
+  import $ from 'jquery'
   import shell from 'shell'
 
   export default {
@@ -9,16 +10,17 @@
     ],
 
     ready() {
-      var self = this
+      const self = this
 
-      var links = document.querySelectorAll('a')
-
-      Array.prototype.forEach.call(links, function (link) {
-        link.addEventListener('click', function (e) {
-          console.log(this.href)
-          e.preventDefault()
-          self.openInBrowser(this.href)
-        })
+      $('.readme a').click(function(e) {
+        e.preventDefault()
+        const href = $(this).attr('href')
+        if (href.match(/^[a-zA-Z]+:\/\//)) {
+          self.openInBrowser(href)
+        } else {
+          // TODO dealwith wrong url
+          console.log('[' + href + '] is a wrong url')
+        }
       })
     },
 
