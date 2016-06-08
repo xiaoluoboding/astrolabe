@@ -1,10 +1,32 @@
 <script>
+  import shell from 'shell'
+
   export default {
     name: 'Readme',
 
     props: [
       'repoReadme'
-    ]
+    ],
+
+    ready() {
+      var self = this
+
+      var links = document.querySelectorAll('a')
+
+      Array.prototype.forEach.call(links, function (link) {
+        link.addEventListener('click', function (e) {
+          console.log(this.href)
+          e.preventDefault()
+          self.openInBrowser(this.href)
+        })
+      })
+    },
+
+    methods: {
+      openInBrowser(url) {
+        shell.openExternal(url);
+      }
+    }
   }
 </script>
 <template>
