@@ -204,6 +204,11 @@
     display: block;
   }
 
+  .repos-desc a:hover {
+    color: #004D40;
+    text-decoration: underline;
+  }
+
   .repos-readme {
     position: absolute;
     background: #fff;
@@ -280,6 +285,11 @@
     color: rgba(0, 0, 0, 0.8);
     padding: 2px 8px;
     background-color: #e0e0e0;
+  }
+
+  .card .card-content .card-tag .chip:hover {
+    color: #004D40;
+    text-decoration: underline;
   }
 
   .card .card-content.white-text .card-tag .chip {

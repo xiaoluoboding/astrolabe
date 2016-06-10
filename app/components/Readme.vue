@@ -22,6 +22,21 @@
           console.log('[' + href + '] is a wrong url')
         }
       })
+
+      // numbering for pre>code blocks
+      $(function() {
+        $('pre code').each(function() {
+          var lines = $(this).text().split('\n').length;
+          var $numbering = $('<ul/>').addClass('pre-numbering');
+          $(this)
+            .addClass('has-numbering')
+            .parent()
+            .append($numbering);
+          for (let i = 1; i <= lines; i++) {
+            $numbering.append($('<li/>').text(i));
+          }
+        });
+      });
     },
 
     methods: {
@@ -68,6 +83,11 @@
     margin: 16px;
   }
 
+  .repos-readme .readme a:hover {
+    color: #01579B;
+    text-decoration: underline;
+  }
+
   .repos-readme .readme img {
     max-width: 670px;
     vertical-align: middle;
@@ -106,5 +126,41 @@
   .repos-readme .readme ul ul,
   .repos-readme .readme ol ul {
     list-style-type: circle;
+  }
+
+  pre {
+    position: relative;
+    margin-bottom: 24px;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  code {
+    background-color: #FCE4EC;
+    color: #880E4F;
+    padding: 0.1em 0.2em;
+    font-family: Consolas, Monaco, Menlo, Courier, monospace;
+  }
+
+  code.has-numbering {
+    margin-left: 32px;
+  }
+
+  pre .pre-numbering {
+    padding-left: 0px !important;
+  }
+
+  .pre-numbering {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 32px;
+    margin: 0;
+    padding: 0.5em 0.5em 1.6em 0.5em;
+    border-right: 1px solid #23241F;
+    background-color: rgba(35, 36, 31, 0.9);
+    text-align: right;
+    font-size: 1em;
+    color: #999;
   }
 </style>
