@@ -11,18 +11,33 @@
   import MdlLoading from './materialize/MdlLoading'
   import MdlFab from './materialize/MdlFab'
   import shell from 'shell'
-  import marked from 'marked'
+  import marked, { Renderer } from 'marked'
   import $ from 'jquery'
+  import hljs from 'highlight.js'
+
+  // Create your custom renderer.
+  const renderer = new Renderer();
+  renderer.code = (code, language) => {
+    // Check whether the given language is valid for highlight.js.
+    const validLang = !!(language && hljs.getLanguage(language));
+    // Highlight only if the language is valid.
+    const highlighted = validLang ? hljs.highlight(language, code).value : code;
+    // Render the highlighted code with `hljs` class.
+    return `<pre><code class="hljs ${language}">${highlighted}</code></pre>`;
+  };
 
   marked.setOptions({
-    renderer: new marked.Renderer(),
+    renderer,
     gfm: true,
     tables: true,
     breaks: false,
     pedantic: false,
     sanitize: true,
     smartLists: true,
-    smartypants: false
+    smartypants: false,
+    highlight: function(code) {
+      return hljs.highlightAuto(code).value;
+    }
   })
 
   export default {
@@ -79,7 +94,7 @@
           var githubRepo = this.github.getRepo(repo.owner_name, repo.repo_name)
           githubRepo.read('master', 'README.md', function(err, data) {
             self.repoReadme = marked(data)
-          });
+          })
         }
       }
     },

@@ -37,6 +37,13 @@
   </div>
 </template>
 <style>
+  code,
+  kbd,
+  pre,
+  samp {
+    font: 1em Consolas, Monaco, Menlo, Courier, monospace
+  }
+
   .repos-readme .empty-placeholder {
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
@@ -54,6 +61,10 @@
   }
 
   .repos-readme .readme {
+    font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 16px;
+    line-height: 1.6;
+    word-wrap: break-word;
     margin: 16px;
   }
 
@@ -92,7 +103,8 @@
     list-style-type: disc;
   }
 
-  .repos-readme .readme ul ul, .repos-readme .readme ol ul {
+  .repos-readme .readme ul ul,
+  .repos-readme .readme ol ul {
     list-style-type: circle;
   }
 </style>

@@ -42,7 +42,7 @@
     methods: {
       getLocalToken() {
         let self = this
-        storage.get('login-user', function(error, data) {
+        storage.get('oauth2', function(error, data) {
           if (data.token) {
             self.setToken(data.token)
             let github = new Github({

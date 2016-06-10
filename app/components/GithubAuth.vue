@@ -93,7 +93,7 @@
           console.log('code:' + code)
           this.code = code
           this.getToken(this.options, code)
-          storage.set('login-user', {
+          storage.set('oauth2', {
             code: code
           }, function (error) {
             if (error) throw error
@@ -131,7 +131,7 @@
             })
             self.setGithub(github)
             self.getUser(info.access_token)
-            storage.set('login-user', {
+            storage.set('oauth2', {
               code: code,
               token: info.access_token
             }, function (error) {
