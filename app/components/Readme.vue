@@ -26,12 +26,15 @@
       // numbering for pre>code blocks
       $(function() {
         $('pre code').each(function() {
-          var lines = $(this).text().split('\n').length;
+          var lines = $(this).text().split('\n').length - 1;
           var $numbering = $('<ul/>').addClass('pre-numbering');
           $(this)
             .addClass('has-numbering')
             .parent()
             .append($numbering);
+          if (!$(this).hasClass('hljs')) {
+            $(this).addClass('hljs');
+          }
           for (let i = 1; i <= lines; i++) {
             $numbering.append($('<li/>').text(i));
           }

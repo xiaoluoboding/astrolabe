@@ -11,34 +11,51 @@
   import MdlLoading from './materialize/MdlLoading'
   import MdlFab from './materialize/MdlFab'
   import shell from 'shell'
-  import marked, { Renderer } from 'marked'
   import $ from 'jquery'
   import hljs from 'highlight.js'
+  import markdownIt from 'markdown-it'
+  // import marked, { Renderer } from 'marked'
 
-  // Create your custom renderer.
-  const renderer = new Renderer();
-  renderer.code = (code, language) => {
-    // Check whether the given language is valid for highlight.js.
-    const validLang = !!(language && hljs.getLanguage(language));
-    // Highlight only if the language is valid.
-    const highlighted = validLang ? hljs.highlight(language, code).value : code;
-    // Render the highlighted code with `hljs` class.
-    return `<pre><code class="hljs ${language}">${highlighted}</code></pre>`;
-  };
-
-  marked.setOptions({
-    renderer,
-    gfm: true,
-    tables: true,
-    breaks: false,
-    pedantic: false,
-    sanitize: true,
-    smartLists: true,
-    smartypants: false,
-    highlight: function(code) {
-      return hljs.highlightAuto(code).value;
+  const md = new markdownIt({
+    html: true,
+    linkify: true,
+    typographer: true,
+    langPrefix: 'lang-',
+    highlight: (code, language) => {
+      // Check whether the given language is valid for highlight.js.
+      const validLang = !!(language && hljs.getLanguage(language));
+      // Highlight only if the language is valid.
+      const highlighted = validLang ? hljs.highlight(language, code).value : code;
+      // Render the highlighted code with `hljs` class.
+      return `<pre><code class="hljs ${language}">${highlighted}</code></pre>`;
     }
   })
+
+  // // Create your custom renderer.
+  // const renderer = new Renderer();
+  //
+  // renderer.code = (code, language) => {
+  //   // Check whether the given language is valid for highlight.js.
+  //   const validLang = !!(language && hljs.getLanguage(language));
+  //   // Highlight only if the language is valid.
+  //   const highlighted = validLang ? hljs.highlight(language, code).value : code;
+  //   // Render the highlighted code with `hljs` class.
+  //   return `<pre><code class="hljs ${language}">${highlighted}</code></pre>`;
+  // };
+  //
+  // marked.setOptions({
+  //   renderer,
+  //   gfm: true,
+  //   tables: true,
+  //   breaks: false,
+  //   pedantic: false,
+  //   sanitize: true,
+  //   smartLists: true,
+  //   smartypants: false,
+  //   highlight: function(code) {
+  //     return hljs.highlightAuto(code).value;
+  //   }
+  // })
 
   export default {
     name: 'Dashboard',
@@ -93,7 +110,11 @@
           this.repoReadme = true
           var githubRepo = this.github.getRepo(repo.owner_name, repo.repo_name)
           githubRepo.read('master', 'README.md', function(err, data) {
-            self.repoReadme = marked(data)
+            if (err) {
+              console.log(err);
+            }
+            // self.repoReadme = marked(data)
+            self.repoReadme = md.render(data)
           })
         }
       }
