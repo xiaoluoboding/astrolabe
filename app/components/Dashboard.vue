@@ -109,7 +109,7 @@
           this.setActiveRepo(repo)
           this.repoReadme = true
           var githubRepo = this.github.getRepo(repo.owner_name, repo.repo_name)
-          githubRepo.read('master', 'README.md', function(err, data) {
+          githubRepo.getContents('master', 'README.md', true, function(err, data) {
             if (err) {
               console.log(err);
             }

@@ -1,5 +1,6 @@
 <script>
   import shell from 'shell'
+  import $ from 'jquery'
 
   export default {
     name: 'MdlFab',
@@ -29,6 +30,20 @@
       },
       openInBrowser(url) {
         shell.openExternal(url);
+      },
+      backToTop(name, speed) {
+        if (!speed) speed = 300
+        if (!name) {
+            $('#repos-readme').animate({
+                scrollTop: 0
+            }, speed)
+        } else {
+            if ($(name).length > 0) {
+                $('#repos-readme').animate({
+                    scrollTop: $(name).offset().top
+                }, speed)
+            }
+        }
       }
     },
 
@@ -55,12 +70,13 @@
     <a href="#" class="btn-fab btn-floating waves-effect waves-light green" tooltip="Download">
       <i class="material-icons">file_download</i>
     </a>
-    <a href="#" class="btn-fab btn-floating waves-effect waves-light blue" tooltip="Add Tags">
-      <i class="material-icons">add</i>
+    <a href="#" class="btn-fab btn-floating waves-effect waves-light blue" tooltip="Back to Top"
+       @click="backToTop()">
+      <i class="material-icons">expand_less</i>
     </a>
-    <a href="#" class="btn-fab btn-large btn-floating waves-effect waves-light red" tooltip="Operate"
+    <a href="#" class="btn-fab btn-large btn-floating waves-effect waves-light red" tooltip="OPERATE"
        @mouseenter="initTooltip()">
-      <i class="large material-icons">mode_edit</i>
+      <i class="large material-icons">add</i>
     </a>
   </div>
 </template>
