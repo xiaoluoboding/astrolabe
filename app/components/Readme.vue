@@ -12,19 +12,11 @@
     ready() {
       const self = this
 
-      $('.readme a').click(function(e) {
-        e.preventDefault()
-        const href = $(this).attr('href')
-        if (href.match(/^[a-zA-Z]+:\/\//)) {
-          self.openInBrowser(href)
-        } else {
-          // TODO dealwith wrong url
-          console.log('[' + href + '] is a wrong url')
-        }
-      })
+      $(document).ready(function() {
+        // dealwith table style
+        $('table').addClass('bordered striped')
 
-      // numbering for pre>code blocks
-      $(function() {
+        // numbering for pre>code blocks
         $('pre code').each(function() {
           var lines = $(this).text().split('\n').length - 1;
           var $numbering = $('<ul/>').addClass('pre-numbering');
@@ -39,7 +31,19 @@
             $numbering.append($('<li/>').text(i));
           }
         });
-      });
+      })
+
+      // prevent default click action instead of execute openInBrowser()
+      $('.readme a').click(function(e) {
+        e.preventDefault()
+        const href = $(this).attr('href')
+        if (href.match(/^[a-zA-Z]+:\/\//)) {
+          self.openInBrowser(href)
+        } else {
+          // TODO dealwith wrong url
+          console.log('[' + href + '] is a wrong url')
+        }
+      })
     },
 
     methods: {
