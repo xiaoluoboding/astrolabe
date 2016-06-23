@@ -33,7 +33,7 @@
     "cross-spawn": "^2.1.5",
     "css-loader": "^0.23.0",
     "debug-menu": "0.3.0",
-    "electron-packager": "5.2.1",
+    "electron-packager": "^7.0.4",
     "electron-prebuilt": "^0.37.8",
     "electron-prebuilt-compile": "0.37.2",
     "electron-rebuild": "1.1.3",

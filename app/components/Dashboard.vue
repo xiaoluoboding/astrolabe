@@ -10,6 +10,7 @@
   import Readme from './Readme'
   import MdlLoading from './materialize/MdlLoading'
   import MdlFab from './materialize/MdlFab'
+  import Stroll from './plugins/Stroll'
   import shell from 'shell'
   import $ from 'jquery'
   import hljs from 'highlight.js'
@@ -62,7 +63,6 @@
 
     data () {
       return {
-        strollStyle: true,
         repoReadme: ''
       }
     },
@@ -75,7 +75,6 @@
         activeRepo: ({ dashboard }) => dashboard.activeRepo,
         repoKey: ({ dashboard }) => dashboard.repoKey,
         order: ({ dashboard }) => dashboard.order,
-        strollStyle: ({ dashboard }) => dashboard.strollStyle,
         searchQuery: ({ sidebar }) => sidebar.searchQuery,
         filterFields: ({ sidebar }) => sidebar.filterFields
       },
@@ -133,7 +132,8 @@
       Search,
       Readme,
       MdlLoading,
-      MdlFab
+      MdlFab,
+      Stroll
     }
   }
 </script>
@@ -145,7 +145,7 @@
         <a class="waves-effect waves-light btn" @click="orderRepo('repo_name')"><octicon name="repo"></octicon>Repo</a>
         <a class="waves-effect waves-light btn" @click="orderRepo('stargazers_count')"><octicon name="star"></octicon>Star</a>
       </div>
-      <aside id="repos-desc" class="repos-desc" :class="{ cards: strollStyle }">
+      <aside id="repos-desc" class="repos-desc cards">
         <!-- <search :search-query.sync="searchQuery"></search> -->
         <!-- {{ $data | json }} -->
         <div
@@ -190,6 +190,8 @@
           </div>
         </div>
       </main>
+      <!-- stroll component is after the cards's dom rendered -->
+      <!-- <stroll v-if="repos.length > 10"></stroll> -->
     </div>
   </div>
 </template>
