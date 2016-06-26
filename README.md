@@ -1,7 +1,7 @@
 # Astrolabe
 Manage your GitHub stars use one desktop app.
 
-# State of the Art
+# Tech Stack
 
 - Electron
 - Material Design
@@ -36,6 +36,8 @@ Now you can rise up astrolabe with hot loading.
 - [ ] User Card
 - [ ] Repo Card
 - [x] Copy clone link to clipboard
+- [x] Back to top
+- [x] Open All Link in Default Brower
 
 # License
 
