@@ -67,7 +67,8 @@
        v-show="showCopy" v-clipboard:copy="activeRepo.clone_url" @click="copyAction()">
       <i class="material-icons">content_copy</i>
     </a>
-    <a href="#" class="btn-fab btn-floating waves-effect waves-light green" tooltip="Download">
+    <a href="#" class="btn-fab btn-floating waves-effect waves-light green" tooltip="Download"
+       v-show="showCopy" @click="openInBrowser(activeRepo.downloads_url)">
       <i class="material-icons">file_download</i>
     </a>
     <a href="#" class="btn-fab btn-floating waves-effect waves-light blue" tooltip="Back to Top"

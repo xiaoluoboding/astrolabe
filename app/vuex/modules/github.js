@@ -8,7 +8,6 @@ import {
 } from '../mutation-types'
 import mongoose from 'mongoose'
 import env from '../../../config/env_dev.json'
-// const db = mongoose.connect(env.db.url)
 mongoose.connect(env.db.url)
 import Users from '../models/usersModel'
 import Repos from '../models/reposModel'
@@ -44,7 +43,6 @@ const mutations = {
         return
       }
       state.user = result
-      // console.log(db);
       console.log('findOneAndUpdate user[' + user.login + ']')
     }
     Users.findOneAndUpdate(query, doc, options, callback)
@@ -55,6 +53,7 @@ const mutations = {
     let initRepos = []
     let reposArray = []
     for (let i in repos) {
+      // console.log(repos[i])
       let t_repo = {
         '_id': repos[i].id,
         'owner_name': repos[i].full_name.split('\/').shift(),
@@ -65,7 +64,7 @@ const mutations = {
         'html_url': repos[i].html_url,
         'clone_url': repos[i].clone_url,
         'git_url': repos[i].git_url,
-        'downloads_url': repos[i].downloads_url,
+        'downloads_url': repos[i].html_url + '/archive/' + repos[i].default_branch + '.zip',
         'created_at': repos[i].created_at,
         'updated_at': repos[i].updated_at,
         'language': repos[i].language == null ? 'null' : repos[i].language

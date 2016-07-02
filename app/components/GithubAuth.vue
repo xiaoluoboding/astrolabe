@@ -166,8 +166,8 @@
         let self = this
         this.toggleLoading()
         let githubUser = self.github.getUser()
-        githubUser.userStarred(user.login, function(err, repos) {
-          self.initRepos(repos)
+        githubUser.listStarredRepos(function(err, repos) {
+          self.initRepos(user, repos)
         })
         this.toggleLogin()
       }
