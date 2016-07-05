@@ -3,6 +3,7 @@ var merge = require('webpack-merge')
 var baseConfig = require('./webpack.base.conf')
 var cssLoaders = require('./css-loaders')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
+var config = require('../config')
 
 baseConfig.entry = {
   app: './app/main.js'
@@ -13,7 +14,9 @@ Object.keys(baseConfig.entry).forEach(function (name) {
   baseConfig.entry[name] = ['./build/dev-client'].concat(baseConfig.entry[name])
 })
 
-module.exports = merge(baseConfig, {
+var devServerUrl = 'http://localhost:' + config.dev.port + '/'
+
+var webpackConfig = merge(baseConfig, {
   // eval-source-map is faster for development
   devtool: '#eval-source-map',
   output: {
@@ -21,7 +24,7 @@ module.exports = merge(baseConfig, {
     // when serving the html from in-memory
     // need to explicitly set localhost to prevent
     // the hot updates from looking for local files
-    publicPath: 'http://localhost:8888/'
+    publicPath: devServerUrl
   },
   vue: {
     loaders: cssLoaders({
@@ -43,7 +46,27 @@ module.exports = merge(baseConfig, {
     new HtmlWebpackPlugin({
       filename: 'main.html',
       template: './app/main.html',
+      excludeChunks: ['devtools'],
       inject: true
     })
   ]
 })
+
+if (config.dev.vueDevTools) {
+  webpackConfig.entry.app.unshift(
+    './tools/vue-devtools/hook.js',
+    './tools/vue-devtools/backend.js'
+  )
+  webpackConfig.entry.devtools = './tools/vue-devtools/devtools.js'
+
+  webpackConfig.plugins.push(new HtmlWebpackPlugin({
+    filename: 'devtools.html',
+    template: './tools/vue-devtools/index.html',
+    chunks: ['devtools'],
+    inject: true
+  }))
+}
+
+
+
+module.exports = webpackConfig
