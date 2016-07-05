@@ -36,6 +36,7 @@ Now you can rise up astrolabe with hot loading.
 - [ ] User Card
 - [ ] Repo Card
 - [x] Copy clone link to clipboard
+- [x] Download archive file
 - [x] Back to top
 - [x] Open All Link in Default Brower
 
