@@ -9,9 +9,10 @@ import {
 import mongoose from 'mongoose'
 import env from '../../../config/env_dev.json'
 mongoose.connect(env.db.url)
-import Users from '../models/usersModel'
+// import Users from '../models/usersModel'
 import Repos from '../models/reposModel'
 import userRepos from '../models/userReposModel'
+import db from '../../services/db'
 
 // initial state
 const state = {
@@ -33,19 +34,32 @@ const mutations = {
   },
 
   [SET_USER] (state, user) {
-    user._id = user.id
-    let query = {_id: user.id}
-    let doc = {$set: user}
-    let options = {upsert: true, new: true}
-    let callback = function(err, result) {
-      if (err) {
-        console.log(err)
-        return
-      }
-      state.user = result
-      console.log('findOneAndUpdate user[' + user.login + ']')
+    // user._id = user.id
+    // let query = {_id: user.id}
+    // let doc = {$set: user}
+    // let options = {upsert: true, new: true}
+    // let callback = function(err, result) {
+    //   if (err) {
+    //     console.log(err)
+    //     return
+    //   }
+    //   state.user = result
+    //   console.log('findOneAndUpdate user[' + user.login + ']')
+    // }
+    // Users.findOneAndUpdate(query, doc, options, callback)
+    db.findOneUser(user.id).then(user => {
+      console.log(user)
+      state.user = user
+    })
+    console.log(state.user.length)
+    if (state.user.length == 0) {
+      db.addUser(user, docs => {
+        state.user = docs
+        // callback(docs)
+      })
+    } else {
+      db.updateUser(user)
     }
-    Users.findOneAndUpdate(query, doc, options, callback)
   },
 
   [INIT_REPOS] (state, user, repos) {
