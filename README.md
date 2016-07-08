@@ -39,6 +39,7 @@ Now you can rise up astrolabe with hot loading.
 - [x] Download archive file
 - [x] Back to top
 - [x] Open All Link in Default Brower
+- [ ] Use `Nedb` for cache local data
 
 # License
 
