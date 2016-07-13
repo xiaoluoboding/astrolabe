@@ -3,8 +3,10 @@ let ds = new DS()
 let connect = ds.init()
 let user = connect.user
 let repo = connect.repo
+let langGroup = connect.langGroup
 
 export default {
+  // users.db CRUD
   addUser (userData, callback) {
     userData._id = userData.id
     user.insert(userData, (err, docs) => {
@@ -25,6 +27,7 @@ export default {
       })
     })
   },
+  // repos.db CRUD
   addRepo (repoData, callback) {
     repo.insert(repoData, (err, docs) => {
       if (err) {}
@@ -50,6 +53,13 @@ export default {
         if (err) {}
         return resolve(docs)
       })
+    })
+  },
+  // langGroup.db CRUD
+  addLangGroup (langData, callback) {
+    langGroup.insert(langData, (err, docs) => {
+      if (err) {}
+      return callback(docs)
     })
   }
 }

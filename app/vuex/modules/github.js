@@ -64,7 +64,7 @@ const mutations = {
   [INIT_REPOS] (state, user, repos) {
     // insert t_repos
     let initRepos = []
-    // let reposArray = []
+    let reposArray = []
     for (let i in repos) {
       // console.log(repos[i])
       let t_repo = {
@@ -101,43 +101,47 @@ const mutations = {
           // state.repos = initRepos
         }
       })
-      // reposArray.push(repos[i].id)
+      reposArray.push(repos[i].id)
     }
     console.log('findOneAndUpdate [%d] repos', repos.length)
 
     // insert t_user_repos
-    // let aggregate = [
-    //   {$match: {_id: {$in: reposArray}}},
-    //   {$group: {_id: '$language', count: {$sum: 1}}},
-    //   {$project: {_id: 0, lang: '$_id', count: 1}},
-    //   {$sort: {count: -1, lang: 1}}
-    // ]
-    // Repos.aggregate(
-    //   aggregate,
-    //   function (err, res) {
-    //     if (err) {
-    //       console.log(err)
-    //       return
-    //     }
-    //     state.langGroup = res
-    //     let user_repos = {
-    //       'user_id': user.id,
-    //       'repos': reposArray,
-    //       'lang_group': res
-    //     }
-    //     let query = {user_id: user.id}
-    //     let doc = {$set: user_repos}
-    //     let options = {upsert: true, new: true}
-    //     let callback = function(err, result) {
-    //       if (err) {
-    //         console.log(err)
-    //         return
-    //       }
-    //       console.log('findOneAndUpdate t_user_repos')
-    //     }
-    //     userRepos.findOneAndUpdate(query, doc, options, callback)
-    //   }
-    // )
+    let aggregate = [
+      {$match: {_id: {$in: reposArray}}},
+      {$group: {_id: '$language', count: {$sum: 1}}},
+      {$project: {_id: 0, lang: '$_id', count: 1}},
+      {$sort: {count: -1, lang: 1}}
+    ]
+    Repos.aggregate(
+      aggregate,
+      function (err, res) {
+        if (err) {
+          console.log(err)
+          return
+        }
+
+        let user_repos = {
+          '_id': user.id,
+          'repos': reposArray,
+          'lang_group': res
+        }
+
+        db.addLangGroup(user_repos, docs => {
+          state.langGroup = res
+        })
+        // let query = {user_id: user.id}
+        // let doc = {$set: user_repos}
+        // let options = {upsert: true, new: true}
+        // let callback = function(err, result) {
+        //   if (err) {
+        //     console.log(err)
+        //     return
+        //   }
+        //   console.log('findOneAndUpdate t_user_repos')
+        // }
+        // userRepos.findOneAndUpdate(query, doc, options, callback)
+      }
+    )
 
     // set init repos
     state.repos = initRepos

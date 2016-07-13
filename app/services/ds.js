@@ -12,14 +12,16 @@ export default class {
   createOrReadDatabase (dbname) {
     let haveUser = fs.existsSync(this.userDataDir.path(dbname.user))
     let haveRepo = fs.existsSync(this.userDataDir.path(dbname.repo))
+    let haveLangGroup = fs.existsSync(this.userDataDir.path(dbname.langGroup))
 
-    if (haveUser && haveRepo) {
+    if (haveUser && haveRepo && haveLangGroup) {
       let userData = fs.readFileSync(this.userDataDir.path(dbname.user))
       let repoData = fs.readFileSync(this.userDataDir.path(dbname.repo))
+      let langGroupData = fs.readFileSync(this.userDataDir.path(dbname.langGroup))
 
       let database = {}
 
-      if (!userData && !repoData) {
+      if (!userData && !repoData && !langGroupData) {
         return
       }
 
@@ -31,11 +33,16 @@ export default class {
         filename: this.userDataDir.path(dbname.repo),
         autoload: true
       })
+      database.langGroup = new DataStore({
+        filename: this.userDataDir.path(dbname.langGroup),
+        autoload: true
+      })
       return database
     } else {
       try {
         this.userDataDir.write(dbname.user)
         this.userDataDir.write(dbname.repo)
+        this.userDataDir.write(dbname.langGroup)
 
         let database = {}
 
@@ -45,6 +52,10 @@ export default class {
         })
         database.repo = new DataStore({
           filename: this.userDataDir.path(dbname.repo),
+          autoload: true
+        })
+        database.langGroup = new DataStore({
+          filename: this.userDataDir.path(dbname.langGroup),
           autoload: true
         })
         return database
@@ -60,7 +71,8 @@ export default class {
     }
     this.db = this.createOrReadDatabase({
       'user': 'users.db',
-      'repo': 'repos.db'
+      'repo': 'repos.db',
+      'langGroup': 'langGroup.db'
     })
     return this.db
   }
