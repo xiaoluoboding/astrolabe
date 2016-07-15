@@ -6,13 +6,7 @@ import {
   INIT_REPOS,
   SET_REPOS
 } from '../mutation-types'
-import mongoose from 'mongoose'
-import env from '../../../config/env_dev.json'
-mongoose.connect(env.db.url)
 import _ from 'lodash'
-// import Users from '../models/usersModel'
-import Repos from '../models/reposModel'
-import userRepos from '../models/userReposModel'
 import db from '../../services/db'
 
 // initial state
@@ -35,19 +29,6 @@ const mutations = {
   },
 
   [SET_USER] (state, user) {
-    // user._id = user.id
-    // let query = {_id: user.id}
-    // let doc = {$set: user}
-    // let options = {upsert: true, new: true}
-    // let callback = function(err, result) {
-    //   if (err) {
-    //     console.log(err)
-    //     return
-    //   }
-    //   state.user = result
-    //   console.log('findOneAndUpdate user[' + user.login + ']')
-    // }
-    // Users.findOneAndUpdate(query, doc, options, callback)
     db.findOneUser(user.id).then(doc => {
       if (_.isNull(doc)) {
         db.addUser(user, docs => {
@@ -82,16 +63,6 @@ const mutations = {
         'updated_at': repos[i].updated_at,
         'language': repos[i].language == null ? 'null' : repos[i].language
       }
-      // let query = {_id: repos[i].id}
-      // let doc = {$set: t_repo}
-      // let options = {upsert: true, new: true}
-      // let callback = function(err, result) {
-      //   if (err) {
-      //     console.log(err)
-      //     return
-      //   }
-      // }
-      // Repos.findOneAndUpdate(query, doc, options, callback)
       initRepos.push(t_repo);
       db.findOneRepo(t_repo._id).then(doc => {
         if (_.isNull(doc)) {
@@ -105,58 +76,39 @@ const mutations = {
     }
     console.log('findOneAndUpdate [%d] repos', repos.length)
 
-    // insert t_user_repos
-    let aggregate = [
-      {$match: {_id: {$in: reposArray}}},
-      {$group: {_id: '$language', count: {$sum: 1}}},
-      {$project: {_id: 0, lang: '$_id', count: 1}},
-      {$sort: {count: -1, lang: 1}}
-    ]
-    Repos.aggregate(
-      aggregate,
-      function (err, res) {
-        if (err) {
-          console.log(err)
-          return
-        }
+    let countLangs = _.countBy(initRepos, 'language')
 
-        let user_repos = {
-          '_id': user.id,
-          'repos': reposArray,
-          'lang_group': res
+    let langGroup = []
+    for (var lang in countLangs) {
+      if (countLangs.hasOwnProperty(lang)) {
+        let lang_count = {
+          '_id': lang,
+          'lang': lang,
+          'count': countLangs[lang]
         }
-
-        db.addLangGroup(user_repos, docs => {
-          state.langGroup = res
-        })
-        // let query = {user_id: user.id}
-        // let doc = {$set: user_repos}
-        // let options = {upsert: true, new: true}
-        // let callback = function(err, result) {
-        //   if (err) {
-        //     console.log(err)
-        //     return
-        //   }
-        //   console.log('findOneAndUpdate t_user_repos')
-        // }
-        // userRepos.findOneAndUpdate(query, doc, options, callback)
+        langGroup.push(lang_count)
       }
-    )
+    }
+
+    console.log(langGroup);
+
+    db.fetchLangGroup().then(groups => {
+      if (_.isEmpty(groups)) {
+        db.addLangGroup(langGroup, docs => {
+          state.langGroup = langGroup
+        })
+      } else {
+        state.langGroup = groups
+      }
+    })
 
     // set init repos
     state.repos = initRepos
   },
 
   [SET_REPOS] (state) {
-    // db.fetchRepos().then(repos => {
-    //   state.repos = repos
-    // })
-    Repos.find({}, function (err, result) {
-      if (err) {
-        console.log(err)
-        return
-      }
-      state.repos = result
+    db.fetchRepos().then(repos => {
+      state.repos = repos
     })
   }
 }

@@ -47,11 +47,19 @@ export default {
       })
     })
   },
-  findRepos () {
+  fetchRepos () {
     return new Promise((resolve, reject) => {
       repo.find({}, (err, docs) => {
         if (err) {}
         return resolve(docs)
+      })
+    })
+  },
+  countLangGroup (lang) {
+    return new Promise((resolve, reject) => {
+      repo.count({language: lang}, (err, count) => {
+        if (err) {}
+        return resolve(count)
       })
     })
   },
@@ -60,6 +68,14 @@ export default {
     langGroup.insert(langData, (err, docs) => {
       if (err) {}
       return callback(docs)
+    })
+  },
+  fetchLangGroup () {
+    return new Promise((resolve, reject) => {
+      langGroup.find({}, (err, docs) => {
+        if (err) {}
+        return resolve(docs)
+      })
     })
   }
 }

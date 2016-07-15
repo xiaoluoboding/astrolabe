@@ -247,7 +247,7 @@
       <div class="dd" id="nestable">
         <ol class="dd-list">
           <li class="dd-item" data-id="{{ index }}"
-              v-for="(index, group) in langGroups | orderBy lang" v-if="group.count > 5 && group.lang != 'null'">
+              v-for="(index, group) in langGroups | orderBy 'count' -1" v-if="group.count >= 5 && group.lang != 'null'">
             <div class="dd-handle">
               <a href="#" class="waves-effect" :class="group.color" @click="filterByLanguage(group.lang)">
                 <i class="material-icons">local_offer</i>
