@@ -14,6 +14,7 @@ export const setGithub = makeAction('SET_GITHUB')
 export const setUser = makeAction('SET_USER')
 export const initRepos = makeAction('INIT_REPOS')
 export const setRepos = makeAction('SET_REPOS')
+export const setLangGroup = makeAction('SET_LANG_GROUP')
 
 // dashboard actions
 export const toggleLoadingReadme = makeAction('TOGGLE_LOADING_README')

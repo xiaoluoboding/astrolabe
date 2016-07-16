@@ -70,11 +70,31 @@ export default {
       return callback(docs)
     })
   },
+  updateLangGroup (langGroupData) {
+    langGroup.update({_id: langGroupData._id}, {$set: langGroupData}, (err, num) => {
+      if (err) {}
+    })
+  },
+  findOneLangGroup (id) {
+    return new Promise((resolve, reject) => {
+      langGroup.findOne({_id: id}, (err, doc) => {
+        if (err) {}
+        return resolve(doc)
+      })
+    })
+  },
   fetchLangGroup () {
     return new Promise((resolve, reject) => {
       langGroup.find({}, (err, docs) => {
         if (err) {}
         return resolve(docs)
+      })
+    })
+  },
+  removeLangGroup () {
+    return new Promise((resolve, reject) => {
+      langGroup.remove({}, { multi: true }, (err, numRemoved) => {
+        if (err) {}
       })
     })
   }

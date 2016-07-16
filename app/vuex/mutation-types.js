@@ -9,6 +9,7 @@ export const SET_GITHUB = 'SET_GITHUB'
 export const SET_USER = 'SET_USER'
 export const INIT_REPOS = 'INIT_REPOS'
 export const SET_REPOS = 'SET_REPOS'
+export const SET_LANG_GROUP = 'SET_LANG_GROUP'
 
 // dashboard mutation types
 export const TOGGLE_LOADING_README = 'TOGGLE_LOADING_README'

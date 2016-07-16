@@ -72,7 +72,7 @@ export default class {
     this.db = this.createOrReadDatabase({
       'user': 'users.db',
       'repo': 'repos.db',
-      'langGroup': 'langGroup.db'
+      'langGroup': 'lang_group.db'
     })
     return this.db
   }
