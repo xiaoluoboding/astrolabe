@@ -45,23 +45,6 @@
           }
         }
         return count
-      },
-      langGroups() {
-        var langGroups = []
-        var waveColors = ['waves-red', 'waves-orange', 'waves-yellow', 'waves-green', 'waves-teal', 'waves-blue', 'waves-purple']
-        function randomArray(array, separate) {
-          array.sort(function () {
-            return Math.random() - 0.5
-          })
-          return array[separate]
-        }
-        for (let i in this.langGroup) {
-          if (typeof (this.langGroup[i].lang) === 'string') {
-            this.langGroup[i].color = randomArray(waveColors, 1)
-            langGroups.push(this.langGroup[i])
-          }
-        }
-        return langGroups
       }
     },
 
@@ -201,14 +184,14 @@
       <li :class="{active : isAll}" @click="toggleSidebar(isAll)">
         <a href="#" class="waves-effect waves-teal" @click="setSearchQuery('')">
           <i class="material-icons">star</i>
-          <span>All Stars</span>
+          <span class="blue-grey-text">All Stars</span>
           <span class="sidebar-badge">{{ total }}</span>
         </a>
       </li>
       <li :class="{active : !isAll}" @click="toggleSidebar(!isAll)">
         <a href="#" class="waves-effect waves-teal" @click="filterByLanguage('null')">
           <i class="material-icons">bookmark_border</i>
-          <span>Untagged Stars</span>
+          <span class="blue-grey-text">Untagged Stars</span>
           <span class="sidebar-badge">{{ untaggedTotal }}</span>
         </a>
       </li>
@@ -216,28 +199,28 @@
       <li class="dropdown">
         <a class="ripple-effect dropdown-toggle" href="#" data-toggle="dropdown">
           <i class="material-icons">label</i>
-          <span>Tag Group</span>
+          <span class="blue-grey-text">Tag Group</span>
           <b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
           <li>
             <a href="#" tabindex="-1" class="waves-effect waves-teal">
               <i class="material-icons">label_outline</i>
-              <span>JavaScript</span>
+              <span class="blue-grey-text">JavaScript</span>
               <span class="sidebar-badge">12</span>
             </a>
           </li>
           <li>
             <a href="#" tabindex="-1" class="waves-effect waves-teal">
               <i class="material-icons">label_outline</i>
-              <span>Css</span>
+              <span class="blue-grey-text">Css</span>
               <span class="sidebar-badge">0</span>
             </a>
           </li>
           <li>
             <a href="#" tabindex="-1" class="waves-effect waves-teal">
               <i class="material-icons">label_outline</i>
-              <span>Html</span>
+              <span class="blue-grey-text">Html</span>
               <span class="sidebar-badge">0</span>
             </a>
           </li>
@@ -247,7 +230,7 @@
       <div class="dd" id="nestable">
         <ol class="dd-list">
           <li class="dd-item" data-id="{{ index }}"
-              v-for="(index, group) in langGroups | orderBy 'count' -1" v-if="group.count >= 5 && group.lang != 'null'">
+              v-for="(index, group) in langGroup | orderBy 'count' -1" v-if="group.count >= 5 && group.lang != 'null'">
             <div class="dd-handle">
               <a href="#" class="waves-effect" :class="group.color" @click="filterByLanguage(group.lang)">
                 <i class="material-icons">local_offer</i>
@@ -1164,6 +1147,11 @@
 
   .sidebar-fixed-right .icon-material-sidebar-arrow:before {
     content: "\e614";
+  }
+
+  .sidebar-nav span {
+    display: inline-block;
+    font-weight: bold;
   }
 
   @media (max-width: 768px) {

@@ -6,6 +6,8 @@
     setToken,
     setGithub,
     setUser,
+    setRepos,
+    setLangGroup,
     initRepos
   } from '../vuex/actions'
   import GithubAuth from './GithubAuth'
@@ -15,6 +17,8 @@
   import storage from 'electron-json-storage'
   import request from 'request'
   import Github from 'github-api'
+  import _ from 'lodash'
+  import db from '../services/db'
 
   export default {
     vuex: {
@@ -31,6 +35,8 @@
         setToken,
         setGithub,
         setUser,
+        setRepos,
+        setLangGroup,
         initRepos
       }
     },
@@ -78,8 +84,30 @@
         let self = this
         this.toggleLoading()
         let githubUser = this.github.getUser(user.login)
+        db.findOneUser(user.id).then(doc => {
+          if (_.isNull(doc)) {
+            githubUser.listStarredRepos(function(err, repos) {
+              self.initRepos(repos)
+            })
+          } else {
+            db.fetchRepos().then(repos => {
+              if (_.isEmpty(repos)) {
+                githubUser.listStarredRepos(function(err, repos) {
+                  self.initRepos(user, repos)
+                })
+              } else {
+                self.setRepos(repos)
+              }
+            })
+            db.fetchLangGroup().then(langGroup => {
+              if (!_.isEmpty(langGroup)) {
+                self.setLangGroup(langGroup)
+              }
+            })
+          }
+        })
         githubUser.listStarredRepos(function(err, repos) {
-          self.initRepos(user, repos)
+          self.initRepos(repos)
         })
         this.toggleLogin()
       }

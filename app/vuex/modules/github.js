@@ -4,10 +4,15 @@ import {
   SET_GITHUB,
   SET_USER,
   INIT_REPOS,
-  SET_REPOS
+  SET_REPOS,
+  SET_LANG_GROUP
 } from '../mutation-types'
 import _ from 'lodash'
 import db from '../../services/db'
+import jetpack from 'fs-jetpack'
+import { remote } from 'electron'
+
+let userDataDir = remote.app.getPath('userData')
 
 // initial state
 const state = {
@@ -31,9 +36,12 @@ const mutations = {
   [SET_USER] (state, user) {
     db.findOneUser(user.id).then(doc => {
       if (_.isNull(doc)) {
+        // when change user delete all db file
+        jetpack.find(userDataDir, {
+          matching: ['*.db']
+        }).forEach(jetpack.remove)
         db.addUser(user, docs => {
           state.user = docs
-          // callback(docs)
         })
       } else {
         db.updateUser(user)
@@ -42,12 +50,11 @@ const mutations = {
     })
   },
 
-  [INIT_REPOS] (state, user, repos) {
+  [INIT_REPOS] (state, repos) {
     // insert t_repos
     let initRepos = []
     let reposArray = []
     for (let i in repos) {
-      // console.log(repos[i])
       let t_repo = {
         '_id': repos[i].id,
         'owner_name': repos[i].full_name.split('\/').shift(),
@@ -66,50 +73,61 @@ const mutations = {
       initRepos.push(t_repo);
       db.findOneRepo(t_repo._id).then(doc => {
         if (_.isNull(doc)) {
-          db.addRepo(t_repo)
+          db.addRepo(t_repo, docs => {})
         } else {
           db.updateRepo(t_repo)
-          // state.repos = initRepos
         }
       })
       reposArray.push(repos[i].id)
     }
     console.log('findOneAndUpdate [%d] repos', repos.length)
 
+    // build lang_group
     let countLangs = _.countBy(initRepos, 'language')
 
     let langGroup = []
+
+    // create random color
+    var waveColors = ['waves-red', 'waves-orange', 'waves-yellow', 'waves-green', 'waves-teal', 'waves-blue', 'waves-purple']
+
+    function randomArray(array, separate) {
+      array.sort(function () {
+        return Math.random() - 0.5
+      })
+      return array[separate]
+    }
     for (var lang in countLangs) {
       if (countLangs.hasOwnProperty(lang)) {
         let lang_count = {
           '_id': lang,
           'lang': lang,
-          'count': countLangs[lang]
+          'count': countLangs[lang],
+          'color': randomArray(waveColors, 1)
         }
         langGroup.push(lang_count)
+        db.findOneLangGroup(lang).then(doc => {
+          if (_.isNull(doc)) {
+            db.addLangGroup(lang_count, docs => {})
+          } else {
+            db.updateLangGroup(lang_count)
+          }
+        })
       }
     }
 
-    console.log(langGroup);
-
-    db.fetchLangGroup().then(groups => {
-      if (_.isEmpty(groups)) {
-        db.addLangGroup(langGroup, docs => {
-          state.langGroup = langGroup
-        })
-      } else {
-        state.langGroup = groups
-      }
-    })
+    // set lang_group
+    state.langGroup = langGroup
 
     // set init repos
     state.repos = initRepos
   },
 
-  [SET_REPOS] (state) {
-    db.fetchRepos().then(repos => {
-      state.repos = repos
-    })
+  [SET_REPOS] (state, repos) {
+    state.repos = repos
+  },
+
+  [SET_LANG_GROUP] (state, langGroup) {
+    state.langGroup = langGroup
   }
 }
 
