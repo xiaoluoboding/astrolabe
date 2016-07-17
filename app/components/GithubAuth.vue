@@ -18,7 +18,7 @@
   export default {
     data () {
       return {
-        msg: 'GitHub API',
+        appName: 'Astrolabe',
         options: {
           client_id: 'd4a28554213774aa83cc',
           client_secret: 'a737f660e30ca4559069ec484658c45cb2a247a4',
@@ -181,7 +181,7 @@
 
 <template>
   <div class="github">
-    <h2>{{ msg }}</h2>
+    <h2><span v-text="appName"></span></h2>
   </div>
   <a class="waves-effect waves-light btn sidebar-toggle" @click="githubAuth()">
     <octicon name="mark-github"></octicon>

@@ -6,7 +6,8 @@
 
     vuex: {
       getters: {
-        user: ({ github }) => github.user
+        user: ({ github }) => github.user,
+        theme: ({ global }) => global.theme
       }
     },
 
@@ -39,7 +40,7 @@
     </li>
   </ul>
   <div class="navbar-fixed">
-    <nav>
+    <nav :class="[theme.baseColor, theme.accentColor]">
       <div class="nav-wrapper open">
         <span href="#!" class="brand-logo waves-effect waves-light">Astrolabe</span>
         <ul class="right hide-on-med-and-down">
@@ -60,10 +61,6 @@
 </template>
 
 <style>
-  nav {
-    background-color: #e91e63;
-  }
-
   nav .brand-logo {
     font-size: 1.8rem;
   }

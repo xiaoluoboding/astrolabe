@@ -76,7 +76,8 @@
         repoKey: ({ dashboard }) => dashboard.repoKey,
         order: ({ dashboard }) => dashboard.order,
         searchQuery: ({ sidebar }) => sidebar.searchQuery,
-        filterFields: ({ sidebar }) => sidebar.filterFields
+        filterFields: ({ sidebar }) => sidebar.filterFields,
+        theme: ({ global }) => global.theme
       },
       actions: {
         toggleLoadingReadme,
@@ -141,9 +142,15 @@
   <main class="wrapper">
     <div class="content">
       <div class="btn-group btn-repos">
-        <a class="waves-effect waves-light btn" @click="orderRepo('owner_name')"><octicon name="octoface"></octicon>Owner</a>
-        <a class="waves-effect waves-light btn" @click="orderRepo('repo_name')"><octicon name="repo"></octicon>Repo</a>
-        <a class="waves-effect waves-light btn" @click="orderRepo('stargazers_count')"><octicon name="star"></octicon>Star</a>
+        <a class="waves-effect waves-light btn"
+           @click="orderRepo('owner_name')"
+           :class="[theme.baseColor, theme.accentColor]"><octicon name="octoface"></octicon>Owner</a>
+        <a class="waves-effect waves-light btn"
+           @click="orderRepo('repo_name')"
+           :class="[theme.baseColor, theme.accentColor]"><octicon name="repo"></octicon>Repo</a>
+        <a class="waves-effect waves-light btn"
+           @click="orderRepo('stargazers_count')"
+           :class="[theme.baseColor, theme.accentColor]"><octicon name="star"></octicon>Star</a>
       </div>
       <aside id="repos-desc" class="repos-desc cards">
         <!-- <search :search-query.sync="searchQuery"></search> -->

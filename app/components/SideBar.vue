@@ -18,18 +18,10 @@
 
     vuex: {
       getters: {
-        repos: ({
-          github
-        }) => github.repos,
-        isAll: ({
-          sidebar
-        }) => sidebar.isAll,
-        searchQuery: ({
-          sidebar
-        }) => sidebar.searchQuery,
-        langGroup: ({
-          github
-        }) => github.langGroup
+        repos: ({ github }) => github.repos,
+        searchQuery: ({ sidebar }) => sidebar.searchQuery,
+        langGroup: ({ github }) => github.langGroup,
+        theme: ({ global }) => global.theme
       },
       actions: {
         setSearchQuery,
@@ -93,12 +85,6 @@
           if (value === 'sidebar-fixed-left' || value === 'sidebar-fixed-right') {
             $('.sidebar-overlay').addClass('active');
           }
-        });
-
-        // Sidebar theme
-        $('#sidebar-theme').change(function() {
-          var value = $(this).val();
-          sidebar.removeClass('sidebar-default sidebar-inverse sidebar-colored sidebar-colored-inverse').addClass(value)
         });
 
         // Header cover
@@ -181,7 +167,7 @@
   <!-- Material sidebar -->
   <aside id="sidebar" class="sidebar sidebar-colored sidebar-stacked open" role="navigation">
     <!-- Sidebar header -->
-    <div class="sidebar-header">
+    <div class="sidebar-header" :class="[theme.baseColor, theme.accentColor]">
       <!-- Top bar -->
       <div class="top-bar">
         <!-- Sidebar toggle button -->
@@ -195,14 +181,14 @@
         <a href="#" class="waves-effect waves-teal" @click="setSearchQuery('')">
           <i class="material-icons">star</i>
           <span class="blue-grey-text">All Stars</span>
-          <span class="sidebar-badge">{{ total }}</span>
+          <span class="sidebar-badge" :class="[theme.baseColor, theme.darkenColor]">{{ total }}</span>
         </a>
       </li>
       <li :class="{active: activeLang == 'null'}" @click="toggleLang('null')">
         <a href="#" class="waves-effect waves-teal" @click="filterByLanguage('null')">
           <i class="material-icons">bookmark_border</i>
           <span class="blue-grey-text">Untagged Stars</span>
-          <span class="sidebar-badge">{{ untaggedTotal }}</span>
+          <span class="sidebar-badge" :class="[theme.baseColor, theme.darkenColor]">{{ untaggedTotal }}</span>
         </a>
       </li>
       <li class="divider"></li>
@@ -248,7 +234,7 @@
               <a href="#" class="waves-effect" :class="group.color" @click="filterByLanguage(group.lang)">
                 <i class="material-icons">local_offer</i>
                 <span class="blue-grey-text">{{ group.lang }}</span>
-                <span class="sidebar-badge">{{ group.count }}</span>
+                <span class="sidebar-badge" :class="[theme.baseColor, theme.darkenColor]">{{ group.count }}</span>
               </a>
             </div>
           </li>
@@ -669,228 +655,6 @@
     box-shadow: none;
   }
 
-  .sidebar-default {
-    background-color: #fff;
-  }
-
-  .sidebar-default .sidebar-header {
-    background-color: #eceff1;
-  }
-
-  .sidebar-default .sidebar-toggle {
-    color: #212121;
-    background-color: transparent;
-  }
-
-  .sidebar-default .sidebar-brand {
-    color: #757575;
-    background-color: transparent;
-  }
-
-  .sidebar-default .sidebar-brand:hover,
-  .sidebar-default .sidebar-brand:focus {
-    color: #212121;
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-
-  .sidebar-default .sidebar-badge {
-    color: #fff;
-    background-color: #bdbdbd;
-  }
-
-  .sidebar-default .sidebar-divider,
-  .sidebar-default .sidebar-nav .divider {
-    background-color: #bdbdbd;
-  }
-
-  .sidebar-default .sidebar-action {
-    color: #212121;
-  }
-
-  .sidebar-default .sidebar-nav li > a {
-    color: #212121;
-    background-color: transparent;
-  }
-
-  .sidebar-default .sidebar-nav li > a i {
-    color: #757575;
-  }
-
-  .sidebar-default .sidebar-nav li:hover > a,
-  .sidebar-default .sidebar-nav li > a:hover {
-    color: #212121;
-    background-color: #e0e0e0;
-  }
-
-  .sidebar-default .sidebar-nav li:hover > a i,
-  .sidebar-default .sidebar-nav li > a:hover i {
-    color: #757575;
-  }
-
-  .sidebar-default .sidebar-nav li:focus > a,
-  .sidebar-default .sidebar-nav li > a:focus {
-    color: #212121;
-    background-color: transparent;
-  }
-
-  .sidebar-default .sidebar-nav li:focus > a i,
-  .sidebar-default .sidebar-nav li > a:focus i {
-    color: #757575;
-  }
-
-  .sidebar-default .sidebar-nav > .open > a,
-  .sidebar-default .sidebar-nav > .open > a:hover,
-  .sidebar-default .sidebar-nav > .open > a:focus {
-    color: #212121;
-    background-color: #e0e0e0;
-  }
-
-  .sidebar-default .sidebar-nav > .active > a,
-  .sidebar-default .sidebar-nav > .active > a:hover,
-  .sidebar-default .sidebar-nav > .active > a:focus {
-    color: #212121;
-    background-color: #e0e0e0;
-  }
-
-  .sidebar-default .sidebar-nav > .disabled > a,
-  .sidebar-default .sidebar-nav > .disabled > a:hover,
-  .sidebar-default .sidebar-nav > .disabled > a:focus {
-    color: #e0e0e0;
-    background-color: transparent;
-  }
-
-  .sidebar-default .sidebar-nav > .dropdown > .dropdown-menu {
-    background-color: #e0e0e0;
-  }
-
-  .sidebar-default .sidebar-nav > .dropdown > .dropdown-menu > li > a:focus {
-    background-color: #e0e0e0;
-    color: #212121;
-  }
-
-  .sidebar-default .sidebar-nav > .dropdown > .dropdown-menu > li > a:hover {
-    background-color: #cecece;
-    color: #212121;
-  }
-
-  .sidebar-default .sidebar-nav > .dropdown > .dropdown-menu > .active > a,
-  .sidebar-default .sidebar-nav > .dropdown > .dropdown-menu > .active > a:hover,
-  .sidebar-default .sidebar-nav > .dropdown > .dropdown-menu > .active > a:focus {
-    color: #212121;
-    background-color: #e0e0e0;
-  }
-
-  .sidebar-inverse {
-    background-color: #212121;
-  }
-
-  .sidebar-inverse .sidebar-header {
-    background-color: #eceff1;
-  }
-
-  .sidebar-inverse .sidebar-toggle {
-    color: #212121;
-    background-color: transparent;
-  }
-
-  .sidebar-inverse .sidebar-brand {
-    color: #757575;
-    background-color: transparent;
-  }
-
-  .sidebar-inverse .sidebar-brand:hover,
-  .sidebar-inverse .sidebar-brand:focus {
-    color: #212121;
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-
-  .sidebar-inverse .sidebar-badge {
-    color: #212121;
-    background-color: #e0e0e0;
-  }
-
-  .sidebar-inverse .sidebar-divider,
-  .sidebar-inverse .sidebar-nav .divider {
-    background-color: #bdbdbd;
-  }
-
-  .sidebar-inverse .sidebar-action {
-    color: #f5f5f5;
-  }
-
-  .sidebar-inverse .sidebar-nav li > a {
-    color: #f5f5f5;
-    background-color: transparent;
-  }
-
-  .sidebar-inverse .sidebar-nav li > a i {
-    color: #bdbdbd;
-  }
-
-  .sidebar-inverse .sidebar-nav li:hover > a,
-  .sidebar-inverse .sidebar-nav li > a:hover {
-    color: #bdbdbd;
-    background-color: #000;
-  }
-
-  .sidebar-inverse .sidebar-nav li:hover > a i,
-  .sidebar-inverse .sidebar-nav li > a:hover i {
-    color: #bdbdbd;
-  }
-
-  .sidebar-inverse .sidebar-nav li:focus > a,
-  .sidebar-inverse .sidebar-nav li > a:focus {
-    color: #f5f5f5;
-    background-color: transparent;
-  }
-
-  .sidebar-inverse .sidebar-nav li:focus > a i,
-  .sidebar-inverse .sidebar-nav li > a:focus i {
-    color: #bdbdbd;
-  }
-
-  .sidebar-inverse .sidebar-nav > .open > a,
-  .sidebar-inverse .sidebar-nav > .open > a:hover,
-  .sidebar-inverse .sidebar-nav > .open > a:focus {
-    color: #bdbdbd;
-    background-color: #000;
-  }
-
-  .sidebar-inverse .sidebar-nav > .active > a,
-  .sidebar-inverse .sidebar-nav > .active > a:hover,
-  .sidebar-inverse .sidebar-nav > .active > a:focus {
-    color: #f5f5f5;
-    background-color: #000;
-  }
-
-  .sidebar-inverse .sidebar-nav > .disabled > a,
-  .sidebar-inverse .sidebar-nav > .disabled > a:hover,
-  .sidebar-inverse .sidebar-nav > .disabled > a:focus {
-    color: #757575;
-    background-color: transparent;
-  }
-
-  .sidebar-inverse .sidebar-nav > .dropdown > .dropdown-menu {
-    background-color: #000;
-  }
-
-  .sidebar-inverse .sidebar-nav > .dropdown > .dropdown-menu > li > a:focus {
-    background-color: #000;
-    color: #bdbdbd;
-  }
-
-  .sidebar-inverse .sidebar-nav > .dropdown > .dropdown-menu > li > a:hover {
-    background-color: #000000;
-    color: #bdbdbd;
-  }
-
-  .sidebar-inverse .sidebar-nav > .dropdown > .dropdown-menu > .active > a,
-  .sidebar-inverse .sidebar-nav > .dropdown > .dropdown-menu > .active > a:hover,
-  .sidebar-inverse .sidebar-nav > .dropdown > .dropdown-menu > .active > a:focus {
-    color: #f5f5f5;
-    background-color: #000;
-  }
-
   .sidebar-colored {
     background-color: #fff;
   }
@@ -1008,112 +772,6 @@
   .sidebar-colored .sidebar-nav > .dropdown > .dropdown-menu > .active > a:focus {
     color: #212121;
     background-color: #f5f5f5;
-  }
-
-  .sidebar-colored-inverse {
-    background-color: #e91e63;
-  }
-
-  .sidebar-colored-inverse .sidebar-header {
-    background-color: #eceff1;
-  }
-
-  .sidebar-colored-inverse .sidebar-brand {
-    color: #757575;
-    background-color: transparent;
-  }
-
-  .sidebar-colored-inverse .sidebar-brand:hover,
-  .sidebar-colored-inverse .sidebar-brand:focus {
-    color: #212121;
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-
-  .sidebar-colored-inverse .sidebar-badge {
-    color: #212121;
-    background-color: #e0e0e0;
-  }
-
-  .sidebar-colored-inverse .sidebar-divider,
-  .sidebar-colored-inverse .sidebar-nav .divider {
-    background-color: #bdbdbd;
-  }
-
-  .sidebar-colored-inverse .sidebar-action {
-    color: #e0e0e0;
-  }
-
-  .sidebar-colored-inverse .sidebar-nav li > a {
-    color: #f5f5f5;
-    background-color: transparent;
-  }
-
-  .sidebar-colored-inverse .sidebar-nav li > a i {
-    color: #e0e0e0;
-  }
-
-  .sidebar-colored-inverse .sidebar-nav li:hover > a,
-  .sidebar-colored-inverse .sidebar-nav li > a:hover {
-    color: #f5f5f5;
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-
-  .sidebar-colored-inverse .sidebar-nav li:hover > a i,
-  .sidebar-colored-inverse .sidebar-nav li > a:hover i {
-    color: #f5f5f5;
-  }
-
-  .sidebar-colored-inverse .sidebar-nav li:focus > a,
-  .sidebar-colored-inverse .sidebar-nav li > a:focus {
-    color: #f5f5f5;
-    background-color: transparent;
-  }
-
-  .sidebar-colored-inverse .sidebar-nav li:focus > a i,
-  .sidebar-colored-inverse .sidebar-nav li > a:focus i {
-    color: #f5f5f5;
-  }
-
-  .sidebar-colored-inverse .sidebar-nav > .open > a,
-  .sidebar-colored-inverse .sidebar-nav > .open > a:hover,
-  .sidebar-colored-inverse .sidebar-nav > .open > a:focus {
-    color: #f5f5f5;
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-
-  .sidebar-colored-inverse .sidebar-nav > .active > a,
-  .sidebar-colored-inverse .sidebar-nav > .active > a:hover,
-  .sidebar-colored-inverse .sidebar-nav > .active > a:focus {
-    color: #f5f5f5;
-    background-color: rgba(0, 0, 0, 0.2);
-  }
-
-  .sidebar-colored-inverse .sidebar-nav > .disabled > a,
-  .sidebar-colored-inverse .sidebar-nav > .disabled > a:hover,
-  .sidebar-colored-inverse .sidebar-nav > .disabled > a:focus {
-    color: #bdbdbd;
-    background-color: transparent;
-  }
-
-  .sidebar-colored-inverse .sidebar-nav > .dropdown > .dropdown-menu {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
-
-  .sidebar-colored-inverse .sidebar-nav > .dropdown > .dropdown-menu > li > a:focus {
-    background-color: rgba(0, 0, 0, 0.1);
-    color: #f5f5f5;
-  }
-
-  .sidebar-colored-inverse .sidebar-nav > .dropdown > .dropdown-menu > li > a:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-    color: #f5f5f5;
-  }
-
-  .sidebar-colored-inverse .sidebar-nav > .dropdown > .dropdown-menu > .active > a,
-  .sidebar-colored-inverse .sidebar-nav > .dropdown > .dropdown-menu > .active > a:hover,
-  .sidebar-colored-inverse .sidebar-nav > .dropdown > .dropdown-menu > .active > a:focus {
-    color: #f5f5f5;
-    background-color: rgba(0, 0, 0, 0.2);
   }
 
   .sidebar {

@@ -7,7 +7,6 @@
 
     data () {
       return {
-        copyData: '',
         copyTooltip: 'Copy clone link to clipboard',
         showCopy: false
       }
