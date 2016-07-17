@@ -1,6 +1,5 @@
 // vuex/modules/sidebar.js
 import {
-  TOGGLE_SIDEBAR,
   SET_SEARCH_QUERY,
   FILTER_BY_LANGUAGE
 } from '../mutation-types'

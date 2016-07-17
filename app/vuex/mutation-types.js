@@ -1,3 +1,6 @@
+// global mutation types
+export const CHANGE_THEME = 'CHANGE_THEME'
+
 // login mutation types
 export const TOGGLE_CONNECTING = 'TOGGLE_CONNECTING'
 export const TOGGLE_LOADING = 'TOGGLE_LOADING'

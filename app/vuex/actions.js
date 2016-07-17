@@ -3,6 +3,9 @@
 //   dispatch(types.SET_TOKEN, token)
 // }
 
+// global actions
+export const changeTheme = makeAction('CHANGE_THEME')
+
 // login actions
 export const toggleConnecting = makeAction('TOGGLE_CONNECTING')
 export const toggleLoading = makeAction('TOGGLE_LOADING')
