@@ -1,6 +1,5 @@
 <script>
   import {
-    toggleSidebar,
     setSearchQuery,
     filterByLanguage
   } from '../vuex/actions'
@@ -10,6 +9,12 @@
 
   export default {
     name: 'SideBar',
+
+    data () {
+      return {
+        activeLang: 'all'
+      }
+    },
 
     vuex: {
       getters: {
@@ -27,7 +32,6 @@
         }) => github.langGroup
       },
       actions: {
-        toggleSidebar,
         setSearchQuery,
         filterByLanguage
       }
@@ -159,6 +163,12 @@
       })(jQuery.fn.removeClass);
     },
 
+    methods: {
+      toggleLang (lang) {
+        this.activeLang = lang
+      }
+    },
+
     components: {
       Search
     }
@@ -181,14 +191,14 @@
     </div>
     <!-- Sidebar navigation -->
     <ul class="nav sidebar-nav">
-      <li :class="{active : isAll}" @click="toggleSidebar(isAll)">
+      <li :class="{active: activeLang == 'all'}" @click="toggleLang('all')">
         <a href="#" class="waves-effect waves-teal" @click="setSearchQuery('')">
           <i class="material-icons">star</i>
           <span class="blue-grey-text">All Stars</span>
           <span class="sidebar-badge">{{ total }}</span>
         </a>
       </li>
-      <li :class="{active : !isAll}" @click="toggleSidebar(!isAll)">
+      <li :class="{active: activeLang == 'null'}" @click="toggleLang('null')">
         <a href="#" class="waves-effect waves-teal" @click="filterByLanguage('null')">
           <i class="material-icons">bookmark_border</i>
           <span class="blue-grey-text">Untagged Stars</span>
@@ -230,7 +240,10 @@
       <div class="dd" id="nestable">
         <ol class="dd-list">
           <li class="dd-item" data-id="{{ index }}"
-              v-for="(index, group) in langGroup | orderBy 'count' -1" v-if="group.count >= 5 && group.lang != 'null'">
+              v-for="(index, group) in langGroup | orderBy 'count' -1"
+              v-if="group.count >= 5 && group.lang != 'null'"
+              @click="toggleLang(group.lang)"
+              :class="{active: activeLang == group.lang}">
             <div class="dd-handle">
               <a href="#" class="waves-effect" :class="group.color" @click="filterByLanguage(group.lang)">
                 <i class="material-icons">local_offer</i>
@@ -961,6 +974,12 @@
   .sidebar-colored .sidebar-nav > .active > a:focus {
     color: #212121;
     background-color: #f5f5f5;
+  }
+
+  .sidebar-colored .sidebar-nav > .active > a i,
+  .sidebar-colored .sidebar-nav > .active > a:hover i,
+  .sidebar-colored .sidebar-nav > .active > a:focus i{
+    color: #f06292;
   }
 
   .sidebar-colored .sidebar-nav > .disabled > a,

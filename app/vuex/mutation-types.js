@@ -17,6 +17,5 @@ export const SET_ACTIVE_REPO = 'SET_ACTIVE_REPO'
 export const ORDER_REPO = 'ORDER_REPO'
 
 // sidebar mutation types
-export const TOGGLE_SIDEBAR = 'TOGGLE_SIDEBAR'
 export const SET_SEARCH_QUERY = 'SET_SEARCH_QUERY'
 export const FILTER_BY_LANGUAGE = 'FILTER_BY_LANGUAGE'

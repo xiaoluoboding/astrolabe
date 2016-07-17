@@ -476,10 +476,28 @@
     line-height: 36px !important;
   }
 
-  .dd .dd-list li a:hover,
-  .dd .dd-list li a:focus {
-    color: #f06292 !important;
+  .dd .dd-list li:hover a,
+  .dd .dd-list li a:hover {
+    color: #e91e63;
     background-color: #e0e0e0;
+  }
+
+  .dd .dd-list li:hover a i,
+  .dd .dd-list li a:hover i {
+    color: #f06292;
+  }
+
+  .dd .dd-list .dd-item.active a,
+  .dd .dd-list .dd-item.active a:hover,
+  .dd .dd-list .dd-item.active a:focus {
+    color: #212121;
+    background-color: #f5f5f5;
+  }
+
+  .dd .dd-list .dd-item.active a i,
+  .dd .dd-list .dd-item.active a:hover i,
+  .dd .dd-list .dd-item.active a:focus i {
+    color: #f06292;
   }
 
   .dd .dd-list li a .sidebar-badge {
