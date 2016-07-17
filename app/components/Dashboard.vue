@@ -11,6 +11,7 @@
   import MdlLoading from './materialize/MdlLoading'
   import MdlFab from './materialize/MdlFab'
   import Stroll from './plugins/Stroll'
+  import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
   import shell from 'shell'
   import $ from 'jquery'
   import hljs from 'highlight.js'
@@ -63,7 +64,8 @@
 
     data () {
       return {
-        repoReadme: ''
+        repoReadme: '',
+        isLoadingDesc: false
       }
     },
 
@@ -117,6 +119,9 @@
             self.repoReadme = md.render(data)
           })
         }
+      },
+      toggleLoadingDesc() {
+        this.isLoadingDesc = !this.isLoadingDesc
       }
     },
 
@@ -124,6 +129,11 @@
       'repoReadme': function (val, oldVal) {
         if (val) {
           this.toggleLoadingReadme()
+        }
+      },
+      'repos': function (val, oldVal) {
+        if (val) {
+          this.toggleLoadingDesc()
         }
       }
     },
@@ -134,6 +144,7 @@
       Readme,
       MdlLoading,
       MdlFab,
+      PulseLoader,
       Stroll
     }
   }
@@ -155,11 +166,14 @@
       <aside id="repos-desc" class="repos-desc cards">
         <!-- <search :search-query.sync="searchQuery"></search> -->
         <!-- {{ $data | json }} -->
+        <div class="empty-placeholder animated fadeIn" v-if="isLoadingDesc">
+          <pulse-loader :loading="loading" color="#00bfa5"></pulse-loader>
+        </div>
         <div
-          class="card waves-effect waves-light"
+          class="card waves-effect waves-light animated fadeIn"
           :class="{ 'blue-grey': activeRepo._id === repo._id, 'darken-1': activeRepo._id === repo._id }"
           @click="showReadme(repo)"
-          v-for="repo in repos | filterBy searchQuery in filterFields | orderBy repoKey order">
+          v-for="repo in repos | filterBy searchQuery in filterFields | orderBy repoKey order" v-else>
           <div class="card-content" :class="{ 'white-text': activeRepo._id === repo._id }">
             <span class="card-title">{{ repo.owner_name }} / {{ repo.repo_name }}</span>
             <p>{{ repo.description }}</p>
@@ -364,5 +378,21 @@
 
   .card .card-content.white-text .card-action a:not(.btn):not(.btn-large):not(.btn-floating) {
     color: #ffab40;
+  }
+
+  .repos-desc .empty-placeholder {
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    color: #658399;
+    font-weight: bold;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    text-align: center;
+    width: 100%;
   }
 </style>

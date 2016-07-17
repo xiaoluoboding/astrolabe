@@ -90,8 +90,12 @@
     margin: 16px;
   }
 
+  .repos-readme .readme a {
+    color: #00bfa5;
+  }
+
   .repos-readme .readme a:hover {
-    color: #01579B;
+    color: #009688;
     text-decoration: underline;
   }
 
