@@ -1,5 +1,6 @@
 // vuex/modules/dashboard.js
 import {
+  TOGGLE_LOADING_DESC,
   TOGGLE_LOADING_README,
   SET_ACTIVE_REPO,
   ORDER_REPO
@@ -7,6 +8,7 @@ import {
 
 // initial state
 const state = {
+  loadingDesc: false,
   loadingReadme: false,
   activeRepo: {},
   repoKey: '',
@@ -15,6 +17,10 @@ const state = {
 
 // mutations
 const mutations = {
+  [TOGGLE_LOADING_DESC] (state) {
+    state.loadingDesc = !state.loadingDesc
+  },
+
   [TOGGLE_LOADING_README] (state) {
     state.loadingReadme = !state.loadingReadme
   },

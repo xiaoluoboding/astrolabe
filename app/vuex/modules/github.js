@@ -7,7 +7,7 @@ import {
   SET_REPOS,
   SET_LANG_GROUP
 } from '../mutation-types'
-import _ from 'lodash'
+import { isNull, countBy } from 'lodash'
 import db from '../../services/db'
 import jetpack from 'fs-jetpack'
 import { remote } from 'electron'
@@ -35,7 +35,7 @@ const mutations = {
 
   [SET_USER] (state, user) {
     db.findOneUser(user.id).then(doc => {
-      if (_.isNull(doc)) {
+      if (isNull(doc)) {
         // when change user delete all db file
         jetpack.find(userDataDir, {
           matching: ['*.db']
@@ -72,7 +72,7 @@ const mutations = {
       }
       initRepos.push(t_repo);
       db.findOneRepo(t_repo._id).then(doc => {
-        if (_.isNull(doc)) {
+        if (isNull(doc)) {
           db.addRepo(t_repo, docs => {})
         } else {
           db.updateRepo(t_repo)
@@ -83,7 +83,7 @@ const mutations = {
     console.log('findOneAndUpdate [%d] repos', repos.length)
 
     // build lang_group
-    let countLangs = _.countBy(initRepos, 'language')
+    let countLangs = countBy(initRepos, 'language')
 
     let langGroup = []
 
@@ -106,7 +106,7 @@ const mutations = {
         }
         langGroup.push(lang_count)
         db.findOneLangGroup(lang).then(doc => {
-          if (_.isNull(doc)) {
+          if (isNull(doc)) {
             db.addLangGroup(lang_count, docs => {})
           } else {
             db.updateLangGroup(lang_count)
