@@ -17,7 +17,7 @@
   import storage from 'electron-json-storage'
   import request from 'request'
   import Github from 'github-api'
-  import _ from 'lodash'
+  import { isNull, isEmpty } from 'lodash'
   import db from '../services/db'
 
   export default {
@@ -85,13 +85,13 @@
         this.toggleLoading()
         let githubUser = this.github.getUser(user.login)
         db.findOneUser(user.id).then(doc => {
-          if (_.isNull(doc)) {
+          if (isNull(doc)) {
             githubUser.listStarredRepos(function(err, repos) {
               self.initRepos(repos)
             })
           } else {
             db.fetchRepos().then(repos => {
-              if (_.isEmpty(repos)) {
+              if (isEmpty(repos)) {
                 githubUser.listStarredRepos(function(err, repos) {
                   self.initRepos(user, repos)
                 })
@@ -100,7 +100,7 @@
               }
             })
             db.fetchLangGroup().then(langGroup => {
-              if (!_.isEmpty(langGroup)) {
+              if (!isEmpty(langGroup)) {
                 self.setLangGroup(langGroup)
               }
             })

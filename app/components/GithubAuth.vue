@@ -5,15 +5,20 @@
     toggleConnecting,
     toggleLoading,
     toggleLogin,
+    toggleLoadingDesc,
     setToken,
     setGithub,
     setUser,
+    setRepos,
+    setLangGroup,
     initRepos
   } from '../vuex/actions'
   const BrowserWindow = remote.BrowserWindow
   import storage from 'electron-json-storage'
   import request from 'request'
   import Octicon from '../node_modules/vue-octicon/src/components/Octicon'
+  import { isNull, isEmpty } from 'lodash'
+  import db from '../services/db'
 
   export default {
     data () {
@@ -35,9 +40,12 @@
         toggleConnecting,
         toggleLoading,
         toggleLogin,
+        toggleLoadingDesc,
         setToken,
         setGithub,
         setUser,
+        setRepos,
+        setLangGroup,
         initRepos
       }
     },
@@ -165,7 +173,33 @@
       getRepos(user) {
         let self = this
         this.toggleLoading()
-        let githubUser = self.github.getUser()
+        let githubUser = this.github.getUser(user.login)
+        this.toggleLoadingDesc()
+        db.findOneUser(user.id).then(doc => {
+          if (isNull(doc)) {
+            console.log('111111111111111');
+            githubUser.listStarredRepos(function(err, repos) {
+              self.initRepos(repos)
+            })
+          } else {
+            db.fetchRepos().then(repos => {
+              if (isEmpty(repos)) {
+                console.log('22222222222222');
+                githubUser.listStarredRepos(function(err, repos) {
+                  self.initRepos(user, repos)
+                })
+              } else {
+                console.log('33333333333333');
+                self.setRepos(repos)
+              }
+            })
+            db.fetchLangGroup().then(langGroup => {
+              if (!isEmpty(langGroup)) {
+                self.setLangGroup(langGroup)
+              }
+            })
+          }
+        })
         githubUser.listStarredRepos(function(err, repos) {
           self.initRepos(user, repos)
         })

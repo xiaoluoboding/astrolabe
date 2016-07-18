@@ -1,5 +1,6 @@
 <script>
   import {
+    toggleLoadingDesc,
     toggleLoadingReadme,
     setActiveRepo,
     orderRepo,
@@ -64,8 +65,7 @@
 
     data () {
       return {
-        repoReadme: '',
-        isLoadingDesc: false
+        repoReadme: ''
       }
     },
 
@@ -73,6 +73,7 @@
       getters: {
         github: ({ github }) => github.github,
         repos: ({ github }) => github.repos,
+        loadingDesc: ({ dashboard }) => dashboard.loadingDesc,
         loadingReadme: ({ dashboard }) => dashboard.loadingReadme,
         activeRepo: ({ dashboard }) => dashboard.activeRepo,
         repoKey: ({ dashboard }) => dashboard.repoKey,
@@ -82,6 +83,7 @@
         theme: ({ global }) => global.theme
       },
       actions: {
+        toggleLoadingDesc,
         toggleLoadingReadme,
         setActiveRepo,
         orderRepo,
@@ -119,9 +121,6 @@
             self.repoReadme = md.render(data)
           })
         }
-      },
-      toggleLoadingDesc() {
-        this.isLoadingDesc = !this.isLoadingDesc
       }
     },
 
@@ -166,7 +165,7 @@
       <aside id="repos-desc" class="repos-desc cards">
         <!-- <search :search-query.sync="searchQuery"></search> -->
         <!-- {{ $data | json }} -->
-        <div class="empty-placeholder animated fadeIn" v-if="isLoadingDesc">
+        <div class="empty-placeholder animated fadeIn" v-if="loadingDesc">
           <pulse-loader :loading="loading" color="#00bfa5"></pulse-loader>
         </div>
         <div
