@@ -86,13 +86,13 @@
         let githubUser = this.github.getUser(user.login)
         db.findOneUser(user.id).then(doc => {
           if (isNull(doc)) {
-            githubUser.listStarredRepos(function(err, repos) {
+            githubUser.getStarredRepos(function(err, repos) {
               self.initRepos(repos)
             })
           } else {
             db.fetchRepos().then(repos => {
               if (isEmpty(repos)) {
-                githubUser.listStarredRepos(function(err, repos) {
+                githubUser.getStarredRepos(function(err, repos) {
                   self.initRepos(user, repos)
                 })
               } else {
@@ -106,7 +106,7 @@
             })
           }
         })
-        githubUser.listStarredRepos(function(err, repos) {
+        githubUser.getStarredRepos(function(err, repos) {
           self.initRepos(repos)
         })
         this.toggleLogin()
