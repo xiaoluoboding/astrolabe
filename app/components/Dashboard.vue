@@ -161,6 +161,9 @@
         <a class="waves-effect waves-light btn"
            @click="orderRepo('stargazers_count')"
            :class="[theme.baseColor, theme.accentColor]"><octicon name="star"></octicon>Star</a>
+        <a class="waves-effect waves-light btn"
+           @click="orderRepo('repo_idx')"
+           :class="[theme.baseColor, theme.accentColor]"><octicon name="calendar"></octicon>Time</a>
       </div>
       <aside id="repos-desc" class="repos-desc cards">
         <!-- <search :search-query.sync="searchQuery"></search> -->

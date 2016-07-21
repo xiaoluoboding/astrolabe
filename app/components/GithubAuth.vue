@@ -177,19 +177,16 @@
         this.toggleLoadingDesc()
         db.findOneUser(user.id).then(doc => {
           if (isNull(doc)) {
-            console.log('111111111111111');
             githubUser.listStarredRepos(function(err, repos) {
               self.initRepos(repos)
             })
           } else {
             db.fetchRepos().then(repos => {
               if (isEmpty(repos)) {
-                console.log('22222222222222');
                 githubUser.listStarredRepos(function(err, repos) {
                   self.initRepos(user, repos)
                 })
               } else {
-                console.log('33333333333333');
                 self.setRepos(repos)
               }
             })

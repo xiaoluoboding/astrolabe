@@ -57,6 +57,7 @@ const mutations = {
     for (let i in repos) {
       let t_repo = {
         '_id': repos[i].id,
+        'repo_idx': parseInt(i),
         'owner_name': repos[i].full_name.split('\/').shift(),
         'repo_name': repos[i].full_name.split('\/').pop(),
         'description': repos[i].description,
