@@ -154,16 +154,16 @@
       <div class="btn-group btn-repos">
         <a class="waves-effect waves-light btn"
            @click="orderRepo('owner_name')"
-           :class="[theme.baseColor, theme.accentColor]"><octicon name="octoface"></octicon>Owner</a>
+           :class="[theme.baseColor, theme.accentColor]">Owner</a>
         <a class="waves-effect waves-light btn"
            @click="orderRepo('repo_name')"
-           :class="[theme.baseColor, theme.accentColor]"><octicon name="repo"></octicon>Repo</a>
+           :class="[theme.baseColor, theme.accentColor]">Repo</a>
         <a class="waves-effect waves-light btn"
            @click="orderRepo('stargazers_count')"
-           :class="[theme.baseColor, theme.accentColor]"><octicon name="star"></octicon>Star</a>
+           :class="[theme.baseColor, theme.accentColor]">Star</a>
         <a class="waves-effect waves-light btn"
            @click="orderRepo('repo_idx')"
-           :class="[theme.baseColor, theme.accentColor]"><octicon name="calendar"></octicon>Time</a>
+           :class="[theme.baseColor, theme.accentColor]">Time</a>
       </div>
       <aside id="repos-desc" class="repos-desc cards">
         <!-- <search :search-query.sync="searchQuery"></search> -->
@@ -284,6 +284,7 @@
     border-radius: 0;
     text-transform: inherit;
     width: 100%;
+    font-weight: bold;
   }
 
   .btn-group .btn i.left {
