@@ -6,7 +6,7 @@ import {
 // initial state
 const state = {
   theme: {
-    baseColor: 'cyan',
+    baseColor: 'green',
     lightenColor: 'lighten-1',
     darkenColor: 'darken-1',
     accentColor: 'accent-4'

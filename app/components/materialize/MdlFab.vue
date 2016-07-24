@@ -1,5 +1,5 @@
 <script>
-  import shell from 'shell'
+  const {shell} = require('electron')
   import $ from 'jquery'
 
   export default {

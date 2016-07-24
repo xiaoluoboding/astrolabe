@@ -4,9 +4,9 @@
 (function () {
     'use strict';
 
-    var remote = require('remote');
-    var Menu = remote.require('menu');
-    var MenuItem = remote.require('menu-item');
+    const remote = require('electron').remote;
+    const Menu = remote.Menu;
+    const MenuItem = remote.MenuItem;
 
     var cut = new MenuItem({
         label: "Cut",

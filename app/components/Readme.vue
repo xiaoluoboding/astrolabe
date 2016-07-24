@@ -1,6 +1,6 @@
 <script>
   import $ from 'jquery'
-  import shell from 'shell'
+  const {shell} = require('electron')
 
   export default {
     name: 'Readme',

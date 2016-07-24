@@ -1,6 +1,5 @@
 <script>
   import Github from 'github-api'
-  import { remote } from 'electron'
   import {
     toggleConnecting,
     toggleLoading,
@@ -13,7 +12,9 @@
     setLangGroup,
     initRepos
   } from '../vuex/actions'
-  const BrowserWindow = remote.BrowserWindow
+  // const remote = require('electron').remote
+  // const BrowserWindow = remote.BrowserWindow
+  const {BrowserWindow} = require('electron').remote
   import storage from 'electron-json-storage'
   import request from 'request'
   import Octicon from '../node_modules/vue-octicon/src/components/Octicon'

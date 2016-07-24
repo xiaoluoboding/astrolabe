@@ -13,7 +13,7 @@
   import MdlFab from './materialize/MdlFab'
   import Stroll from './plugins/Stroll'
   import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
-  import shell from 'shell'
+  const {shell} = require('electron')
   import $ from 'jquery'
   import hljs from 'highlight.js'
   import markdownIt from 'markdown-it'
