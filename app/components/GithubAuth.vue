@@ -12,9 +12,7 @@
     setLangGroup,
     initRepos
   } from '../vuex/actions'
-  // const remote = require('electron').remote
-  // const BrowserWindow = remote.BrowserWindow
-  const {BrowserWindow} = require('electron').remote
+  import { BrowserWindow } from 'electron'
   import storage from 'electron-json-storage'
   import request from 'request'
   import Octicon from '../node_modules/vue-octicon/src/components/Octicon'

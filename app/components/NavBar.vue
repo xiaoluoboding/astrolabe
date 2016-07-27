@@ -1,5 +1,6 @@
 <script>
   import $ from 'jquery'
+  import { ipcRenderer } from 'electron'
 
   export default {
     name: 'NavBar',
@@ -21,6 +22,12 @@
         belowOrigin: true, // Displays dropdown below the button
         alignment: 'right' // Displays dropdown with edge aligned to the left of button
       });
+    },
+
+    methods: {
+      exit () {
+        ipcRenderer.send('exit', 'exit')
+      }
     }
   }
 </script>
@@ -36,7 +43,7 @@
     </li>
     <li class="divider"></li>
     <li>
-      <a href="#" tabindex="-1" class="waves-effect waves-teal"><i class="material-icons tiny">exit_to_app</i>Exit</a>
+      <a href="#" tabindex="-1" class="waves-effect waves-teal" @click="exit"><i class="material-icons tiny">exit_to_app</i>Exit</a>
     </li>
   </ul>
   <div class="navbar-fixed">
