@@ -49,7 +49,7 @@ export default {
   },
   fetchRepos () {
     return new Promise((resolve, reject) => {
-      repo.find({}, (err, docs) => {
+      repo.find({}).sort({repo_idx: 1}).skip(0).limit(300).exec((err, docs) => {
         if (err) {}
         return resolve(docs)
       })

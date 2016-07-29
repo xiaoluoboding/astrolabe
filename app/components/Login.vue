@@ -106,9 +106,9 @@
             })
           }
         })
-        githubUser.getStarredRepos(function(err, repos) {
-          self.initRepos(repos)
-        })
+        // githubUser.getStarredRepos(function(err, repos) {
+        //   self.initRepos(repos)
+        // })
         this.toggleLogin()
       }
     },

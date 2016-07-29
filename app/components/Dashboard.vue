@@ -168,14 +168,14 @@
       <aside id="repos-desc" class="repos-desc cards">
         <!-- <search :search-query.sync="searchQuery"></search> -->
         <!-- {{ $data | json }} -->
-        <div class="empty-placeholder animated fadeIn" v-if="loadingDesc">
+        <!-- <div class="empty-placeholder animated fadeIn" v-if="loadingDesc">
           <pulse-loader :loading="loading" color="#00bfa5"></pulse-loader>
-        </div>
+        </div> -->
         <div
           class="card waves-effect waves-light animated fadeIn"
           :class="{ 'blue-grey': activeRepo._id === repo._id, 'darken-1': activeRepo._id === repo._id }"
           @click="showReadme(repo)"
-          v-for="repo in repos | filterBy searchQuery in filterFields | orderBy repoKey order" v-else>
+          v-for="repo in repos | filterBy searchQuery in filterFields | orderBy repoKey order">
           <div class="card-content" :class="{ 'white-text': activeRepo._id === repo._id }">
             <span class="card-title">{{ repo.owner_name }} / {{ repo.repo_name }}</span>
             <p>{{ repo.description }}</p>
