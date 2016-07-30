@@ -7,21 +7,40 @@
     name: 'Search',
 
     vuex: {
+      getters: {
+        searchQuery: ({ sidebar }) => sidebar.searchQuery
+      },
       actions: {
         setSearchQuery
       }
     },
 
-    methods: {
-      updateSearchQuery: function(e) {
-        this.setSearchQuery(e.target.value)
+    // first way to archive filter repos without v-model
+    // methods: {
+    //   updateSearchQuery: function(e) {
+    //     this.setSearchQuery(e.target.value)
+    //   }
+    // },
+
+    // sencod way to archive filter repos that can use v-model
+    computed: {
+      thisSearchQuery: {
+        get () {
+          return this.searchQuery
+        },
+        set (val) {
+          this.setSearchQuery(val)
+        }
       }
     }
   }
 </script>
 <template>
   <form action="" class="search">
-    <input class="search-box" type="search" id="search-box" autocomplete="off" :value="searchQuery" @input="updateSearchQuery">
+    <!-- // first way to archive filter repos without v-model -->
+    <!-- <input class="search-box" type="search" id="search-box" autocomplete="off" :value="searchQuery" @input="updateSearchQuery"> -->
+    <!-- // the second way to archive filter repos that can use v-model -->
+    <input class="search-box" type="search" id="search-box" autocomplete="off" v-model="thisSearchQuery">
     <label class="search-label" for="search-box"><i class="material-icons medium">search</i></label>
   </form>
 </template>
