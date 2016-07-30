@@ -5,6 +5,7 @@
 
 // global actions
 export const changeTheme = makeAction('CHANGE_THEME')
+export const increaseLimit = makeAction('INCREASE_LIMIT')
 
 // login actions
 export const toggleConnecting = makeAction('TOGGLE_CONNECTING')
@@ -17,6 +18,7 @@ export const setGithub = makeAction('SET_GITHUB')
 export const setUser = makeAction('SET_USER')
 export const initRepos = makeAction('INIT_REPOS')
 export const setRepos = makeAction('SET_REPOS')
+export const setLazyRepos = makeAction('SET_LAZY_REPOS')
 export const setLangGroup = makeAction('SET_LANG_GROUP')
 
 // dashboard actions

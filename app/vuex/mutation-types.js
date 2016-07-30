@@ -1,5 +1,6 @@
 // global mutation types
 export const CHANGE_THEME = 'CHANGE_THEME'
+export const INCREASE_LIMIT = 'INCREASE_LIMIT'
 
 // login mutation types
 export const TOGGLE_CONNECTING = 'TOGGLE_CONNECTING'
@@ -12,6 +13,7 @@ export const SET_GITHUB = 'SET_GITHUB'
 export const SET_USER = 'SET_USER'
 export const INIT_REPOS = 'INIT_REPOS'
 export const SET_REPOS = 'SET_REPOS'
+export const SET_LAZY_REPOS = 'SET_LAZY_REPOS'
 export const SET_LANG_GROUP = 'SET_LANG_GROUP'
 
 // dashboard mutation types

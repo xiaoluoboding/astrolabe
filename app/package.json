@@ -17,6 +17,7 @@
     "nedb": "^1.8.0",
     "request": "^2.65.0",
     "vue-clipboard": "0.0.1",
+    "vue-infinite-scroll": "^0.2.3",
     "vue-octicon": "^0.2.1",
     "vue-spinner": "^1.0.2"
   }
