@@ -156,8 +156,8 @@
         setTimeout(() => {
           db.fetchLazyRepos(self.limitCount).then(lazyRepos => {
             self.setLazyRepos(lazyRepos)
-            self.isLoadingData = false
           })
+          self.isLoadingData = false
         }, 500)
       }
     },
@@ -206,7 +206,8 @@
       <aside id="repos-desc" class="repos-desc cards"
         v-infinite-scroll="loadMore()"
         infinite-scroll-disabled="isLoadingData"
-        infinite-scroll-distance="100">
+        infinite-scroll-distance="100"
+        infinite-scroll-immediate-check>
         <!-- {{ $data | json }} -->
         <div
           class="card waves-effect waves-light animated fadeIn"

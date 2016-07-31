@@ -28,18 +28,19 @@ Now you can rise up astrolabe with hot loading.
 - [x] Global search
 - [x] Github stars List
 - [x] Github stars Sort
-- [x] Parse the README.md file of repo
+- [x] Parse the preferred README for a repository
+- [x] Highlight code
 - [x] Categorized and navigated by language
 - [ ] Add tags
 - [ ] Setting Interface
 - [ ] Icon design
-- [ ] User Card
-- [ ] Repo Card
+- [ ] User Card && Repo Card
 - [x] Copy clone link to clipboard
 - [x] Download archive file
 - [x] Back to top
 - [x] Open All Link in Default Brower
-- [ ] Use `Nedb` for cache local data
+- [x] Use `Nedb` for cache local data
+- [ ] Infinite scroll the description of repository
 
 # License
 

@@ -47,14 +47,30 @@ export default {
       })
     })
   },
-  fetchRepos () {
+  fetchAllRepos () {
     return new Promise((resolve, reject) => {
-      repo.find({}).sort({repo_idx: 1}).skip(0).limit(300).exec((err, docs) => {
+      repo.find({}).sort({repo_idx: 1}).exec((err, docs) => {
         if (err) {}
         return resolve(docs)
       })
     })
   },
+  fetchLazyRepos (limit) {
+    return new Promise((resolve, reject) => {
+      repo.find({}).sort({repo_idx: 1}).skip(0).limit(limit).exec((err, docs) => {
+        if (err) {}
+        return resolve(docs)
+      })
+    })
+  },
+  removeRepo (id) {
+    return new Promise((resolve, reject) => {
+      repo.remove({_id: id}, {}, (err, numRemoved) => {
+        if (err) {}
+      })
+    })
+  },
+  // langGroup.db CRUD
   countLangGroup (lang) {
     return new Promise((resolve, reject) => {
       repo.count({language: lang}, (err, count) => {
@@ -63,7 +79,6 @@ export default {
       })
     })
   },
-  // langGroup.db CRUD
   addLangGroup (langData, callback) {
     langGroup.insert(langData, (err, docs) => {
       if (err) {}

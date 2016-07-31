@@ -5,14 +5,15 @@ import {
   SET_USER,
   INIT_REPOS,
   SET_REPOS,
+  SET_LAZY_REPOS,
   SET_LANG_GROUP
 } from '../mutation-types'
-import { isNull, countBy } from 'lodash'
+import { isNull, countBy, sample, xor, size, includes } from 'lodash'
 import db from '../../services/db'
 import jetpack from 'fs-jetpack'
 import { remote } from 'electron'
 
-let userDataDir = remote.app.getPath('userData')
+const userDataDir = remote.app.getPath('userData')
 
 // initial state
 const state = {
@@ -20,6 +21,7 @@ const state = {
   github: '',
   user: '',
   repos: [],
+  lazyRepos: [],
   langGroup: []
 }
 
@@ -53,7 +55,7 @@ const mutations = {
   [INIT_REPOS] (state, repos) {
     // insert t_repos
     let initRepos = []
-    let reposArray = []
+    let apiReposArray = []
     for (let i in repos) {
       let t_repo = {
         '_id': repos[i].id,
@@ -79,31 +81,46 @@ const mutations = {
           db.updateRepo(t_repo)
         }
       })
-      reposArray.push(repos[i].id)
+      apiReposArray.push(repos[i].id)
     }
-    console.log('findOneAndUpdate [%d] repos', repos.length)
+    console.log('findOneAndUpdate [%d] repos', size(repos))
+
+    // sync repos.db
+    let diffRepos = []
+    db.fetchAllRepos().then(dbRepos => {
+      let dbReposArray = []
+      for (let i in dbRepos) {
+        dbReposArray.push(dbRepos[i]._id)
+      }
+      // looking for difference
+      diffRepos = xor(apiReposArray, dbReposArray)
+      if (size(diffRepos) > 0) {
+        for (let diff in diffRepos) {
+          if (diffRepos.hasOwnProperty(diff) && includes(dbReposArray, diffRepos[diff])) {
+            // remove the difference repos
+            db.removeRepo(diffRepos[diff])
+          } else {
+            //
+            console.log(diffRepos[diff])
+          }
+        }
+      }
+    })
 
     // build lang_group
     let countLangs = countBy(initRepos, 'language')
 
     let langGroup = []
 
-    // create random color
-    var waveColors = ['waves-red', 'waves-orange', 'waves-yellow', 'waves-green', 'waves-teal', 'waves-blue', 'waves-purple']
+    const waveColors = ['waves-red', 'waves-orange', 'waves-yellow', 'waves-green', 'waves-teal', 'waves-blue', 'waves-purple']
 
-    function randomArray(array, separate) {
-      array.sort(function () {
-        return Math.random() - 0.5
-      })
-      return array[separate]
-    }
-    for (var lang in countLangs) {
+    for (let lang in countLangs) {
       if (countLangs.hasOwnProperty(lang)) {
         let lang_count = {
           '_id': lang,
           'lang': lang,
           'count': countLangs[lang],
-          'color': randomArray(waveColors, 1)
+          'color': sample(waveColors)
         }
         langGroup.push(lang_count)
         db.findOneLangGroup(lang).then(doc => {
@@ -125,6 +142,10 @@ const mutations = {
 
   [SET_REPOS] (state, repos) {
     state.repos = repos
+  },
+
+  [SET_LAZY_REPOS] (state, lazyRepos) {
+    state.lazyRepos = lazyRepos
   },
 
   [SET_LANG_GROUP] (state, langGroup) {
