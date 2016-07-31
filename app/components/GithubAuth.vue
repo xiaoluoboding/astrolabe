@@ -12,9 +12,10 @@
     setLangGroup,
     initRepos
   } from '../vuex/actions'
-  import { BrowserWindow } from 'electron'
+  import { remote } from 'electron'
+  const BrowserWindow = remote.BrowserWindow
   import storage from 'electron-json-storage'
-  import request from 'request'
+  import request from 'superagent'
   import Octicon from '../node_modules/vue-octicon/src/components/Octicon'
   import { isNull, isEmpty } from 'lodash'
   import db from '../services/db'
@@ -117,22 +118,12 @@
           client_secret: option.client_secret,
           code: code
         }
-
-        let options = {
-          url: 'https://github.com/login/oauth/access_token',
-          headers: {
-            'Accept': 'application/json',
-            'User-Agent': 'Astrolabe'
-          },
-          form: postData
-        }
-
-        function callback (error, response, body) {
+        function callback (error, response) {
           if (!error && response.statusCode === 200) {
-            let info = JSON.parse(body)
+            let info = response.body
             console.log('token:' + info.access_token)
             self.setToken(info.access_token)
-            var github = new Github({
+            const github = new Github({
               token: info.access_token,
               auth: 'oauth'
             })
@@ -146,28 +137,25 @@
             })
           }
         }
-
-        request(options, callback)
+        request.post('https://github.com/login/oauth/access_token')
+          .accept('application/json')
+          .send(postData)
+          .end(callback)
       },
       getUser(token) {
         let self = this
         this.toggleConnecting()
-        let options = {
-          url: 'https://api.github.com/user',
-          headers: {
-            'Accept': 'application/json',
-            'User-Agent': 'Astrolabe',
-            'Authorization': 'token ' + token
-          }
-        }
-        function callback(error, response, body) {
+        function callback(error, response) {
           if (!error && response.statusCode === 200) {
-            let user = JSON.parse(body)
+            let user = response.body
             self.setUser(user)
             self.getRepos(user)
           }
         }
-        request(options, callback)
+        request.get('https://api.github.com/user')
+          .accept('application/json')
+          .auth('token', token)
+          .end(callback)
       },
       getRepos(user) {
         let self = this
@@ -176,13 +164,14 @@
         this.toggleLoadingDesc()
         db.findOneUser(user.id).then(doc => {
           if (isNull(doc)) {
-            githubUser.listStarredRepos(function(err, repos) {
+            githubUser.getStarredRepos(function(err, repos) {
               self.initRepos(repos)
             })
           } else {
-            db.fetchRepos().then(repos => {
+            // fetch all repos into repos state
+            db.fetchAllRepos().then(repos => {
               if (isEmpty(repos)) {
-                githubUser.listStarredRepos(function(err, repos) {
+                githubUser.getStarredRepos(function(err, repos) {
                   self.initRepos(user, repos)
                 })
               } else {
@@ -196,7 +185,7 @@
             })
           }
         })
-        githubUser.listStarredRepos(function(err, repos) {
+        githubUser.getStarredRepos(function(err, repos) {
           self.initRepos(user, repos)
         })
         this.toggleLogin()

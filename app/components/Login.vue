@@ -7,6 +7,7 @@
     setGithub,
     setUser,
     setRepos,
+    setLazyRepos,
     setLangGroup,
     initRepos
   } from '../vuex/actions'
@@ -15,7 +16,7 @@
   import DotLoader from 'vue-spinner/src/DotLoader.vue'
   import BounceLoader from 'vue-spinner/src/BounceLoader.vue'
   import storage from 'electron-json-storage'
-  import request from 'request'
+  import request from 'superagent'
   import Github from 'github-api'
   import { isNull, isEmpty } from 'lodash'
   import db from '../services/db'
@@ -26,7 +27,8 @@
         connecting: ({ login }) => login.connecting,
         loading: ({ login }) => login.loading,
         github: ({ github }) => github.github,
-        repos: ({ github }) => github.repos
+        repos: ({ github }) => github.repos,
+        lazyRepos: ({ github }) => github.lazyRepos
       },
       actions: {
         toggleConnecting,
@@ -36,6 +38,7 @@
         setGithub,
         setUser,
         setRepos,
+        setLazyRepos,
         setLangGroup,
         initRepos
       }
@@ -63,22 +66,17 @@
       getUser(token) {
         let self = this
         this.toggleConnecting()
-        let options = {
-          url: 'https://api.github.com/user',
-          headers: {
-            'Accept': 'application/json',
-            'User-Agent': 'Astrolabe',
-            'Authorization': 'token ' + token
-          }
-        }
-        function callback(error, response, body) {
+        function callback(error, response) {
           if (!error && response.statusCode === 200) {
-            let user = JSON.parse(body)
+            let user = response.body
             self.setUser(user)
             self.getRepos(user)
           }
         }
-        request(options, callback)
+        request.get('https://api.github.com/user')
+          .accept('application/json')
+          .auth('token', token)
+          .end(callback)
       },
       getRepos(user) {
         let self = this
@@ -90,13 +88,18 @@
               self.initRepos(repos)
             })
           } else {
-            db.fetchRepos().then(repos => {
+            // fetch all repos into repos state
+            db.fetchAllRepos().then(repos => {
               if (isEmpty(repos)) {
                 githubUser.getStarredRepos(function(err, repos) {
                   self.initRepos(user, repos)
                 })
               } else {
                 self.setRepos(repos)
+                // fetch lazy repos limit is 50
+                // db.fetchLazyRepos(50).then(lazyRepos => {
+                //   self.setLazyRepos(lazyRepos)
+                // })
               }
             })
             db.fetchLangGroup().then(langGroup => {
@@ -106,9 +109,9 @@
             })
           }
         })
-        // githubUser.getStarredRepos(function(err, repos) {
-        //   self.initRepos(repos)
-        // })
+        githubUser.getStarredRepos(function(err, repos) {
+          self.initRepos(repos)
+        })
         this.toggleLogin()
       }
     },

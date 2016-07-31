@@ -4,6 +4,8 @@
     toggleLoadingReadme,
     setActiveRepo,
     orderRepo,
+    setLazyRepos,
+    increaseLimit,
     filterByLanguage
   } from '../vuex/actions'
   import Octicon from '../node_modules/vue-octicon/src/components/Octicon'
@@ -17,6 +19,17 @@
   import $ from 'jquery'
   import hljs from 'highlight.js'
   import markdownIt from 'markdown-it'
+  import db from '../services/db'
+  import request from 'superagent'
+  // github.users.getFollowingForUser({
+  //   // optional:
+  //   // headers: {
+  //   //     "cookie": "blahblah"
+  //   // },
+  //   user: "xiaoluobding"
+  // }, function(err, res) {
+  //   console.log(JSON.stringify(res));
+  // });
   // import marked, { Renderer } from 'marked'
 
   const md = new markdownIt({
@@ -65,7 +78,8 @@
 
     data () {
       return {
-        repoReadme: ''
+        repoReadme: '',
+        isLoadingData: false
       }
     },
 
@@ -73,6 +87,7 @@
       getters: {
         github: ({ github }) => github.github,
         repos: ({ github }) => github.repos,
+        lazyRepos: ({ github }) => github.lazyRepos,
         loadingDesc: ({ dashboard }) => dashboard.loadingDesc,
         loadingReadme: ({ dashboard }) => dashboard.loadingReadme,
         activeRepo: ({ dashboard }) => dashboard.activeRepo,
@@ -80,6 +95,7 @@
         order: ({ dashboard }) => dashboard.order,
         searchQuery: ({ sidebar }) => sidebar.searchQuery,
         filterFields: ({ sidebar }) => sidebar.filterFields,
+        limitCount: ({ global }) => global.limitCount,
         theme: ({ global }) => global.theme
       },
       actions: {
@@ -87,6 +103,8 @@
         toggleLoadingReadme,
         setActiveRepo,
         orderRepo,
+        setLazyRepos,
+        increaseLimit,
         filterByLanguage
       }
     },
@@ -108,19 +126,39 @@
         shell.openExternal(url);
       },
       showReadme(repo) {
-        var self = this
+        const self = this
         if (repo._id != this.activeRepo._id) {
           this.setActiveRepo(repo)
           this.repoReadme = true
-          var githubRepo = this.github.getRepo(repo.owner_name, repo.repo_name)
-          githubRepo.getContents('master', 'README.md', true, function(err, data) {
-            if (err) {
-              console.log(err);
-            }
-            // self.repoReadme = marked(data)
-            self.repoReadme = md.render(data)
-          })
+          const githubRepo = this.github.getRepo(repo.owner_name, repo.repo_name)
+          const readmeUrl = 'https://api.github.com/repos/' + repo.owner_name + '/' + repo.repo_name + '/readme'
+          request.get(readmeUrl)
+            .accept('application/json')
+            .end(function(err, res) {
+              if (!err && res) {
+                githubRepo.getContents('master', res.body.name, true, function(err, data) {
+                  if (err) {
+                    console.dir(err.status);
+                  }
+                  // self.repoReadme = marked(data)
+                  self.repoReadme = md.render(data)
+                })
+              } else {
+                console.log('Something went wrong fetching from GitHub', err);
+              }
+            })
         }
+      },
+      loadMore() {
+        const self = this
+        this.isLoadingData = true
+        this.increaseLimit()
+        setTimeout(() => {
+          db.fetchLazyRepos(self.limitCount).then(lazyRepos => {
+            self.setLazyRepos(lazyRepos)
+            self.isLoadingData = false
+          })
+        }, 500)
       }
     },
 
@@ -165,17 +203,16 @@
            @click="orderRepo('repo_idx')"
            :class="[theme.baseColor, theme.accentColor]">Time</a>
       </div>
-      <aside id="repos-desc" class="repos-desc cards">
-        <!-- <search :search-query.sync="searchQuery"></search> -->
+      <aside id="repos-desc" class="repos-desc cards"
+        v-infinite-scroll="loadMore()"
+        infinite-scroll-disabled="isLoadingData"
+        infinite-scroll-distance="100">
         <!-- {{ $data | json }} -->
-        <!-- <div class="empty-placeholder animated fadeIn" v-if="loadingDesc">
-          <pulse-loader :loading="loading" color="#00bfa5"></pulse-loader>
-        </div> -->
         <div
           class="card waves-effect waves-light animated fadeIn"
           :class="{ 'blue-grey': activeRepo._id === repo._id, 'darken-1': activeRepo._id === repo._id }"
           @click="showReadme(repo)"
-          v-for="repo in repos | filterBy searchQuery in filterFields | orderBy repoKey order">
+          v-for="repo in lazyRepos | filterBy searchQuery in filterFields | orderBy repoKey order">
           <div class="card-content" :class="{ 'white-text': activeRepo._id === repo._id }">
             <span class="card-title">{{ repo.owner_name }} / {{ repo.repo_name }}</span>
             <p>{{ repo.description }}</p>
@@ -197,6 +234,9 @@
             </div>
           </div>
         </div>
+        <!-- <div class="empty-placeholder animated fadeIn" v-if="loadingDesc">
+          <pulse-loader :loading="loading" color="#00bfa5"></pulse-loader>
+        </div> -->
       </aside>
       <mdl-fab></mdl-fab>
       <main id="repos-readme" class="repos-readme">

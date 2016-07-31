@@ -13,7 +13,7 @@ module.exports = {
   target: 'node',
   node: {
     __filename: false,
-    __dirname: false
+    __dirname: true
   },
   resolve: {
     extensions: ['', '.js', '.vue'],
@@ -82,7 +82,8 @@ module.exports = {
       'crash-reporter',
       'screen',
       'shell'
-    ])
+    ]),
+    new webpack.DefinePlugin({ "global.GENTLY": false })
   ],
   eslint: {
     formatter: require('eslint-friendly-formatter')
