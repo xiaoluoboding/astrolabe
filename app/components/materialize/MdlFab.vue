@@ -1,14 +1,15 @@
 <script>
-  const {shell} = require('electron')
+  const { shell } = require('electron')
   import $ from 'jquery'
 
   export default {
     name: 'MdlFab',
 
-    data () {
+    data() {
       return {
         copyTooltip: 'Copy clone link to clipboard',
-        showCopy: false
+        showCopy: false,
+        operateIcon: 'add'
       }
     },
 
@@ -21,27 +22,21 @@
     },
 
     methods: {
-      copyAction() {
-        this.copyTooltip = 'Copied!'
-      },
-      initTooltip() {
-        this.copyTooltip = 'Copy clone link to clipboard'
-      },
       openInBrowser(url) {
         shell.openExternal(url);
       },
       backToTop(name, speed) {
         if (!speed) speed = 300
         if (!name) {
-            $('#repos-readme').animate({
-                scrollTop: 0
-            }, speed)
+          $('#repos-readme').animate({
+            scrollTop: 0
+          }, speed)
         } else {
-            if ($(name).length > 0) {
-                $('#repos-readme').animate({
-                    scrollTop: $(name).offset().top
-                }, speed)
-            }
+          if ($(name).length > 0) {
+            $('#repos-readme').animate({
+              scrollTop: $(name).offset().top
+            }, speed)
+          }
         }
       }
     },
@@ -58,30 +53,25 @@
 
 <template>
   <div class="fab">
-    <a href="#" class="btn-fab btn-floating waves-effect waves-light red" tooltip="View on GitHub"
-       v-show="showCopy" @click="openInBrowser(activeRepo.html_url)">
+    <a href="#" class="btn-fab btn-floating waves-effect waves-light red" tooltip="View on GitHub" v-show="showCopy" @click="openInBrowser(activeRepo.html_url)">
       <i class="material-icons">open_in_browser</i>
     </a>
-    <a href="#" class="btn-fab btn-floating waves-effect waves-light yellow darken-1" tooltip="{{ copyTooltip }}"
-       v-show="showCopy" v-clipboard:copy="activeRepo.clone_url" @click="copyAction()">
+    <a href="#" class="btn-fab btn-floating waves-effect waves-light yellow darken-1" tooltip="{{ copyTooltip }}" v-show="showCopy" v-clipboard:copy="activeRepo.clone_url" @click="copyTooltip = 'Copied'">
       <i class="material-icons">content_copy</i>
     </a>
-    <a href="#" class="btn-fab btn-floating waves-effect waves-light green" tooltip="Download"
-       v-show="showCopy" @click="openInBrowser(activeRepo.downloads_url)">
+    <a href="#" class="btn-fab btn-floating waves-effect waves-light green" tooltip="Download" v-show="showCopy" @click="openInBrowser(activeRepo.downloads_url)">
       <i class="material-icons">file_download</i>
     </a>
-    <a href="#" class="btn-fab btn-floating waves-effect waves-light blue" tooltip="Back to Top"
-       @click="backToTop()">
+    <a href="#" class="btn-fab btn-floating waves-effect waves-light blue" tooltip="Back to Top" @click="backToTop()">
       <i class="material-icons">expand_less</i>
     </a>
-    <a href="#" class="btn-fab btn-large btn-floating waves-effect waves-light red" tooltip="OPERATE"
-       @mouseenter="initTooltip()">
-      <i class="large material-icons">add</i>
+    <a href="#" class="btn-fab btn-large btn-floating waves-effect waves-light red" tooltip="OPERATE" @mouseenter="copyTooltip = 'Copy clone link to clipboard'">
+      <i class="large material-icons rotate" v-text="operateIcon" @mouseenter="operateIcon = 'create'" @mouseleave="operateIcon = 'add'"></i>
     </a>
   </div>
 </template>
 
-<style>
+<style scope>
   .fab {
     margin: 1em;
     position: fixed;
@@ -95,11 +85,6 @@
     height: 40px;
     margin: 15px auto 0;
     opacity: 1;
-  }
-
-  .fab:hover .rotate {
-    background-image: url("http://goo.gl/0eJslQ");
-    transform: rotate(0deg);
   }
 
   .btn-fab {
@@ -144,6 +129,22 @@
 
   .btn-fab:hover {
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
+  }
+
+  .fab i {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+
+  .fab i.rotate {
+    transform: rotate(90deg);
+    transition: .3s;
+  }
+
+  .fab i.rotate:hover {
+    transform: rotate(0deg);
+    transition: .3s;
   }
 
   [tooltip]:before {
