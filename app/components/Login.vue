@@ -96,10 +96,6 @@
                 })
               } else {
                 self.setRepos(repos)
-                // fetch lazy repos limit is 50
-                // db.fetchLazyRepos(50).then(lazyRepos => {
-                //   self.setLazyRepos(lazyRepos)
-                // })
               }
             })
             db.fetchLangGroup().then(langGroup => {

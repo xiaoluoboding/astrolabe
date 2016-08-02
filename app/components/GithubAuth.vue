@@ -4,7 +4,6 @@
     toggleConnecting,
     toggleLoading,
     toggleLogin,
-    toggleLoadingDesc,
     setToken,
     setGithub,
     setUser,
@@ -40,7 +39,6 @@
         toggleConnecting,
         toggleLoading,
         toggleLogin,
-        toggleLoadingDesc,
         setToken,
         setGithub,
         setUser,
@@ -161,7 +159,6 @@
         let self = this
         this.toggleLoading()
         let githubUser = this.github.getUser(user.login)
-        this.toggleLoadingDesc()
         db.findOneUser(user.id).then(doc => {
           if (isNull(doc)) {
             githubUser.getStarredRepos(function(err, repos) {

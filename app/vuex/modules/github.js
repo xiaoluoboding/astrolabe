@@ -8,7 +8,7 @@ import {
   SET_LAZY_REPOS,
   SET_LANG_GROUP
 } from '../mutation-types'
-import { isNull, countBy, sample, xor, size, includes } from 'lodash'
+import { isNull, countBy, sample, xor, size, includes, filter, matches } from 'lodash'
 import db from '../../services/db'
 import jetpack from 'fs-jetpack'
 import { remote } from 'electron'
@@ -22,7 +22,9 @@ const state = {
   user: '',
   repos: [],
   lazyRepos: [],
-  langGroup: []
+  langGroup: [],
+  reposCount: 0,
+  untaggedCount: 0
 }
 
 // mutations
@@ -99,9 +101,6 @@ const mutations = {
           if (diffRepos.hasOwnProperty(diff) && includes(dbReposArray, diffRepos[diff])) {
             // remove the difference repos
             db.removeRepo(diffRepos[diff])
-          } else {
-            //
-            console.log(diffRepos[diff])
           }
         }
       }
@@ -138,10 +137,18 @@ const mutations = {
 
     // set init repos
     state.repos = initRepos
+
+    // set repos count
+    state.reposCount = size(repos)
+
+    // set untagged count
+    state.untaggedCount = size(filter(repos, matches({ 'language': null })))
   },
 
   [SET_REPOS] (state, repos) {
     state.repos = repos
+    state.reposCount = size(repos)
+    state.untaggedCount = size(filter(repos, matches({ 'language': 'null' })))
   },
 
   [SET_LAZY_REPOS] (state, lazyRepos) {

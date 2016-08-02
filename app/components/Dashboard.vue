@@ -76,7 +76,7 @@
     vuex: {
       getters: {
         github: ({ github }) => github.github,
-        repos: ({ github }) => github.repos,
+        reposCount: ({ github }) => github.reposCount,
         lazyRepos: ({ github }) => github.lazyRepos,
         loadingReadme: ({ dashboard }) => dashboard.loadingReadme,
         activeRepo: ({ dashboard }) => dashboard.activeRepo,
@@ -214,7 +214,7 @@
             </div>
           </div>
         </div>
-        <infinite-loading :distance="distance" :on-infinite="loadMore" v-if="limitCount < repos.length">No More Data.</infinite-loading>
+        <infinite-loading :distance="distance" :on-infinite="loadMore" v-if="limitCount < reposCount">No More Data.</infinite-loading>
       </aside>
       <mdl-fab></mdl-fab>
       <main id="repos-readme" class="repos-readme">

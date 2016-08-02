@@ -18,7 +18,8 @@
 
     vuex: {
       getters: {
-        repos: ({ github }) => github.repos,
+        reposCount: ({ github }) => github.reposCount,
+        untaggedCount: ({ github }) => github.untaggedCount,
         searchQuery: ({ sidebar }) => sidebar.searchQuery,
         langGroup: ({ github }) => github.langGroup,
         theme: ({ global }) => global.theme
@@ -26,21 +27,6 @@
       actions: {
         setSearchQuery,
         filterByLanguage
-      }
-    },
-
-    computed: {
-      total() {
-        return this.repos.length
-      },
-      untaggedTotal() {
-        let count = 0
-        for (let i in this.repos) {
-          if (this.repos[i].language == 'null') {
-            count += 1
-          }
-        }
-        return count
       }
     },
 
@@ -147,6 +133,10 @@
           return this;
         }
       })(jQuery.fn.removeClass);
+
+      $(window).resize(function() {
+        $('.sidebar-nav').css('height', $(this).height() - 124)
+      })
     },
 
     methods: {
@@ -181,14 +171,14 @@
         <a href="#" class="waves-effect waves-teal" @click="setSearchQuery('')">
           <i class="material-icons">star</i>
           <span class="blue-grey-text">All Stars</span>
-          <span class="sidebar-badge" :class="[theme.baseColor, theme.darkenColor]">{{ total }}</span>
+          <span class="sidebar-badge" :class="[theme.baseColor, theme.darkenColor]" v-text="reposCount"></span>
         </a>
       </li>
       <li :class="{active: activeLang == 'null'}" @click="toggleLang('null')">
         <a href="#" class="waves-effect waves-teal" @click="filterByLanguage('null')">
           <i class="material-icons">bookmark_border</i>
           <span class="blue-grey-text">Untagged Stars</span>
-          <span class="sidebar-badge" :class="[theme.baseColor, theme.darkenColor]">{{ untaggedTotal }}</span>
+          <span class="sidebar-badge" :class="[theme.baseColor, theme.darkenColor]" v-text="untaggedCount"></span>
         </a>
       </li>
       <li class="divider"></li>
@@ -349,7 +339,7 @@
     position: relative;
     display: block;
     min-height: 100%;
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: hidden;
     border: none;
     -webkit-transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
@@ -594,6 +584,8 @@
   .sidebar .sidebar-nav {
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   .sidebar .sidebar-nav li {

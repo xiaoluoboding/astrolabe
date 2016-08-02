@@ -87,10 +87,6 @@
   */
 
   .search {
-    position: relative;
-    /*display: flex;*/
-    /*margin-top: 8px;*/
-    /*color: #555;*/
     position: fixed;
     display: -webkit-box;
     display: -webkit-flex;
