@@ -22,7 +22,6 @@ export const setLazyRepos = makeAction('SET_LAZY_REPOS')
 export const setLangGroup = makeAction('SET_LANG_GROUP')
 
 // dashboard actions
-export const toggleLoadingDesc = makeAction('TOGGLE_LOADING_DESC')
 export const toggleLoadingReadme = makeAction('TOGGLE_LOADING_README')
 export const setActiveRepo = makeAction('SET_ACTIVE_REPO')
 export const orderRepo = makeAction('ORDER_REPO')

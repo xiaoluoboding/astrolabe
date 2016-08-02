@@ -8,10 +8,8 @@ import MdlWave from './components/materialize/MdlWave'
 import MdlDropdown from './components/materialize/MdlDropdown'
 import Easing from './components/plugins/Easing'
 import VueClipboard from 'vue-clipboard'
-import infiniteScroll from 'vue-infinite-scroll'
 
 Vue.use(VueClipboard)
-Vue.use(infiniteScroll)
 
 new Vue({
   el: 'body',

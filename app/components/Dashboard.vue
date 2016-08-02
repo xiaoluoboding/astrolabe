@@ -1,6 +1,5 @@
 <script>
   import {
-    toggleLoadingDesc,
     toggleLoadingReadme,
     setActiveRepo,
     orderRepo,
@@ -14,22 +13,13 @@
   import MdlLoading from './materialize/MdlLoading'
   import MdlFab from './materialize/MdlFab'
   import Stroll from './plugins/Stroll'
-  import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
   const {shell} = require('electron')
   import $ from 'jquery'
   import hljs from 'highlight.js'
   import markdownIt from 'markdown-it'
   import db from '../services/db'
   import request from 'superagent'
-  // github.users.getFollowingForUser({
-  //   // optional:
-  //   // headers: {
-  //   //     "cookie": "blahblah"
-  //   // },
-  //   user: "xiaoluobding"
-  // }, function(err, res) {
-  //   console.log(JSON.stringify(res));
-  // });
+  import InfiniteLoading from 'vue-infinite-loading'
   // import marked, { Renderer } from 'marked'
 
   const md = new markdownIt({
@@ -79,7 +69,7 @@
     data () {
       return {
         repoReadme: '',
-        isLoadingData: false
+        distance: 100
       }
     },
 
@@ -88,7 +78,6 @@
         github: ({ github }) => github.github,
         repos: ({ github }) => github.repos,
         lazyRepos: ({ github }) => github.lazyRepos,
-        loadingDesc: ({ dashboard }) => dashboard.loadingDesc,
         loadingReadme: ({ dashboard }) => dashboard.loadingReadme,
         activeRepo: ({ dashboard }) => dashboard.activeRepo,
         repoKey: ({ dashboard }) => dashboard.repoKey,
@@ -99,7 +88,6 @@
         theme: ({ global }) => global.theme
       },
       actions: {
-        toggleLoadingDesc,
         toggleLoadingReadme,
         setActiveRepo,
         orderRepo,
@@ -151,14 +139,14 @@
       },
       loadMore() {
         const self = this
-        this.isLoadingData = true
+        // Configurable
         this.increaseLimit()
         setTimeout(() => {
           db.fetchLazyRepos(self.limitCount).then(lazyRepos => {
             self.setLazyRepos(lazyRepos)
+            self.$broadcast('$InfiniteLoading:loaded')
           })
-          self.isLoadingData = false
-        }, 500)
+        }, 1000)
       }
     },
 
@@ -166,11 +154,6 @@
       'repoReadme': function (val, oldVal) {
         if (val) {
           this.toggleLoadingReadme()
-        }
-      },
-      'repos': function (val, oldVal) {
-        if (val) {
-          this.toggleLoadingDesc()
         }
       }
     },
@@ -181,8 +164,8 @@
       Readme,
       MdlLoading,
       MdlFab,
-      PulseLoader,
-      Stroll
+      Stroll,
+      InfiniteLoading
     }
   }
 </script>
@@ -203,11 +186,7 @@
            @click="orderRepo('repo_idx')"
            :class="[theme.baseColor, theme.accentColor]">Time</a>
       </div>
-      <aside id="repos-desc" class="repos-desc cards"
-        v-infinite-scroll="loadMore()"
-        infinite-scroll-disabled="isLoadingData"
-        infinite-scroll-distance="100"
-        infinite-scroll-immediate-check>
+      <aside id="repos-desc" class="repos-desc cards">
         <!-- {{ $data | json }} -->
         <div
           class="card waves-effect waves-light animated fadeIn"
@@ -235,9 +214,7 @@
             </div>
           </div>
         </div>
-        <!-- <div class="empty-placeholder animated fadeIn" v-if="loadingDesc">
-          <pulse-loader :loading="loading" color="#00bfa5"></pulse-loader>
-        </div> -->
+        <infinite-loading :distance="distance" :on-infinite="loadMore" v-if="limitCount < repos.length">No More Data.</infinite-loading>
       </aside>
       <mdl-fab></mdl-fab>
       <main id="repos-readme" class="repos-readme">
