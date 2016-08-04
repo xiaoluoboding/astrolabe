@@ -69,7 +69,8 @@
     data () {
       return {
         repoReadme: '',
-        distance: 100
+        distance: 100,
+        isLoadingRepos: false
       }
     },
 
@@ -77,6 +78,7 @@
       getters: {
         github: ({ github }) => github.github,
         reposCount: ({ github }) => github.reposCount,
+        langGroup: ({ github }) => github.langGroup,
         lazyRepos: ({ github }) => github.lazyRepos,
         loadingReadme: ({ dashboard }) => dashboard.loadingReadme,
         activeRepo: ({ dashboard }) => dashboard.activeRepo,
@@ -154,6 +156,19 @@
       'repoReadme': function (val, oldVal) {
         if (val) {
           this.toggleLoadingReadme()
+        }
+      },
+      'langGroup': function (val, oldVal) {
+        this.isLoadingRepos = !this.isLoadingRepos
+      },
+      'isLoadingRepos': function (val, oldVal) {
+        const self = this
+        if (!val) {
+          setTimeout(() => {
+            db.fetchLazyRepos(self.limitCount).then(lazyRepos => {
+              self.setLazyRepos(lazyRepos)
+            })
+          }, 1000)
         }
       }
     },

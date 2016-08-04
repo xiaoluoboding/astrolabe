@@ -40,7 +40,7 @@ Now you can rise up astrolabe with hot loading.
 - [x] Back to top
 - [x] Open All Link in Default Brower
 - [x] Use `Nedb` for cache local data
-- [ ] Infinite scroll the description of repository
+- [x] Infinite scroll the description of repository
 
 # License
 
