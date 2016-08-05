@@ -149,6 +149,14 @@
             self.$broadcast('$InfiniteLoading:loaded')
           })
         }, 1000)
+      },
+      reload() {
+        const self = this
+        setTimeout(() => {
+          db.fetchLazyRepos(self.limitCount).then(lazyRepos => {
+            self.setLazyRepos(lazyRepos)
+          })
+        }, 1000)
       }
     },
 
@@ -162,13 +170,8 @@
         this.isLoadingRepos = !this.isLoadingRepos
       },
       'isLoadingRepos': function (val, oldVal) {
-        const self = this
         if (!val) {
-          setTimeout(() => {
-            db.fetchLazyRepos(self.limitCount).then(lazyRepos => {
-              self.setLazyRepos(lazyRepos)
-            })
-          }, 1000)
+          this.reload()
         }
       }
     },
