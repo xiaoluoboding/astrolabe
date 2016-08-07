@@ -166,7 +166,7 @@
       </div>
     </div>
     <!-- Sidebar navigation -->
-    <ul class="nav sidebar-nav">
+    <ul id="sidebar-nav" class="nav sidebar-nav">
       <li :class="{active: activeLang == 'all'}" @click="toggleLang('all')">
         <a href="#" class="waves-effect waves-teal" @click="setSearchQuery('')">
           <i class="material-icons">star</i>
@@ -222,7 +222,7 @@
               :class="{active: activeLang == group.lang}">
             <div class="dd-handle">
               <a href="#" class="waves-effect" :class="group.color" @click="filterByLanguage(group.lang)">
-                <i class="material-icons">local_offer</i>
+                <i class="devicon colored" :class="group.icon"></i>
                 <span class="blue-grey-text">{{ group.lang }}</span>
                 <span class="sidebar-badge" :class="[theme.baseColor, theme.darkenColor]">{{ group.count }}</span>
               </a>
@@ -848,5 +848,9 @@
     .sidebar .sidebar-toggle {
       margin: 8px;
     }
+  }
+
+  .devicon {
+    font-size: 24px;
   }
 </style>

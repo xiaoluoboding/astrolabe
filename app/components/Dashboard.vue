@@ -222,10 +222,10 @@
             <div class="card-action">
               <div class="repo-count">
                 <div class="star">
-                  <octicon name="star"></octicon><span> {{ repo.stargazers_count }}</span>
+                  <i class="material-icons">star</i><span> {{ repo.stargazers_count }}</span>
                 </div>
                 <div class="fork">
-                  <octicon name="repo-forked"></octicon><span> {{ repo.forks_count }}</span>
+                  <i class="devicons devicons-git_branch"></i><span> {{ repo.forks_count }}</span>
                 </div>
               </div>
               <a href="#" @click="openInBrowser(repo.html_url)">View on GitHub</a>
@@ -390,6 +390,10 @@
     margin-top: 2px;
     font-weight: bold;
     color: #546e7a;
+  }
+
+  .card .card-content .card-action .repo-count i{
+    font-size: 18px;
   }
 
   .card .card-content.white-text .card-action .repo-count {

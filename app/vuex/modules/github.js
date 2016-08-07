@@ -8,7 +8,7 @@ import {
   SET_LAZY_REPOS,
   SET_LANG_GROUP
 } from '../mutation-types'
-import { isNull, countBy, sample, xor, size, includes, filter, matches } from 'lodash'
+import _ from 'lodash'
 import db from '../../services/db'
 import jetpack from 'fs-jetpack'
 import { remote } from 'electron'
@@ -39,7 +39,7 @@ const mutations = {
 
   [SET_USER] (state, user) {
     db.findOneUser(user.id).then(doc => {
-      if (isNull(doc)) {
+      if (_.isNull(doc)) {
         // when change user delete all db file
         jetpack.find(userDataDir, {
           matching: ['*.db']
@@ -77,7 +77,7 @@ const mutations = {
       }
       initRepos.push(t_repo);
       db.findOneRepo(t_repo._id).then(doc => {
-        if (isNull(doc)) {
+        if (_.isNull(doc)) {
           db.addRepo(t_repo, docs => {})
         } else {
           db.updateRepo(t_repo)
@@ -85,7 +85,7 @@ const mutations = {
       })
       apiReposArray.push(repos[i].id)
     }
-    console.log('findOneAndUpdate [%d] repos', size(repos))
+    console.log('findOneAndUpdate [%d] repos', _.size(repos))
 
     // sync repos.db
     let diffRepos = []
@@ -95,10 +95,10 @@ const mutations = {
         dbReposArray.push(dbRepos[i]._id)
       }
       // looking for difference
-      diffRepos = xor(apiReposArray, dbReposArray)
-      if (size(diffRepos) > 0) {
+      diffRepos = _.xor(apiReposArray, dbReposArray)
+      if (_.size(diffRepos) > 0) {
         for (let diff in diffRepos) {
-          if (diffRepos.hasOwnProperty(diff) && includes(dbReposArray, diffRepos[diff])) {
+          if (diffRepos.hasOwnProperty(diff) && _.includes(dbReposArray, diffRepos[diff])) {
             // remove the difference repos
             db.removeRepo(diffRepos[diff])
           }
@@ -107,7 +107,7 @@ const mutations = {
     })
 
     // build lang_group
-    let countLangs = countBy(initRepos, 'language')
+    let countLangs = _.countBy(initRepos, 'language')
 
     let langGroup = []
 
@@ -115,15 +115,58 @@ const mutations = {
 
     for (let lang in countLangs) {
       if (countLangs.hasOwnProperty(lang)) {
+        let icon = ''
+        switch (lang) {
+          case 'CSS':
+            icon = 'devicon-css3-plain'
+            break;
+          case 'HTML':
+            icon = 'devicon-html5-plain'
+            break;
+          case 'Shell':
+            icon = 'devicons devicons-terminal'
+            break;
+          case 'PowerShell':
+            icon = 'devicons devicons-terminal'
+            break;
+          case 'C++':
+            icon = 'devicon-cplusplus-plain'
+            break;
+          case 'C#':
+            icon = 'devicon-csharp-plain'
+            break;
+          case 'Swift':
+            icon = 'devicons devicons-swift'
+            break;
+          case 'Objective-C':
+            icon = 'devicon-apple-plain'
+            break;
+          case 'GCC Machine Description':
+            icon = 'devicons devicons-gnu'
+            break;
+          case 'VimL':
+            icon = 'devicon-vim-plain'
+            break;
+          case 'TypeScript':
+            icon = 'devicons devicons-terminal_badge'
+            break;
+          case 'Vue':
+            icon = 'devicons devicons-terminal_badge'
+            break;
+          default:
+            icon = 'devicon-' + _.toLower(lang) + '-plain'
+        }
+
         let lang_count = {
           '_id': lang,
           'lang': lang,
           'count': countLangs[lang],
-          'color': sample(waveColors)
+          'color': _.sample(waveColors),
+          'icon': icon
         }
         langGroup.push(lang_count)
         db.findOneLangGroup(lang).then(doc => {
-          if (isNull(doc)) {
+          if (_.isNull(doc)) {
             db.addLangGroup(lang_count, docs => {})
           } else {
             db.updateLangGroup(lang_count)
@@ -139,16 +182,16 @@ const mutations = {
     state.repos = initRepos
 
     // set repos count
-    state.reposCount = size(repos)
+    state.reposCount = _.size(repos)
 
     // set untagged count
-    state.untaggedCount = size(filter(repos, matches({ 'language': null })))
+    state.untaggedCount = _.size(_.filter(repos, _.matches({ 'language': null })))
   },
 
   [SET_REPOS] (state, repos) {
     state.repos = repos
-    state.reposCount = size(repos)
-    state.untaggedCount = size(filter(repos, matches({ 'language': 'null' })))
+    state.reposCount = _.size(repos)
+    state.untaggedCount = _.size(_.filter(repos, _.matches({ 'language': 'null' })))
   },
 
   [SET_LAZY_REPOS] (state, lazyRepos) {
