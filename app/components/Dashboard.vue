@@ -7,7 +7,6 @@
     increaseLimit,
     filterByLanguage
   } from '../vuex/actions'
-  import Octicon from '../node_modules/vue-octicon/src/components/Octicon'
   import Search from './Search'
   import Readme from './Readme'
   import MdlLoading from './materialize/MdlLoading'
@@ -177,7 +176,6 @@
     },
 
     components: {
-      Octicon,
       Search,
       Readme,
       MdlLoading,

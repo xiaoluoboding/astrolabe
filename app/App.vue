@@ -34,6 +34,19 @@
 </template>
 
 <style>
+  /* materialize */
+  @import '~materialize-css/bin/materialize.css';
+
+  /* material-design-icons */
+  @import '~material-design-icons/iconfont/material-icons.css';
+
+  /* devicon */
+  @import '~devicon/devicon.min.css';
+  @import '~devicon/devicon-colors.css';
+
+  /* devicons */
+  @import '~devicons/css/devicons.css';
+
   body {
     font-family: lato, sans-serif;
   }

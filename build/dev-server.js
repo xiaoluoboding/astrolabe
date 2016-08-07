@@ -51,9 +51,6 @@ app.use(hotMiddleware)
 // serve pure static assets
 app.use('/static', express.static('./static'))
 app.use('/assets', express.static('./app/assets'))
-app.use('/materialize', express.static('./app/node_modules/materialize-css'))
-app.use('/mdl', express.static('./app/node_modules/material-design-lite'))
-app.use('/mdi', express.static('./app/node_modules/material-design-icons'))
 
 module.exports = app.listen(8888, function (err) {
   if (err) {
