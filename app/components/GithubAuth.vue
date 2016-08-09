@@ -15,7 +15,6 @@
   const BrowserWindow = remote.BrowserWindow
   import storage from 'electron-json-storage'
   import request from 'superagent'
-  import Octicon from '../node_modules/vue-octicon/src/components/Octicon'
   import { isNull, isEmpty } from 'lodash'
   import db from '../services/db'
 
@@ -187,10 +186,6 @@
         })
         this.toggleLogin()
       }
-    },
-
-    components: {
-      Octicon
     }
   }
 </script>
@@ -200,7 +195,7 @@
     <h2><span v-text="appName"></span></h2>
   </div>
   <a class="waves-effect waves-light btn sidebar-toggle" @click="githubAuth()">
-    <octicon name="mark-github"></octicon>
+    <i class="devicon-github-plain colored"></i>
     <span>Log in with GitHub</span>
   </a>
 </template>
