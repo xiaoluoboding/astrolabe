@@ -65,7 +65,7 @@
   export default {
     name: 'Dashboard',
 
-    data () {
+    data() {
       return {
         repoReadme: '',
         distance: 100,

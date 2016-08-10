@@ -10,7 +10,7 @@
   export default {
     name: 'SideBar',
 
-    data () {
+    data() {
       return {
         activeLang: 'all'
       }
@@ -140,7 +140,7 @@
     },
 
     methods: {
-      toggleLang (lang) {
+      toggleLang(lang) {
         this.activeLang = lang
       }
     },

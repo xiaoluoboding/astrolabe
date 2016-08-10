@@ -44,7 +44,7 @@
       }
     },
 
-    ready () {
+    ready() {
       this.getLocalToken()
     },
 
