@@ -142,9 +142,9 @@
     right: 0px;
     bottom: 0px;
     left: 0px;
-    background: url(../assets/images/bg.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: #f857a6; /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #f857a6 , #e91e63); /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #f857a6 , #e91e63); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     color: #fff;
   }
 
