@@ -17,7 +17,6 @@
   import request from 'superagent'
   import { isNull, isEmpty } from 'lodash'
   import db from '../services/db'
-  import $ from 'jquery'
 
   export default {
     data() {
@@ -184,9 +183,6 @@
           self.initRepos(user, repos)
         })
         this.toggleLogin()
-      },
-      toggleOpen() {
-        this.isOpen = !this.Open
       }
     }
   }
@@ -199,7 +195,7 @@
       <button class="loginBtn" @click="githubAuth()">Log in with GitHub</button>
     </div>
     <!-- <form class="register-form" :class="{open: isOpen}">
-      <i class="material-icons close" @click="toggleOpen">close</i>
+      <i class="material-icons close" @click="isOpen = !isOpen">close</i>
       <h2>Loading</h2>
       <div class="formset">
         <button class="loginBtn" @click="githubAuth()">Log in with GitHub</button>
