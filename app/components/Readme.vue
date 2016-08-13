@@ -100,7 +100,8 @@
   }
 
   .repos-readme .readme img {
-    max-width: 670px;
+    max-width: 100%;
+    height: auto;
     vertical-align: middle;
   }
 
