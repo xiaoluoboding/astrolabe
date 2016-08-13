@@ -1,14 +1,17 @@
 <script>
   import $ from 'jquery'
   import { ipcRenderer } from 'electron'
+  import { MoonLoader } from 'vue-spinner/dist/vue-spinner.min.js'
 
   export default {
     name: 'NavBar',
 
     vuex: {
       getters: {
+        theme: ({ global }) => global.theme,
         user: ({ github }) => github.user,
-        theme: ({ global }) => global.theme
+        lazyRepos: ({ github }) => github.lazyRepos,
+        loadingRepos: ({ dashboard }) => dashboard.loadingRepos
       }
     },
 
@@ -28,6 +31,10 @@
       exit () {
         ipcRenderer.send('exit', 'exit')
       }
+    },
+
+    components: {
+      MoonLoader
     }
   }
 </script>
@@ -50,6 +57,10 @@
     <nav :class="[theme.baseColor, theme.accentColor]">
       <div class="nav-wrapper open">
         <span href="#!" class="brand-logo waves-effect waves-light">Astrolabe</span>
+        <div class="brand-loading animated fadeIn" v-if="loadingRepos">
+          <moon-loader :loading="true" color="#fff" size="32px"></moon-loader>
+          <span class="loading-stars">Syncing Stars...</span>
+        </div>
         <ul class="right hide-on-med-and-down">
           <!-- Dropdown Trigger -->
           <li>
@@ -78,6 +89,31 @@
 
   .nav-wrapper .brand-logo {
     transform: translate3d(88px, 0, 0);
+  }
+
+  .nav-wrapper.open .brand-loading {
+    transform: translate3d(560px, 0, 0);
+  }
+
+  .nav-wrapper .brand-loading {
+    position: absolute;
+    display: inline-block;
+    transform: translate3d(384px, 0, 0);
+    transition: all 0.2s ease-in-out;
+    margin: 16px;
+  }
+
+  .nav-wrapper .brand-loading .v-spinner {
+    float: right;
+  }
+
+  .nav-wrapper .brand-loading span {
+    margin-right: 16px;
+    display: inline-block;
+    position: relative;
+    top: -16px;
+    color: #fff;
+    opacity: .7;
   }
 
   .nav-wrapper .dropdown-button {

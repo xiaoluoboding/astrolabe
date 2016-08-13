@@ -1,5 +1,6 @@
 <script>
   import {
+    toggleLoadingRepos,
     toggleLoadingReadme,
     setActiveRepo,
     orderRepo,
@@ -68,8 +69,7 @@
     data() {
       return {
         repoReadme: '',
-        distance: 100,
-        isLoadingRepos: false
+        distance: 100
       }
     },
 
@@ -79,6 +79,7 @@
         reposCount: ({ github }) => github.reposCount,
         langGroup: ({ github }) => github.langGroup,
         lazyRepos: ({ github }) => github.lazyRepos,
+        loadingRepos: ({ dashboard }) => dashboard.loadingRepos,
         loadingReadme: ({ dashboard }) => dashboard.loadingReadme,
         activeRepo: ({ dashboard }) => dashboard.activeRepo,
         repoKey: ({ dashboard }) => dashboard.repoKey,
@@ -89,6 +90,7 @@
         theme: ({ global }) => global.theme
       },
       actions: {
+        toggleLoadingRepos,
         toggleLoadingReadme,
         setActiveRepo,
         orderRepo,
@@ -166,9 +168,9 @@
         }
       },
       'langGroup': function (val, oldVal) {
-        this.isLoadingRepos = !this.isLoadingRepos
+        this.toggleLoadingRepos()
       },
-      'isLoadingRepos': function (val, oldVal) {
+      'loadingRepos': function (val, oldVal) {
         if (!val) {
           this.reload()
         }
