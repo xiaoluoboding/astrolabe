@@ -21,10 +21,12 @@
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 0;
+    left: 320px;
     right: 0;
     padding: 5%;
     background: white;
+    opacity: .9;
+    z-index: 99;
   }
 
   .loader {

@@ -120,7 +120,7 @@
         const self = this
         if (repo._id != this.activeRepo._id) {
           this.setActiveRepo(repo)
-          this.repoReadme = true
+          this.toggleLoadingReadme()
           const githubRepo = this.github.getRepo(repo.owner_name, repo.repo_name)
           const readmeUrl = 'https://api.github.com/repos/' + repo.owner_name + '/' + repo.repo_name + '/readme'
           request.get(readmeUrl)
@@ -130,9 +130,11 @@
                 githubRepo.getContents('master', res.body.name, true, function(err, data) {
                   if (err) {
                     console.dir(err.status);
+                    // TODO dealwith 404
                   }
                   // self.repoReadme = marked(data)
                   self.repoReadme = md.render(data)
+                  self.toggleLoadingReadme()
                 })
               } else {
                 console.log('Something went wrong fetching from GitHub', err);
@@ -162,11 +164,6 @@
     },
 
     watch: {
-      'repoReadme': function (val, oldVal) {
-        if (val) {
-          this.toggleLoadingReadme()
-        }
-      },
       'langGroup': function (val, oldVal) {
         this.toggleLoadingRepos()
       },
@@ -235,19 +232,13 @@
         <infinite-loading :distance="distance" :on-infinite="loadMore" v-if="limitCount < reposCount">No More Data.</infinite-loading>
       </aside>
       <mdl-fab></mdl-fab>
+      <mdl-loading v-show='loadingReadme'></mdl-loading>
       <main id="repos-readme" class="repos-readme">
         <!-- {{ $data | json }} -->
-        <div class='empty-placeholder' v-if='!repoReadme'>
+        <div class='empty-placeholder' v-if='repoReadme.length == 0'>
           No Repo Selected
         </div>
-        <div v-else>
-          <div class="animated fadeIn" v-if='loadingReadme'>
-            <mdl-loading></mdl-loading>
-          </div>
-          <div class="animated fadeIn" v-else>
-            <readme :repo-readme='repoReadme'></readme>
-          </div>
-        </div>
+        <readme :repo-readme='repoReadme' v-else></readme>
       </main>
       <!-- stroll component is after the cards's dom rendered -->
       <!-- <stroll v-if="repos.length > 10"></stroll> -->

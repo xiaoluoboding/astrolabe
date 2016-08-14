@@ -54,7 +54,7 @@
   }
 </script>
 <template>
-  <div class="readme">
+  <div class="readme animated fadeIn">
     {{{ repoReadme }}}
   </div>
 </template>

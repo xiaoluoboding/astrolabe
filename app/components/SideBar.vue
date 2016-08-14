@@ -823,6 +823,16 @@
     font-weight: bold;
   }
 
+  .devicon {
+    font-size: 24px;
+  }
+
+  @media only screen and (max-width: 992px) {
+    nav .brand-logo {
+      left: 0%;
+    }
+  }
+
   @media (max-width: 768px) {
     .sidebar-stacked.open + .wrapper .content {
       margin-left: 192px;
@@ -848,9 +858,5 @@
     .sidebar .sidebar-toggle {
       margin: 8px;
     }
-  }
-
-  .devicon {
-    font-size: 24px;
   }
 </style>
